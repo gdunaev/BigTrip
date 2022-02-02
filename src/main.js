@@ -15,7 +15,7 @@ import { createPoint } from "./view/mock.js";
 const PLACE_BEFORE = 'beforeend';
 const PLACE_AFTER = 'afterbegin';
 const COUNT_ITEM = 3;
-const COUNT_POINT = 15;
+const COUNT_POINT = 5;
 
 
 const render = (container, template, place) => {
@@ -48,10 +48,20 @@ render(tripEvents, createContentTemplate(), PLACE_BEFORE);
 
 
 //наполнение контента
+const getArrayPoints = () => {
+
+  const array = [];
+  for (let i = 1; i <= COUNT_POINT; i++) {
+    array.push(createPoint());
+  }
+  return array;
+
+}
+
 const tripEventsList = tripEvents.querySelector('.trip-events__list');
-for (let i = 1; i <= COUNT_ITEM; i++) {
-    // console.log('111')
-    render(tripEventsList, createContentItemTemplate(), PLACE_BEFORE);
+const countPoint = getArrayPoints();
+for (let i = 0; i < countPoint.length; i++) {
+    render(tripEventsList, createContentItemTemplate(countPoint[i]), PLACE_BEFORE);
 }
 
 
@@ -73,6 +83,3 @@ const pageBodyContainer = pageBodyMain.querySelector('.page-body__container');
 render(pageBodyContainer, createStatsTemplate(), PLACE_BEFORE);
 
 
-for (let i = 1; i <= COUNT_POINT; i++) {
-    console.log(createPoint());
-}
