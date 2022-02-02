@@ -2,18 +2,20 @@ import { createInfoTemplate } from "./view/info.js";
 import { createNavigationTemplate } from "./view/navigation.js";
 import { createFiltersTemplate } from "./view/filters.js";
 import { createSortTemplate } from "./view/sort.js";
-import {createContentTemplate} from "./view/content.js"
+import { createContentTemplate } from "./view/content.js"
 import { createContentItemTemplate } from "./view/content-item.js";
 import { createOffersTemplate } from "./view/offers.js";
 import { createDestinationTemplate } from "./view/destination.js";
 import { createListEmptyTemplate } from "./view/list-empty.js";
 import { createLoadingTemplate } from "./view/loading.js";
-
 import { createStatsTemplate } from "./view/stats.js";
+
+import { createPoint } from "./view/mock.js";
 
 const PLACE_BEFORE = 'beforeend';
 const PLACE_AFTER = 'afterbegin';
 const COUNT_ITEM = 3;
+const COUNT_POINT = 15;
 
 
 const render = (container, template, place) => {
@@ -48,8 +50,8 @@ render(tripEvents, createContentTemplate(), PLACE_BEFORE);
 //наполнение контента
 const tripEventsList = tripEvents.querySelector('.trip-events__list');
 for (let i = 1; i <= COUNT_ITEM; i++) {
-  // console.log('111')
-  render(tripEventsList, createContentItemTemplate(), PLACE_BEFORE);
+    // console.log('111')
+    render(tripEventsList, createContentItemTemplate(), PLACE_BEFORE);
 }
 
 
@@ -69,3 +71,8 @@ render(eventDetails, createLoadingTemplate(), PLACE_BEFORE);
 const pageBodyMain = document.querySelector('.page-body__page-main');
 const pageBodyContainer = pageBodyMain.querySelector('.page-body__container');
 render(pageBodyContainer, createStatsTemplate(), PLACE_BEFORE);
+
+
+for (let i = 1; i <= COUNT_POINT; i++) {
+    console.log(createPoint());
+}
