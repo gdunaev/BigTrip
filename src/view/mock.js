@@ -148,7 +148,7 @@ const createPoint = () => {
         'date_from': "2019-07-10T22:55:56.845Z",
         'date_to': "2019-07-11T11:22:13.375Z",
         'destination': getDestination(this.point),
-        'is_favorite': false,
+        'is_favorite': Boolean(getRandomInteger(0, 1)),
         'offers': getOffers(this.type_point),
     };
 }
