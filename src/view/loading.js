@@ -1,5 +1,8 @@
-export const createLoadingTemplate = () => {
+export const createLoadingTemplate = (isLoading) => {
 
-  return `<p class="trip-events__msg">Loading...</p>`;
+    if (isLoading) {
+        return `<p class="trip-events__msg">Loading...</p>`;
+    }
+    return '';
 
 };

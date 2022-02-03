@@ -1,6 +1,7 @@
-export const createStatsTemplate = () => {
+export const createStatsTemplate = (isStats) => {
 
-  return `<section class="statistics">
+    if (isStats) {
+        return `<section class="statistics">
   <h2 class="visually-hidden">Trip statistics</h2>
 
   <!-- Пример диаграмм -->
@@ -18,5 +19,7 @@ export const createStatsTemplate = () => {
     <canvas class="statistics__chart" id="time" width="900"></canvas>
   </div>
 </section>`;
+    }
+    return '';
 
 };

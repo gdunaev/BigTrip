@@ -14,8 +14,7 @@ import { createPoint } from "./view/mock.js";
 
 const PLACE_BEFORE = 'beforeend';
 const PLACE_AFTER = 'afterbegin';
-const COUNT_ITEM = 3;
-const COUNT_POINT = 5;
+const COUNT_POINT = 10;
 
 
 const render = (container, template, place) => {
@@ -43,43 +42,52 @@ const tripEvents = document.querySelector('.trip-events');
 render(tripEvents, createSortTemplate(), PLACE_BEFORE);
 
 
-//контент
+//форма ввода/редактирования
 render(tripEvents, createContentTemplate(), PLACE_BEFORE);
 
 
-//наполнение контента
-const getArrayPoints = () => {
+const compareDataFrom = (elementA, elementB) => {
+    const rankA = elementA.dateFrom;
+    const rankB = elementB.dateFrom;
+    return rankA - rankB;
+};
 
-  const array = [];
-  for (let i = 1; i <= COUNT_POINT; i++) {
-    array.push(createPoint());
-  }
-  return array;
+
+//наполнение контента
+const getPoints = () => {
+
+    const array = [];
+    for (let i = 1; i <= COUNT_POINT; i++) {
+        array.push(createPoint());
+    }
+    return array.sort(compareDataFrom);
 
 }
 
 const tripEventsList = tripEvents.querySelector('.trip-events__list');
-const countPoint = getArrayPoints();
-for (let i = 0; i < countPoint.length; i++) {
-    render(tripEventsList, createContentItemTemplate(countPoint[i]), PLACE_BEFORE);
+const points = getPoints();
+const isEmpty = points.length === 0 ? true : false;
+
+for (let i = 0; i < points.length; i++) {
+    render(tripEventsList, createContentItemTemplate(points[i]), PLACE_BEFORE);
 }
 
 
 //формы
 const eventDetails = tripEvents.querySelector('.event__details');
 
-render(eventDetails, createOffersTemplate(), PLACE_BEFORE);
+// render(eventDetails, createOffersTemplate(), PLACE_BEFORE);
 
-render(eventDetails, createDestinationTemplate(), PLACE_BEFORE);
+// render(eventDetails, createDestinationTemplate(), PLACE_BEFORE);
 
-render(eventDetails, createListEmptyTemplate(), PLACE_BEFORE);
+//нет данных
+render(eventDetails, createListEmptyTemplate(isEmpty), PLACE_BEFORE);
 
-render(eventDetails, createLoadingTemplate(), PLACE_BEFORE);
+//загрузка
+render(eventDetails, createLoadingTemplate(false), PLACE_BEFORE);
 
 
 
 const pageBodyMain = document.querySelector('.page-body__page-main');
 const pageBodyContainer = pageBodyMain.querySelector('.page-body__container');
-render(pageBodyContainer, createStatsTemplate(), PLACE_BEFORE);
-
-
+render(pageBodyContainer, createStatsTemplate(false), PLACE_BEFORE);
