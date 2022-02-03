@@ -21,16 +21,16 @@ export const createContentItemTemplate = (point) => {
 
     return `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime=${point.dateFrom}>${point.dateFromMonth}</time>
+    <time class="event__date" datetime=${point.dateFromOnlyDate}>${point.dateFromMonthDay}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${typePointIcon}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${point.typePoint} ${point.point}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime=${point.dateFrom}>${point.dateFromHour}</time>
+        <time class="event__start-time" datetime=${point.dateFromHourMinute}>${point.dateFromHour}</time>
         &mdash;
-        <time class="event__end-time" datetime=${point.dateTo}>${point.dateToHour}</time>
+        <time class="event__end-time" datetime=${point.dateToHourMinute}>${point.dateToHour}</time>
       </p>
       <p class="event__duration">${point.pointDuration}</p>
     </div>

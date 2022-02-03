@@ -1,8 +1,9 @@
 import { getDateHour } from "./dayjs";
-import { getDateMonth } from "./dayjs";
-import { getRandomDate } from "./dayjs";
+import { getMonthDay } from "./dayjs";
+import { getOnlyDate } from "./dayjs";
 import { getRandomInteger } from "./util";
 import { getMinMaxDurationDate } from "./dayjs";
+import { getDateHourMinute } from "./dayjs";
 
 
 const TYPE_POINT = ['Taxi', 'Bus', 'Train', 'Ship', 'Transport', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
@@ -80,32 +81,23 @@ const createPoint = () => {
     const point = POINT_NAME[getRandomInteger(0, POINT_NAME.length - 1)];
     const typePoint = TYPE_POINT[getRandomInteger(0, TYPE_POINT.length - 1)];
 
-    const dueDates = getMinMaxDurationDate([getRandomDate(), getRandomDate()]);
+    const dueDates = getMinMaxDurationDate();
     const dateFrom = dueDates[0];
     const dateTo = dueDates[1];
-    const pointDuration = dueDates.slice(2).join(' ');
-    // const durationMinute = 0;
-    // const durationHour = 0;
-    // const durationDay = 0;
-    // let pointDuration = `${durationDay === 0 ? '' : durationDay + 'D '}${durationHour === 0 ? '' : durationHour + 'H '}${durationMinute === 0 ? '00' : durationMinute + 'M'}`;
-
-    // const pointDuration = getDuration() Date(dateTo.diff(dateFrom));
-
-    // // console.log(dateTo.diff(dateFrom, 'day'))
-    console.log(pointDuration)
-    console.log(dateFrom)
-    console.log(dateTo)
+    const pointDuration = dueDates[2];
 
     return {
         typePoint,
         point,
         'basePrice': 222,
-        dateFrom,
-        'dateFromMonth': getDateMonth(dateFrom),
+        'dateFrom': dateFrom,
+        'dateFromOnlyDate': getOnlyDate(dateFrom),
+        'dateFromMonthDay': getMonthDay(dateFrom),
+        'dateFromHourMinute': getDateHourMinute(dateFrom),
         'dateFromHour': getDateHour(dateFrom),
-        dateTo,
-        pointDuration,
         'dateToHour': getDateHour(dateTo),
+        'dateToHourMinute': getDateHourMinute(dateTo),
+        pointDuration,
         'destination': POINT_DESCRIPTION.get(point),
         'isFavorite': Boolean(getRandomInteger(0, 1)),
         'offers': OFFER.get(typePoint),
