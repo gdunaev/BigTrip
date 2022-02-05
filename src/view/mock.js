@@ -7,7 +7,7 @@ import { getDateHourMinute } from "./dayjs";
 import { getDateEdit } from "./dayjs";
 
 
-
+const PATH_PHOTOS = 'http://picsum.photos/300/200?r=';
 const TYPE_POINT = ['Taxi', 'Bus', 'Train', 'Ship', 'Transport', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 const POINT_NAME = ['Питер', 'Москва', 'Кукуево', 'Рио', 'Париж', 'Ландон', 'Невада'];
 const DESTINATION_INFORMATION = [
@@ -53,7 +53,7 @@ const getArrayPictures = () => {
         const picture = {
             '_number_photo': getRandomInteger(1, 200),
             get src() {
-                return `http://picsum.photos/300/200?r=${this._number_photo}`;
+                return `${PATH_PHOTOS}${this._number_photo}`;
             },
             get description() {
                 return `описание к фото №${this._number_photo}`;
@@ -63,7 +63,6 @@ const getArrayPictures = () => {
     }
     return array;
 }
-
 
 
 const POINT_DESCRIPTION = new Map([
@@ -99,6 +98,7 @@ const createPoint = () => {
         'dateFromHourMinute': getDateHourMinute(dateFrom),
         'dateFromHour': getDateHour(dateFrom),
         'dateFromEdit': getDateEdit(dateFrom),
+        dateTo,
         'dateToHour': getDateHour(dateTo),
         'dateToHourMinute': getDateHourMinute(dateTo),
         'dateToEdit': getDateEdit(dateTo),

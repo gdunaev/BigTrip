@@ -35,14 +35,14 @@ const getMinMaxDurationDate = () => {
     durationPoint = getStringDate(durationHour, 'H', isDay) + durationPoint;
     durationPoint = getStringDate(durationDay, 'D', isDay) + durationPoint;
 
-    //а потом эту дату запишем в массив с форматированием
+    //а потом эту дату запишем в массив
     minMaxDates.push(durationPoint);
 
     return minMaxDates;
 }
 
 const getRandomDate = () => {
-    return dayjs(dayjs().add(getRandomInteger(60, 3000), 'minute').toDate());
+    return dayjs(dayjs().add(getRandomInteger(-4320, 4320), 'minute').toDate());
 }
 
 const getDateHour = (date) => {
@@ -65,4 +65,23 @@ const getDateEdit = (date) => {
   return date.format('DD/MM/YY HH:mm');
 }
 
-export { getDateHour, getMonthDay, getRandomDate, getMinMaxDurationDate, getOnlyDate, getDateHourMinute, getDateEdit}
+const getCumulativeDate = (dateFrom, dateTo) => {
+
+  return dateFrom.format('MMM') === dateTo.format('MMM')
+  ? `${dateFrom.format('MMM')} ${dateFrom.format('DD')}&nbsp;&mdash;&nbsp;${dateTo.format('DD')}` :
+  `${dateFrom.format('MMM')} ${dateFrom.format('DD')}&nbsp;&mdash;&nbsp;${dateTo.format('MMM')} ${dateTo.format('DD')}`;
+
+}
+
+const getPastPoints = (points) => {
+  const pastPoint = points.filter((currentPoint) => {return dayjs().isAfter(currentPoint.dateFrom, 'D')});
+  return pastPoint;
+}
+
+const getFuturePoints = (points) => {
+  const futurePoint = points.filter((currentPoint) => {return dayjs().isBefore(currentPoint.dateFrom, 'D')});
+  return futurePoint;
+}
+
+export { getDateHour, getMonthDay, getRandomDate, getMinMaxDurationDate, getOnlyDate, getDateHourMinute,
+  getDateEdit, getCumulativeDate, getPastPoints, getFuturePoints}

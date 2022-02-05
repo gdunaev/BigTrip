@@ -1,36 +1,23 @@
 export const createContentTemplate = (point) => {
 
-  //19/03/19 00:00
-
-  //Event type icon
-
-  // <div class="event__offer-selector">
-  //   <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-  //     <label class="event__offer-label" for="event-offer-luggage-1">
-  //       <span class="event__offer-title">Add luggage</span>
-  //       &plus;&euro;&nbsp;
-  //       <span class="event__offer-price">30</span>
-  //     </label>
-  // </div>
-  // img/icons/${test}.png
-
   const test = '';
-  const typePointIcon = point.typePoint.toLowerCase();
+  const {typePoint, offers, destination, basePrice, name, dateFromEdit, dateToEdit} = point;
+  const typePointIcon = typePoint.toLowerCase();
   const cancelDelete = "Delete";
 
-  const offers = point.offers === undefined ? "" :
-    point.offers.map((currentPoint) => {
+  const offersComponent = offers === undefined ? "" :
+    offers.map((currentPoint) => {
       return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
         <label class="event__offer-label" for="event-offer-luggage-1">
           <span class="event__offer-title">${currentPoint.title}</span>
-          &plus;&euro;&nbsp;
+          +€&nbsp;
           <span class="event__offer-price">${currentPoint.price}</span>
         </label>
     </div>`}
     ).join(" ");
 
-  const description = point.destination === undefined ? '' : point.destination[0].description;
+  const descriptionComponent = destination === undefined ? '' : destination[0].description;
 
   const photos = point.destination[0].pictures.map((currentPicture) => {
     return `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`
@@ -108,9 +95,9 @@ export const createContentTemplate = (point) => {
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-          ${point.typePoint}
+          ${typePoint}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point.name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="${test}"></option>
             <option value="${test}"></option>
@@ -120,10 +107,10 @@ export const createContentTemplate = (point) => {
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${point.dateFromEdit}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFromEdit}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${point.dateToEdit}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateToEdit}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -131,7 +118,7 @@ export const createContentTemplate = (point) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -142,11 +129,14 @@ export const createContentTemplate = (point) => {
 
       <section class="event__details">
         <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>${offers}
+          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+          <div class="event__available-offers">
+          ${offersComponent}
+          </div>
         </section>
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${description}</p>
+            <p class="event__destination-description">${descriptionComponent}</p>
             ${photosAll}
         </section>
       </section>
