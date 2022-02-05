@@ -15,9 +15,6 @@ export const createContentItemTemplate = (point) => {
     }
 
     const typePointIcon = point.typePoint.toLowerCase();
-    //img/icons/${point.typePoint}.png
-    //Event type icon
-
 
     return `<li class="trip-events__item">
   <div class="event">
@@ -25,7 +22,7 @@ export const createContentItemTemplate = (point) => {
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${typePointIcon}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">${point.typePoint} ${point.point}</h3>
+    <h3 class="event__title">${point.typePoint} ${point.name}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime=${point.dateFromHourMinute}>${point.dateFromHour}</time>

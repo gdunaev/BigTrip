@@ -42,34 +42,24 @@ const tripEvents = document.querySelector('.trip-events');
 render(tripEvents, createSortTemplate(), PLACE_BEFORE);
 
 
-//форма ввода/редактирования
-render(tripEvents, createContentTemplate(), PLACE_BEFORE);
-
-
 const compareDataFrom = (elementA, elementB) => {
     const rankA = elementA.dateFrom;
     const rankB = elementB.dateFrom;
     return rankA - rankB;
 };
 
+const points = new Array(COUNT_POINT).fill().map(createPoint).sort(compareDataFrom);
 
-//наполнение контента
-const getPoints = () => {
-
-    const array = [];
-    for (let i = 1; i <= COUNT_POINT; i++) {
-        array.push(createPoint());
-    }
-    return array.sort(compareDataFrom);
-
-}
-
-const tripEventsList = tripEvents.querySelector('.trip-events__list');
-const points = getPoints();
 const isEmpty = points.length === 0 ? true : false;
 
+let tripEventsList = '';
 for (let i = 0; i < points.length; i++) {
-    render(tripEventsList, createContentItemTemplate(points[i]), PLACE_BEFORE);
+  if (i === 0) {
+    //форма ввода/редактирования
+     render(tripEvents, createContentTemplate(points[i]), PLACE_BEFORE);
+     tripEventsList = tripEvents.querySelector('.trip-events__list');
+  }
+  render(tripEventsList, createContentItemTemplate(points[i]), PLACE_BEFORE);
 }
 
 

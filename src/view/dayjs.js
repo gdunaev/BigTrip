@@ -61,5 +61,8 @@ const getDateHourMinute = (date) => {
   return date.format('YYYY-MM-DDTHH:mm');
 }
 
+const getDateEdit = (date) => {
+  return date.format('DD/MM/YY HH:mm');
+}
 
-export { getDateHour, getMonthDay, getRandomDate, getMinMaxDurationDate, getOnlyDate, getDateHourMinute}
+export { getDateHour, getMonthDay, getRandomDate, getMinMaxDurationDate, getOnlyDate, getDateHourMinute, getDateEdit}

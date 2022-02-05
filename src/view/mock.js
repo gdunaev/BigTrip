@@ -4,6 +4,8 @@ import { getOnlyDate } from "./dayjs";
 import { getRandomInteger } from "./util";
 import { getMinMaxDurationDate } from "./dayjs";
 import { getDateHourMinute } from "./dayjs";
+import { getDateEdit } from "./dayjs";
+
 
 
 const TYPE_POINT = ['Taxi', 'Bus', 'Train', 'Ship', 'Transport', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
@@ -38,8 +40,9 @@ const getRandomDescription = () => {
     const countString = getRandomInteger(1, 5);
     let destination = '';
     for (let i = 1; i <= countString; i++) {
-        destination = DESTINATION_INFORMATION[0, DESTINATION_INFORMATION.length - 1] + destination !== '' ? " " : "" + destination;
+        destination = DESTINATION_INFORMATION[getRandomInteger(0, DESTINATION_INFORMATION.length - 1)] + (destination !== '' ? " " + destination : destination);
     }
+
     return destination;
 }
 
@@ -78,7 +81,7 @@ const POINT_DESCRIPTION = new Map([
 
 const createPoint = () => {
 
-    const point = POINT_NAME[getRandomInteger(0, POINT_NAME.length - 1)];
+    const name = POINT_NAME[getRandomInteger(0, POINT_NAME.length - 1)];
     const typePoint = TYPE_POINT[getRandomInteger(0, TYPE_POINT.length - 1)];
 
     const dueDates = getMinMaxDurationDate();
@@ -88,17 +91,19 @@ const createPoint = () => {
 
     return {
         typePoint,
-        point,
-        'basePrice': 222,
+        name,
+        'basePrice': getRandomInteger(10, 200),
         'dateFrom': dateFrom,
         'dateFromOnlyDate': getOnlyDate(dateFrom),
         'dateFromMonthDay': getMonthDay(dateFrom),
         'dateFromHourMinute': getDateHourMinute(dateFrom),
         'dateFromHour': getDateHour(dateFrom),
+        'dateFromEdit': getDateEdit(dateFrom),
         'dateToHour': getDateHour(dateTo),
         'dateToHourMinute': getDateHourMinute(dateTo),
+        'dateToEdit': getDateEdit(dateTo),
         pointDuration,
-        'destination': POINT_DESCRIPTION.get(point),
+        'destination': POINT_DESCRIPTION.get(name),
         'isFavorite': Boolean(getRandomInteger(0, 1)),
         'offers': OFFER.get(typePoint),
     };
