@@ -1,25 +1,27 @@
-import { getCumulativeDate } from "./dayjs";
+import { getCumulativeDate } from "./dayjs.js";
+import { createElementDom } from "./util.js";
 
-export const createInfoTemplate = (points) => {
+
+const createInfoTemplate = (points) => {
 
     //маршрут (города)
-    const mainTitle = points.length === 0
-    ? "" : points.map((currentPoint) => {return `${currentPoint.name}`}).join(` &mdash; `);
+    const mainTitle = points.length === 0 ?
+        "" : points.map((currentPoint) => { return `${currentPoint.name}` }).join(` &mdash; `);
 
     //даты от и до
     const cumulativeDate = points.length === 0 ? '' : getCumulativeDate(points[0].dateFrom, points[points.length - 1].dateTo);
 
-   //общая стоимость
+    //общая стоимость
     let fullCost = 0;
-    fullCost = points.length === 0
-    ? 0 : points.reduce((sum, current) => {
+    fullCost = points.length === 0 ?
+        0 : points.reduce((sum, current) => {
 
-      return sum + current.basePrice +
-      (current.offers === undefined
-      ? 0 :
-      current.offers.reduce((sumOffers, currentOffer) => {return   sumOffers + currentOffer.price}, 0));
+            return sum + current.basePrice +
+                (current.offers === undefined ?
+                    0 :
+                    current.offers.reduce((sumOffers, currentOffer) => { return sumOffers + currentOffer.price }, 0));
 
-    }, 0);
+        }, 0);
 
 
     return `<section class="trip-main__trip-info  trip-info">
@@ -34,4 +36,29 @@ export const createInfoTemplate = (points) => {
   </p>
 </section>`;
 
-};
+}
+
+class InfoView {
+    constructor(points) {
+        this._element = null;
+        this._points = points;
+    }
+
+    getTemplate() {
+        // console.log(createInfoTemplate(this._points));
+        return createInfoTemplate(this._points);
+    }
+
+    getElement() {
+        if (!this._element) {
+            this._element = createElementDom(this.getTemplate());
+        }
+        return this._element;
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
+
+export { InfoView };

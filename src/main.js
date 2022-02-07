@@ -1,4 +1,4 @@
-import { createInfoTemplate } from "./view/info.js";
+import { InfoView } from "./view/info.js";
 import { createNavigationTemplate } from "./view/navigation.js";
 import { createFiltersTemplate } from "./view/filters.js";
 import { createSortTemplate } from "./view/sort.js";
@@ -10,22 +10,25 @@ import { createStatsTemplate } from "./view/stats.js";
 import { createPoint } from "./view/mock.js";
 import { getPastPoints } from "./view/dayjs.js";
 import { getFuturePoints } from "./view/dayjs.js";
+import { renderTemplate, RenderPosition } from "./view/util.js";
 
-const PLACE_BEFORE = 'beforeend';
-const PLACE_AFTER = 'afterbegin';
+
+const sixthElement = document.createElement('div'); // Создаём элемент div
+sixthElement.classList.add('el'); // Добавляем класс 'el'
+sixthElement.innerHTML = '<span>5</span>'; // Объявляем содержимое
+console.log(sixthElement)
+
 const COUNT_POINT = 10;
 const pageBodyMain = document.querySelector('.page-body__page-main');
 const tripEventsMain = pageBodyMain.querySelector('.trip-events');
 
 
-const render = (container, template, place) => {
-    container.insertAdjacentHTML(place, template);
-};
+
 
 const compareDataFrom = (elementA, elementB) => {
-  const rankA = elementA.dateFrom;
-  const rankB = elementB.dateFrom;
-  return rankA - rankB;
+    const rankA = elementA.dateFrom;
+    const rankB = elementB.dateFrom;
+    return rankA - rankB;
 };
 
 
@@ -39,55 +42,55 @@ const futurePoints = getFuturePoints(points);
 
 //главное инфо
 const tripMain = document.querySelector('.trip-main');
-render(tripMain, createInfoTemplate(points), PLACE_AFTER);
+renderTemplate(tripMain, new InfoView(points).getElement(), RenderPosition.AFTERBEGIN);
 
 
 //навигация
 const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
-render(tripControlsNavigation, createNavigationTemplate(), PLACE_BEFORE);
+renderTemplate(tripControlsNavigation, createNavigationTemplate(), RenderPosition.BEFOREEND);
 
 
 //фильтры
 const tripControlsFilters = document.querySelector('.trip-controls__filters');
-render(tripControlsFilters, createFiltersTemplate(), PLACE_BEFORE);
+renderTemplate(tripControlsFilters, createFiltersTemplate(), RenderPosition.BEFOREEND);
 
 
 //сортировка
 const tripEvents = document.querySelector('.trip-events');
-render(tripEvents, createSortTemplate(), PLACE_BEFORE);
+renderTemplate(tripEvents, createSortTemplate(), RenderPosition.BEFOREEND);
 
 
 const isEmpty = points.length === 0 ? true : false;
 
 if (!isEmpty) {
 
-  //форма ввода/редактирования
-  render(tripEvents, createContentTemplate(points[0]), PLACE_BEFORE);
-  const tripEventsList = tripEvents.querySelector('.trip-events__list');
+    //форма ввода/редактирования
+    renderTemplate(tripEvents, createContentTemplate(points[0]), RenderPosition.BEFOREEND);
+    const tripEventsList = tripEvents.querySelector('.trip-events__list');
 
-  for (let i = 1; i < points.length; i++) {
-    render(tripEventsList, createContentItemTemplate(points[i]), PLACE_BEFORE);
-  }
+    for (let i = 1; i < points.length; i++) {
+        renderTemplate(tripEventsList, createContentItemTemplate(points[i]), RenderPosition.BEFOREEND);
+    }
 }
 
 
 //формы
 if (isEmpty) {
-// const eventDetails = tripEvents.querySelector('.event__details');
+    // const eventDetails = tripEvents.querySelector('.event__details');
 
-// render(eventDetails, createOffersTemplate(), PLACE_BEFORE);
+    // renderTemplate(eventDetails, createOffersTemplate(), RenderPosition.BEFOREEND);
 
-// render(eventDetails, createDestinationTemplate(), PLACE_BEFORE);
+    // renderTemplate(eventDetails, createDestinationTemplate(), RenderPosition.BEFOREEND);
 
-//нет данных
-render(tripEventsMain, createListEmptyTemplate(isEmpty), PLACE_BEFORE);
+    //нет данных
+    renderTemplate(tripEventsMain, createListEmptyTemplate(isEmpty), RenderPosition.BEFOREEND);
 
-//загрузка
-render(tripEventsMain, createLoadingTemplate(false), PLACE_BEFORE);
+    //загрузка
+    renderTemplate(tripEventsMain, createLoadingTemplate(false), RenderPosition.BEFOREEND);
 }
 
 
 
 // const pageBodyMain = document.querySelector('.page-body__page-main');
 // const pageBodyContainer = pageBodyMain.querySelector('.page-body__container');
-// render(pageBodyContainer, createStatsTemplate(false), PLACE_BEFORE);
+// renderTemplate(pageBodyContainer, createStatsTemplate(false), RenderPosition.BEFOREEND);
