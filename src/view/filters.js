@@ -1,4 +1,6 @@
-export const createFiltersTemplate = () => {
+import { createElementDom } from "./util.js";
+
+const createFiltersTemplate = () => {
 
     return `<form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
@@ -20,3 +22,26 @@ export const createFiltersTemplate = () => {
   </form>`;
 
 };
+
+class FiltersView {
+    constructor() {
+        this._element = null;
+    }
+
+    getTemplate() {
+        return createFiltersTemplate();
+    }
+
+    getElement() {
+        if (!this._element) {
+            this._element = createElementDom(this.getTemplate());
+        }
+        return this._element;
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
+
+export { FiltersView };

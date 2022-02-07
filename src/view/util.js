@@ -17,8 +17,6 @@ const renderTemplate = (container, template, place) => {
 const createElementDom = (template) => {
     const newElement = document.createElement('div');
     newElement.innerHTML = template;
-    console.log(newElement)
-        // console.log(template)
     return newElement.firstChild;
 }
 

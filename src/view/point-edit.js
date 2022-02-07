@@ -1,36 +1,38 @@
-export const createContentTemplate = (point) => {
+import { createElementDom } from "./util.js";
 
-  const test = '';
-  const {typePoint, offers, destination, basePrice, name, dateFromEdit, dateToEdit} = point;
-  const typePointIcon = typePoint.toLowerCase();
-  const cancelDelete = "Delete";
+const createPointEditTemplate = (point) => {
 
-  const offersComponent = offers === undefined ? "" :
-    offers.map((currentPoint) => {
-      return `<div class="event__offer-selector">
+    const test = '';
+    const { typePoint, offers, destination, basePrice, name, dateFromEdit, dateToEdit } = point;
+    const typePointIcon = typePoint.toLowerCase();
+    const cancelDelete = "Delete";
+
+    const offersComponent = offers === undefined ? "" :
+        offers.map((currentPoint) => {
+            return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
         <label class="event__offer-label" for="event-offer-luggage-1">
           <span class="event__offer-title">${currentPoint.title}</span>
           +€&nbsp;
           <span class="event__offer-price">${currentPoint.price}</span>
         </label>
-    </div>`}
-    ).join(" ");
+    </div>`
+        }).join(" ");
 
-  const descriptionComponent = destination === undefined ? '' : destination[0].description;
+    const descriptionComponent = destination === undefined ? '' : destination[0].description;
 
-  const photos = point.destination[0].pictures.map((currentPicture) => {
-    return `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`
-  }).join(" ");
+    const photos = point.destination[0].pictures.map((currentPicture) => {
+        return `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`
+    }).join(" ");
 
-   const photosAll = `<div class="event__photos-container">
+    const photosAll = `<div class="event__photos-container">
                    <div class="event__photos-tape">
                        ${photos}
                      </div>
                    </div>`;
 
 
-  return `<ul class="trip-events__list">
+    return `<ul class="trip-events__list">
   <li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -147,15 +149,26 @@ export const createContentTemplate = (point) => {
 
 };
 
+class PointEditView {
+    constructor(point) {
+        this._element = null;
+        this._point = point;
+    }
 
-/* <div class="event__available-offers">
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-<label class="event__offer-label" for="event-offer-luggage-1">
-<span class="event__offer-title">Add luggage</span>
-&plus;&euro;&nbsp;
-<span class="event__offer-price">30</span>
-</label>
-</div>
-</div>
-</section> */
+    getTemplate() {
+        return createPointEditTemplate(this._point);
+    }
+
+    getElement() {
+        if (!this._element) {
+            this._element = createElementDom(this.getTemplate());
+        }
+        return this._element;
+    }
+
+    removeElement() {
+        this._element = null;
+    }
+}
+
+export { PointEditView };

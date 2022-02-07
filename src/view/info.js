@@ -45,7 +45,6 @@ class InfoView {
     }
 
     getTemplate() {
-        // console.log(createInfoTemplate(this._points));
         return createInfoTemplate(this._points);
     }
 
