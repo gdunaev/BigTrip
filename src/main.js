@@ -10,7 +10,7 @@ import { createStatsTemplate } from "./view/stats.js";
 import { createPoint } from "./view/mock.js";
 import { getPastPoints } from "./view/dayjs.js";
 import { getFuturePoints } from "./view/dayjs.js";
-import { renderTemplate, RenderPosition, renderElement } from "./view/util.js";
+import { renderTemplate, RenderPosition, renderElement, isEscEvent } from "./view/util.js";
 
 
 const COUNT_POINT = 10;
@@ -55,7 +55,7 @@ const getBodySite = () => {
 
     if (!isEmpty) {
         points.forEach((element) => {
-            renderElement(tripEventsMain, new PointView(element).getElement(), RenderPosition.BEFOREEND);
+          renderPointItem(element);
         })
     }
     //формы
@@ -66,6 +66,36 @@ const getBodySite = () => {
         //загрузка
         // renderElement(tripEventsMain, new LoadingView(false).getElement(), RenderPosition.BEFOREEND);
     }
+}
+
+const renderPointItem = (element) => {
+
+  const pointView = new PointView(element);
+  const pointViewEdit = new PointEditView(element);
+
+  const replaceItemToForm = () =>{
+    tripEventsMain.replaceChild(pointViewEdit.getElement(), pointView.getElement());
+  }
+  const replaceFormToItem = () =>{
+    tripEventsMain.replaceChild(pointView.getElement(), pointViewEdit.getElement());
+  }
+
+  const onEscPressDown = (evt) =>{
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      replaceFormToItem();
+    }
+  }
+
+  pointView.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceItemToForm();
+    document.addEventListener('keydown', onEscPressDown, {once: true});
+  });
+  pointViewEdit.getElement().querySelector('.event').addEventListener('submit', replaceFormToItem);
+  pointViewEdit.getElement().querySelector('.event__reset-btn').addEventListener('click', replaceFormToItem);
+  pointViewEdit.getElement().querySelector('.event__rollup-btn').addEventListener('click', replaceFormToItem);
+
+  renderElement(tripEventsMain, pointView.getElement(), RenderPosition.BEFOREEND);
 }
 
 getBodySite();
