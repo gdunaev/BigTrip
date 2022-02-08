@@ -10,7 +10,7 @@ const createNavigationTemplate = () => {
 };
 
 
-class NavigationView {
+export default class NavigationView {
     constructor() {
         this._element = null;
     }
@@ -31,4 +31,3 @@ class NavigationView {
     }
 }
 
-export { NavigationView };

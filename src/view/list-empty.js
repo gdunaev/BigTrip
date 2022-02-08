@@ -7,7 +7,7 @@ const createListEmptyTemplate = (isEmpty) => {
     return '';
 };
 
-class ListEmptyView {
+export default class ListEmptyView {
     constructor(isEmpty) {
         this._element = null;
         this._isEmpty = isEmpty;
@@ -29,4 +29,3 @@ class ListEmptyView {
     }
 }
 
-export { ListEmptyView };

@@ -152,7 +152,7 @@ const createPointEditTemplate = (point) => {
 
 };
 
-class PointEditView {
+export default class PointEditorView {
     constructor(point) {
         this._element = null;
         this._point = point;
@@ -174,4 +174,3 @@ class PointEditView {
     }
 }
 
-export { PointEditView };

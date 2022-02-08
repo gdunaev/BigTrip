@@ -10,14 +10,10 @@ const getRandomInteger = (a = 0, b = 1) => {
     return Math.floor(lower + Math.random() * (upper - lower + 1));
 }
 
-// const renderTemplate = (container, template, place) => {
-//     container.insertAdjacentHTML(place, template);
-// }
-
 const createElementDom = (template) => {
     const newElement = document.createElement('div');
     newElement.innerHTML = template;
-    return newElement.firstChild;
+    return newElement.firstElementChild;
 }
 
 const renderElement = (container, element, place) => {

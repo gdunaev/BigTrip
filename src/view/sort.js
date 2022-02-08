@@ -31,7 +31,7 @@ const createSortTemplate = () => {
 
 };
 
-class SortView {
+export default class SortView {
     constructor() {
         this._element = null;
     }
@@ -52,4 +52,3 @@ class SortView {
     }
 }
 
-export { SortView };

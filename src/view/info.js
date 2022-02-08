@@ -24,7 +24,7 @@ const createInfoTemplate = (points) => {
         }, 0);
 
 
-    return `<section class="trip-main__trip-info  trip-info">
+    return ` <section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${mainTitle}</h1>
 
@@ -38,7 +38,7 @@ const createInfoTemplate = (points) => {
 
 }
 
-class InfoView {
+export default class InfoView {
     constructor(points) {
         this._element = null;
         this._points = points;
@@ -60,4 +60,4 @@ class InfoView {
     }
 }
 
-export { InfoView };
+

@@ -1,11 +1,11 @@
-import { InfoView } from "./view/info.js";
-import { NavigationView } from "./view/navigation.js";
-import { FiltersView } from "./view/filters.js";
-import { SortView } from "./view/sort.js";
-import { PointEditView } from "./view/point-edit.js"
-import { PointView } from "./view/point-item.js";
-import { ListEmptyView } from "./view/list-empty.js";
-import { LoadingView } from "./view/loading.js";
+import InfoView from "./view/info.js";
+import NavigationView from "./view/navigation.js";
+import FiltersView  from "./view/filters.js";
+import SortView from "./view/sort.js";
+import PointEditorView from "./view/point-editor.js"
+import PointView from "./view/point-item.js";
+import ListEmptyView  from "./view/list-empty.js";
+import LoadingView from "./view/loading.js";
 import { createStatsTemplate } from "./view/stats.js";
 import { createPoint } from "./view/mock.js";
 import { getPastPoints } from "./view/dayjs.js";
@@ -71,13 +71,13 @@ const getBodySite = () => {
 const renderPointItem = (element) => {
 
   const pointView = new PointView(element);
-  const pointViewEdit = new PointEditView(element);
+  const pointViewEditor = new PointEditorView(element);
 
   const replaceItemToForm = () =>{
-    tripEventsMain.replaceChild(pointViewEdit.getElement(), pointView.getElement());
+    tripEventsMain.replaceChild(pointViewEditor.getElement(), pointView.getElement());
   }
   const replaceFormToItem = () =>{
-    tripEventsMain.replaceChild(pointView.getElement(), pointViewEdit.getElement());
+    tripEventsMain.replaceChild(pointView.getElement(), pointViewEditor.getElement());
   }
 
   const onEscPressDown = (evt) =>{
@@ -91,9 +91,9 @@ const renderPointItem = (element) => {
     replaceItemToForm();
     document.addEventListener('keydown', onEscPressDown, {once: true});
   });
-  pointViewEdit.getElement().querySelector('.event').addEventListener('submit', replaceFormToItem);
-  pointViewEdit.getElement().querySelector('.event__reset-btn').addEventListener('click', replaceFormToItem);
-  pointViewEdit.getElement().querySelector('.event__rollup-btn').addEventListener('click', replaceFormToItem);
+  pointViewEditor.getElement().querySelector('.event').addEventListener('submit', replaceFormToItem);
+  pointViewEditor.getElement().querySelector('.event__reset-btn').addEventListener('click', replaceFormToItem);
+  pointViewEditor.getElement().querySelector('.event__rollup-btn').addEventListener('click', replaceFormToItem);
 
   renderElement(tripEventsMain, pointView.getElement(), RenderPosition.BEFOREEND);
 }

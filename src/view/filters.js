@@ -23,7 +23,7 @@ const createFiltersTemplate = () => {
 
 };
 
-class FiltersView {
+export default  class FiltersView {
     constructor() {
         this._element = null;
     }
@@ -44,4 +44,3 @@ class FiltersView {
     }
 }
 
-export { FiltersView };

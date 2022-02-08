@@ -9,7 +9,7 @@ const createLoadingTemplate = (isLoading) => {
 
 };
 
-class LoadingView {
+export default class LoadingView {
     constructor(isLoading) {
         this._element = null;
         this._isLoading = isLoading;
@@ -31,4 +31,3 @@ class LoadingView {
     }
 }
 
-export { LoadingView };
