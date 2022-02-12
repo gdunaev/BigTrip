@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getRandomInteger } from "./util.js";
+import { getRandomInteger } from "../utils/common.js";
 
 const minMax = require('dayjs/plugin/minMax');
 dayjs.extend(minMax);

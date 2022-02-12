@@ -5,12 +5,14 @@ import SortView from "./view/sort.js";
 import PointEditorView from "./view/point-editor.js"
 import PointView from "./view/point-item.js";
 import ListEmptyView  from "./view/list-empty.js";
-import LoadingView from "./view/loading.js";
-import { createStatsTemplate } from "./view/stats.js";
+// import LoadingView from "./view/loading.js";
+// import { createStatsTemplate } from "./view/stats.js";
 import { createPoint } from "./view/mock.js";
-import { getPastPoints } from "./view/dayjs.js";
-import { getFuturePoints } from "./view/dayjs.js";
-import { renderTemplate, RenderPosition, renderElement, isEscEvent } from "./view/util.js";
+// import { getPastPoints } from "./view/dayjs.js";
+// import { getFuturePoints } from "./view/dayjs.js";
+import { RenderPosition, renderElement, replace } from "./utils/render.js";
+import { isEscEvent } from "./utils/common.js";
+import { getPoints } from "./view/get-points.js";
 
 
 const COUNT_POINT = 10;
@@ -18,37 +20,27 @@ const pageBodyMain = document.querySelector('.page-body__page-main');
 const tripEventsMain = pageBodyMain.querySelector('.trip-events');
 
 
-//получение данных
-const getPoints = () => {
-    const compareDataFrom = (elementA, elementB) => {
-        const rankA = elementA.dateFrom;
-        const rankB = elementB.dateFrom;
-        return rankA - rankB;
-    };
-    return new Array(COUNT_POINT).fill().map(createPoint).sort(compareDataFrom);
-}
-
-const points = getPoints();
+const points = getPoints(COUNT_POINT);
 
 
 const getBodySite = () => {
     //главное инфо
     const tripMain = document.querySelector('.trip-main');
-    renderElement(tripMain, new InfoView(points).getElement(), RenderPosition.AFTERBEGIN);
+    renderElement(tripMain, new InfoView(points), RenderPosition.AFTERBEGIN);
 
 
     //навигация
     const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
-    renderElement(tripControlsNavigation, new NavigationView().getElement(), RenderPosition.BEFOREEND);
+    renderElement(tripControlsNavigation, new NavigationView(), RenderPosition.BEFOREEND);
 
 
     //фильтры
     const tripControlsFilters = document.querySelector('.trip-controls__filters');
-    renderElement(tripControlsFilters, new FiltersView().getElement(), RenderPosition.BEFOREEND);
+    renderElement(tripControlsFilters, new FiltersView(), RenderPosition.BEFOREEND);
 
 
     //сортировка
-    renderElement(tripEventsMain, new SortView().getElement(), RenderPosition.BEFOREEND);
+    renderElement(tripEventsMain, new SortView(), RenderPosition.BEFOREEND);
 
 
     const isEmpty = points.length === 0 ? true : false;
@@ -61,10 +53,10 @@ const getBodySite = () => {
     //формы
     if (isEmpty) {
         //нет данных
-        renderElement(tripEventsMain, new ListEmptyView(isEmpty).getElement(), RenderPosition.BEFOREEND);
+        renderElement(tripEventsMain, new ListEmptyView(isEmpty), RenderPosition.BEFOREEND);
 
         //загрузка
-        // renderElement(tripEventsMain, new LoadingView(false).getElement(), RenderPosition.BEFOREEND);
+        // renderElement(tripEventsMain, new LoadingView(false), RenderPosition.BEFOREEND);
     }
 }
 
@@ -74,10 +66,10 @@ const renderPointItem = (element) => {
   const pointViewEditor = new PointEditorView(element);
 
   const replaceItemToForm = () =>{
-    tripEventsMain.replaceChild(pointViewEditor.getElement(), pointView.getElement());
+    replace(pointViewEditor, pointView);
   }
   const replaceFormToItem = () =>{
-    tripEventsMain.replaceChild(pointView.getElement(), pointViewEditor.getElement());
+    replace(pointView, pointViewEditor);
   }
 
   const onEscPressDown = (evt) =>{
@@ -95,7 +87,7 @@ const renderPointItem = (element) => {
   pointViewEditor.getResetClickHandler(replaceFormToItem);
   pointViewEditor.getRollupClickHandler(replaceFormToItem);
 
-  renderElement(tripEventsMain, pointView.getElement(), RenderPosition.BEFOREEND);
+  renderElement(tripEventsMain, pointView, RenderPosition.BEFOREEND);
 }
 
 getBodySite();

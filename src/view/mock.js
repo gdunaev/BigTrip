@@ -1,7 +1,7 @@
 import { getDateHour } from "./dayjs";
 import { getMonthDay } from "./dayjs";
 import { getOnlyDate } from "./dayjs";
-import { getRandomInteger } from "./util";
+import { getRandomInteger } from "../utils/common.js";
 import { getMinMaxDurationDate } from "./dayjs";
 import { getDateHourMinute } from "./dayjs";
 import { getDateEdit } from "./dayjs";
