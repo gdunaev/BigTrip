@@ -1,6 +1,5 @@
 import { getCumulativeDate } from "./dayjs.js";
-import { createElementDom } from "./util.js";
-
+import AbstractView from "./abstract.js";
 
 const createInfoTemplate = (points) => {
 
@@ -38,26 +37,15 @@ const createInfoTemplate = (points) => {
 
 }
 
-export default class InfoView {
-    constructor(points) {
-        this._element = null;
-        this._points = points;
-    }
-
-    getTemplate() {
-        return createInfoTemplate(this._points);
-    }
-
-    getElement() {
-        if (!this._element) {
-            this._element = createElementDom(this.getTemplate());
-        }
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
-    }
+export default class InfoView extends AbstractView {
+  constructor(points) {
+      super();
+      this._points = points;
+  }
+  getTemplate() {
+      return createInfoTemplate(this._points);
+  }
 }
+
 
 

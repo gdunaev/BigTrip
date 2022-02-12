@@ -1,4 +1,4 @@
-import { createElementDom } from "./util.js";
+import AbstractView from "./abstract.js";
 
 const createPointItemTemplate = (point) => {
 
@@ -72,26 +72,24 @@ const createPointItemTemplate = (point) => {
 
 };
 
-export default class PointView {
-    constructor(point) {
-        this._element = null;
-        this._point = point;
-    }
-
-    getTemplate() {
-        return createPointItemTemplate(this._point);
-    }
-
-    getElement() {
-        if (!this._element) {
-            this._element = createElementDom(this.getTemplate());
-        }
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
-    }
+export default class PointView extends AbstractView {
+  constructor(point) {
+      super();
+      this._point = point;
+      this._getRollupClick = this._getRollupClick.bind(this);
+  }
+  getTemplate() {
+      return createPointItemTemplate(this._point);
+  }
+  _getRollupClick(evt) {
+    evt.preventDefault();
+    this._callback.rollupClick();
+  }
+  getRollupClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._getRollupClick);
+  }
 }
+
 
 

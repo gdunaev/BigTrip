@@ -1,4 +1,4 @@
-import { createElementDom } from "./util.js";
+import AbstractView from "./abstract.js";
 
 const createPointEditTemplate = (point) => {
 
@@ -152,25 +152,42 @@ const createPointEditTemplate = (point) => {
 
 };
 
-export default class PointEditorView {
-    constructor(point) {
-        this._element = null;
-        this._point = point;
-    }
 
-    getTemplate() {
-        return createPointEditTemplate(this._point);
-    }
+export default class PointEditorView extends AbstractView {
+  constructor(point) {
+      super();
+      this._point = point;
+      this._getSubmitHandler = this._getSubmitHandler.bind(this);
+      this._getResetHandler = this._getResetHandler.bind(this);
+      this._getRollupClick = this._getRollupClick.bind(this);
+  }
+  getTemplate() {
+      return createPointEditTemplate(this._point);
+  }
+  _getSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.submitClick();
+  }
+  getSubmitFormHandler(callback) {
+    this._callback.submitClick = callback;
+    this.getElement().querySelector('.event').addEventListener('submit', this._getSubmitHandler);
+  }
+  _getResetHandler(evt) {
+    evt.preventDefault();
+    this._callback.resetClick();
+  }
+  getResetClickHandler(callback) {
+    this._callback.resetClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._getResetHandler);
+  }
+  _getRollupClick(evt) {
+    evt.preventDefault();
+    this._callback.rollupClick();
+  }
+  getRollupClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._getRollupClick);
+  }
 
-    getElement() {
-        if (!this._element) {
-            this._element = createElementDom(this.getTemplate());
-        }
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
-    }
 }
 

@@ -1,4 +1,4 @@
-import { createElementDom } from "./util.js";
+import AbstractView from "./abstract.js";
 
 const createNavigationTemplate = () => {
 
@@ -9,25 +9,10 @@ const createNavigationTemplate = () => {
 
 };
 
-
-export default class NavigationView {
-    constructor() {
-        this._element = null;
-    }
-
-    getTemplate() {
-        return createNavigationTemplate();
-    }
-
-    getElement() {
-        if (!this._element) {
-            this._element = createElementDom(this.getTemplate());
-        }
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
-    }
+export default class NavigationView extends AbstractView {
+  getTemplate() {
+      return createNavigationTemplate();
+  }
 }
+
 

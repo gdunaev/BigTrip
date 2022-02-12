@@ -1,3 +1,5 @@
+import AbstractView from "./abstract.js";
+
 export const createStatsTemplate = (isStats) => {
 
     if (isStats) {
@@ -23,3 +25,13 @@ export const createStatsTemplate = (isStats) => {
     return '';
 
 };
+
+export default class StatsView extends AbstractView {
+  constructor(isStats) {
+      super();
+      this._isStats = isStats;
+  }
+  getTemplate() {
+      return createStatsTemplate(this._isStats);
+  }
+}

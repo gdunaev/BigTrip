@@ -87,13 +87,13 @@ const renderPointItem = (element) => {
     }
   }
 
-  pointView.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointView.getRollupClickHandler(() => {
     replaceItemToForm();
     document.addEventListener('keydown', onEscPressDown, {once: true});
   });
-  pointViewEditor.getElement().querySelector('.event').addEventListener('submit', replaceFormToItem);
-  pointViewEditor.getElement().querySelector('.event__reset-btn').addEventListener('click', replaceFormToItem);
-  pointViewEditor.getElement().querySelector('.event__rollup-btn').addEventListener('click', replaceFormToItem);
+  pointViewEditor.getSubmitFormHandler(replaceFormToItem);
+  pointViewEditor.getResetClickHandler(replaceFormToItem);
+  pointViewEditor.getRollupClickHandler(replaceFormToItem);
 
   renderElement(tripEventsMain, pointView.getElement(), RenderPosition.BEFOREEND);
 }

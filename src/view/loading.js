@@ -1,4 +1,4 @@
-import { createElementDom } from "./util.js";
+import AbstractView from "./abstract.js";
 
 const createLoadingTemplate = (isLoading) => {
 
@@ -9,25 +9,14 @@ const createLoadingTemplate = (isLoading) => {
 
 };
 
-export default class LoadingView {
-    constructor(isLoading) {
-        this._element = null;
-        this._isLoading = isLoading;
-    }
-
-    getTemplate() {
-        return createLoadingTemplate(this._isLoading);
-    }
-
-    getElement() {
-        if (!this._element) {
-            this._element = createElementDom(this.getTemplate());
-        }
-        return this._element;
-    }
-
-    removeElement() {
-        this._element = null;
-    }
+export default class LoadingView extends AbstractView {
+  constructor(isLoading) {
+      super();
+      this._isLoading = isLoading;
+  }
+  getTemplate() {
+      return createLoadingTemplate(this._isLoading);
+  }
 }
+
 
