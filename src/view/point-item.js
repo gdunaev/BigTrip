@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import {AbstractView} from "./abstract.js";
 
 const createPointItemTemplate = (point) => {
 
@@ -90,6 +90,3 @@ export default class PointView extends AbstractView {
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._getRollupClick);
   }
 }
-
-
-

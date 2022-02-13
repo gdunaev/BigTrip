@@ -1,5 +1,6 @@
 
-import AbstractView from "../view/abstract.js";
+import {AbstractView} from "../view/abstract.js";
+import { isEscEvent } from "./common.js";
 
 const RenderPosition = {
     AFTERBEGIN: 'afterbegin',
@@ -58,5 +59,33 @@ const remove = (component) => {
   component.removeElement();
 }
 
+const renderPointItem = (...rest) => {
 
-export { createElementDom, RenderPosition, remove, replace, renderElement}
+  const [tripEventsMain, pointView, pointViewEditor] = rest;
+
+  const replaceItemToForm = () =>{
+    replace(pointViewEditor, pointView);
+  }
+  const replaceFormToItem = () =>{
+    replace(pointView, pointViewEditor);
+  }
+
+  const onEscPressDown = (evt) =>{
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      replaceFormToItem();
+    }
+  }
+
+  pointView.getRollupClickHandler(() => {
+    replaceItemToForm();
+    document.addEventListener('keydown', onEscPressDown, {once: true});
+  });
+  pointViewEditor.getSubmitFormHandler(replaceFormToItem);
+  pointViewEditor.getResetClickHandler(replaceFormToItem);
+  pointViewEditor.getRollupClickHandler(replaceFormToItem);
+
+  renderElement(tripEventsMain, pointView, RenderPosition.BEFOREEND);
+}
+
+export { createElementDom, RenderPosition, remove, replace, renderElement, renderPointItem}

@@ -1,5 +1,5 @@
 import { getCumulativeDate } from "./dayjs.js";
-import AbstractView from "./abstract.js";
+import {AbstractView} from "./abstract.js";
 
 const createInfoTemplate = (points) => {
 

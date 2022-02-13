@@ -1,6 +1,5 @@
 import { createPoint } from "../view/mock.js";
 
-
 //получение данных
 const getPoints = (countPoint) => {
   const compareDataFrom = (elementA, elementB) => {

@@ -1,6 +1,6 @@
-import AbstractView from "./abstract.js";
+import {AbstractView} from "./abstract.js";
 
-export const createStatsTemplate = (isStats) => {
+const createStatsTemplate = (isStats) => {
 
     if (isStats) {
         return `<section class="statistics">
