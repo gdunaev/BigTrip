@@ -2,10 +2,10 @@ import ListEmptyView from "../view/list-empty.js";
 // import { renderPointItem } from "../utils/render.js";
 import PointEditorView from "../view/point-editor.js"
 import PointView from "../view/point-item.js";
-import { RenderPosition } from "../utils/render.js";
-import { isEscEvent } from "../utils/common.js";
-import { AbstractView } from "../view/abstract.js";
+import { RenderPosition, render } from "../utils/render.js";
+
 import InfoView from "../view/info.js";
+import TripPointPresenter from "./trip-point.js";
 
 
 export default class Trip {
@@ -15,11 +15,12 @@ export default class Trip {
         this._listEmptyView = new ListEmptyView(this._isEmpty);
         this._infoPoints = new InfoView(points);
         this._tripEventsMain = tripEventsMain;
+        // this._tripItem = new TripItem();
     }
 
     start() {
         if (this._isEmpty) {
-            this.render(this._tripEventsMain, this._listEmptyView, RenderPosition.BEFOREEND);
+            render(this._tripEventsMain, this._listEmptyView, RenderPosition.BEFOREEND);
             return;
         }
 
@@ -27,82 +28,18 @@ export default class Trip {
         this._renderPoints();
     }
 
-    _renderPoint(pointView, pointViewEditor) {
-        const replaceItemToForm = () => {
-            this._replace(pointViewEditor, pointView);
-        }
-        const replaceFormToItem = () => {
-            this._replace(pointView, pointViewEditor);
-        }
-
-        const onEscPressDown = (evt) => {
-            if (isEscEvent(evt)) {
-                evt.preventDefault();
-                replaceFormToItem();
-            }
-        }
-        const replaceFavoriteValue = () => {
-
-        }
-        pointView.getRollupClickHandler(() => {
-            replaceItemToForm();
-            document.addEventListener('keydown', onEscPressDown, { once: true });
-        });
-        pointView.getFavoriteButtonHandler();
-        // () => {
-        //     replaceFavoriteValue();
-        // });
-        pointViewEditor.getSubmitFormHandler(replaceFormToItem);
-        pointViewEditor.getResetClickHandler(replaceFormToItem);
-        pointViewEditor.getRollupClickHandler(replaceFormToItem);
-
-        this.render(this._tripEventsMain, pointView, RenderPosition.BEFOREEND);
+    _renderPoint(point) {
+        const tripPointPresenter = new TripPointPresenter(this._tripEventsMain);
+        tripPointPresenter.start(new PointView(point), new PointEditorView(point));
     }
 
     _renderPoints() {
-        this._points.forEach((element) => {
-            const pointView = new PointView(element);
-            const pointViewEditor = new PointEditorView(element);
-            this._renderPoint(pointView, pointViewEditor);
-        })
-    }
-
-    render(container, element, place) {
-        //проверка для DOM-элементов и компонентов, у DOM вызываем getElement
-        if (container instanceof AbstractView) {
-            container = container.getElement();
-        }
-        if (element instanceof AbstractView) {
-            element = element.getElement();
-        }
-        switch (place) {
-            case RenderPosition.AFTERBEGIN:
-                container.prepend(element);
-                break;
-            case RenderPosition.BEFOREEND:
-                container.append(element);
-                break;
-        }
-    }
-
-    _replace(newChild, oldChild) {
-        if (newChild instanceof AbstractView) {
-            newChild = newChild.getElement();
-        }
-        if (oldChild instanceof AbstractView) {
-            oldChild = oldChild.getElement();
-        }
-        const parent = oldChild.parentElement;
-
-        if (parent === null || oldChild === null || newChild === null) {
-            throw new Error('Can\`t replace unexisting elements');
-        }
-
-        parent.replaceChild(newChild, oldChild);
+        this._points
+            .forEach((point) => this._renderPoint(point));
     }
 
     _renderMainInfo() {
         const tripMain = document.querySelector('.trip-main');
-        this.render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
+        render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
     }
 }

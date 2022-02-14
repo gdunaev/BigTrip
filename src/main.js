@@ -7,7 +7,7 @@ import SortView from "./view/sort.js";
 // import { createStatsTemplate } from "./view/stats.js";
 // import { getPastPoints } from "./view/dayjs.js";
 // import { getFuturePoints } from "./view/dayjs.js";
-import { RenderPosition } from "./utils/render.js";
+import { RenderPosition, render } from "./utils/render.js";
 import { getPoints } from "./view/get-points.js";
 import TripPresenter from "./presenter/trip.js";
 
@@ -20,25 +20,19 @@ const tripEventsMain = pageBodyMain.querySelector('.trip-events');
 const points = getPoints(COUNT_POINT);
 
 
-const renderSite = () => {
-
-    const presenter = new TripPresenter(points, tripEventsMain);
 
 
-    //навигация
-    const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
-    presenter.render(tripControlsNavigation, new NavigationView(points), RenderPosition.BEFOREEND);
+const presenter = new TripPresenter(points, tripEventsMain);
 
-    //фильтры
-    const tripControlsFilters = document.querySelector('.trip-controls__filters');
-    presenter.render(tripControlsFilters, new FiltersView(points), RenderPosition.BEFOREEND);
+//навигация
+const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
+render(tripControlsNavigation, new NavigationView(points), RenderPosition.BEFOREEND);
 
-    //сортировка
-    presenter.render(tripEventsMain, new SortView(points), RenderPosition.BEFOREEND);
+//фильтры
+const tripControlsFilters = document.querySelector('.trip-controls__filters');
+render(tripControlsFilters, new FiltersView(points), RenderPosition.BEFOREEND);
 
-    presenter.start();
+//сортировка
+render(tripEventsMain, new SortView(points), RenderPosition.BEFOREEND);
 
-}
-
-
-renderSite();
+presenter.start();
