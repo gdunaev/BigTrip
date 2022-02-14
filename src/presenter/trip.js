@@ -5,6 +5,7 @@ import PointView from "../view/point-item.js";
 import { RenderPosition } from "../utils/render.js";
 import { isEscEvent } from "../utils/common.js";
 import { AbstractView } from "../view/abstract.js";
+import InfoView from "../view/info.js";
 
 
 export default class Trip {
@@ -12,6 +13,7 @@ export default class Trip {
         this._points = points;
         this._isEmpty = points.length === 0 ? true : false;
         this._listEmptyView = new ListEmptyView(this._isEmpty);
+        this._infoPoints = new InfoView(points);
         this._tripEventsMain = tripEventsMain;
     }
 
@@ -20,15 +22,17 @@ export default class Trip {
             this.render(this._tripEventsMain, this._listEmptyView, RenderPosition.BEFOREEND);
             return;
         }
+
+        this._renderMainInfo();
         this._renderPoints();
     }
 
     _renderPoint(pointView, pointViewEditor) {
         const replaceItemToForm = () => {
-            replace(pointViewEditor, pointView);
+            this._replace(pointViewEditor, pointView);
         }
         const replaceFormToItem = () => {
-            replace(pointView, pointViewEditor);
+            this._replace(pointView, pointViewEditor);
         }
 
         const onEscPressDown = (evt) => {
@@ -37,10 +41,17 @@ export default class Trip {
                 replaceFormToItem();
             }
         }
+        const replaceFavoriteValue = () => {
+
+        }
         pointView.getRollupClickHandler(() => {
             replaceItemToForm();
             document.addEventListener('keydown', onEscPressDown, { once: true });
         });
+        pointView.getFavoriteButtonHandler();
+        // () => {
+        //     replaceFavoriteValue();
+        // });
         pointViewEditor.getSubmitFormHandler(replaceFormToItem);
         pointViewEditor.getResetClickHandler(replaceFormToItem);
         pointViewEditor.getRollupClickHandler(replaceFormToItem);
@@ -88,5 +99,10 @@ export default class Trip {
         }
 
         parent.replaceChild(newChild, oldChild);
+    }
+
+    _renderMainInfo() {
+        const tripMain = document.querySelector('.trip-main');
+        this.render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
     }
 }

@@ -23,25 +23,17 @@ const points = getPoints(COUNT_POINT);
 const renderSite = () => {
 
     const presenter = new TripPresenter(points, tripEventsMain);
-    // console.log(presenter)
 
-    //главное инфо
-    const tripMain = document.querySelector('.trip-main');
-    // renderElement(tripMain, new InfoView(points), RenderPosition.AFTERBEGIN);
-    presenter.render(tripMain, new InfoView(points), RenderPosition.AFTERBEGIN);
 
     //навигация
     const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
-    // renderElement(tripControlsNavigation, new NavigationView(), RenderPosition.BEFOREEND);
     presenter.render(tripControlsNavigation, new NavigationView(points), RenderPosition.BEFOREEND);
 
     //фильтры
     const tripControlsFilters = document.querySelector('.trip-controls__filters');
-    // renderElement(tripControlsFilters, new FiltersView(), RenderPosition.BEFOREEND);
     presenter.render(tripControlsFilters, new FiltersView(points), RenderPosition.BEFOREEND);
 
     //сортировка
-    // renderElement(tripEventsMain, new SortView(), RenderPosition.BEFOREEND);
     presenter.render(tripEventsMain, new SortView(points), RenderPosition.BEFOREEND);
 
     presenter.start();
