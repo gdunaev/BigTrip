@@ -5,6 +5,7 @@ import { getRandomInteger } from "../utils/common.js";
 import { getMinMaxDurationDate } from "./dayjs";
 import { getDateHourMinute } from "./dayjs";
 import { getDateEdit } from "./dayjs";
+import { nanoid } from "nanoid";
 
 
 const PATH_PHOTOS = 'http://picsum.photos/300/200?r=';
@@ -89,6 +90,7 @@ const createPoint = () => {
     const pointDuration = dueDates[2];
 
     return {
+        id: nanoid(),
         typePoint,
         name,
         'basePrice': getRandomInteger(10, 200),
