@@ -1,34 +1,50 @@
-import { RenderPosition, render } from "../utils/render";
+import { RenderPosition, render, replace } from "../utils/render.js";
+import { isEscEvent } from "../utils/common.js";
+import PointEditorView from "../view/point-editor.js";
+import PointView from "../view/point-item.js";
 
 export default class TripItem {
     constructor(tripEventsMain) {
         this._tripEventsMain = tripEventsMain;
+        this._pointViewEditor = null;
+        this._pointView = null;
+        this._onEscPressDown = this._onEscPressDown.bind(this);
     }
 
-    start(pointView, pointViewEditor) {
-        const replaceItemToForm = () => {
-            this._replace(pointViewEditor, pointView);
-        }
-        const replaceFormToItem = () => {
-            this._replace(pointView, pointViewEditor);
-        }
+    start(point) {
+        this._pointViewEditor = new PointEditorView(point);
+        this._pointView = new PointView(point);
 
-        const onEscPressDown = (evt) => {
-            if (isEscEvent(evt)) {
-                evt.preventDefault();
-                replaceFormToItem();
-            }
-        }
-
-        pointView.getRollupClickHandler(() => {
-            replaceItemToForm();
-            document.addEventListener('keydown', onEscPressDown, { once: true });
+        this._pointView.setRollupClickHandler(() => {
+            this._replaceItemToForm();
         });
-        pointView.getFavoriteButtonHandler();
-        pointViewEditor.getSubmitFormHandler(replaceFormToItem);
-        pointViewEditor.getResetClickHandler(replaceFormToItem);
-        pointViewEditor.getRollupClickHandler(replaceFormToItem);
+        // this._pointView.getFavoriteButtonHandler();
+        this._pointViewEditor.setSubmitFormHandler(() => {
+            this._replaceFormToItem();
+        });
+        // this._pointViewEditor.setResetClickHandler(this._replaceFormToItem);
+        this._pointViewEditor.setRollupClickHandler(() => {
+            this._replaceFormToItem();
+        });
 
-        render(this._tripEventsMain, pointView, RenderPosition.BEFOREEND);
+        render(this._tripEventsMain, this._pointView, RenderPosition.BEFOREEND);
+    }
+
+    _replaceItemToForm() {
+        replace(this._pointViewEditor, this._pointView);
+        document.addEventListener('keydown', this._onEscPressDown); //, { once: true }
+    }
+
+    _replaceFormToItem() {
+        replace(this._pointView, this._pointViewEditor);
+        document.removeEventListener('keydown', this._onEscPressDown);
+    }
+
+    _onEscPressDown(evt) {
+        if (isEscEvent(evt)) {
+            // console.log(this)
+            evt.preventDefault();
+            this._replaceFormToItem();
+        }
     }
 }

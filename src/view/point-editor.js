@@ -1,4 +1,4 @@
-import {AbstractView} from "./abstract.js";
+import { AbstractView } from "./abstract.js";
 
 const createPointEditTemplate = (point) => {
 
@@ -154,40 +154,39 @@ const createPointEditTemplate = (point) => {
 
 
 export default class PointEditorView extends AbstractView {
-  constructor(point) {
-      super();
-      this._point = point;
-      this._getSubmitHandler = this._getSubmitHandler.bind(this);
-      this._getResetHandler = this._getResetHandler.bind(this);
-      this._getRollupClick = this._getRollupClick.bind(this);
-  }
-  getTemplate() {
-      return createPointEditTemplate(this._point);
-  }
-  _getSubmitHandler(evt) {
-    evt.preventDefault();
-    this._callback.submitClick();
-  }
-  getSubmitFormHandler(callback) {
-    this._callback.submitClick = callback;
-    this.getElement().querySelector('.event').addEventListener('submit', this._getSubmitHandler);
-  }
-  _getResetHandler(evt) {
-    evt.preventDefault();
-    this._callback.resetClick();
-  }
-  getResetClickHandler(callback) {
-    this._callback.resetClick = callback;
-    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._getResetHandler);
-  }
-  _getRollupClick(evt) {
-    evt.preventDefault();
-    this._callback.rollupClick();
-  }
-  getRollupClickHandler(callback) {
-    this._callback.rollupClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._getRollupClick);
-  }
+    constructor(point) {
+        super();
+        this._point = point;
+        this._setSubmitHandler = this._setSubmitHandler.bind(this);
+        this._setResetHandler = this._setResetHandler.bind(this);
+        this._setRollupClick = this._setRollupClick.bind(this);
+    }
+    getTemplate() {
+        return createPointEditTemplate(this._point);
+    }
+    _setSubmitHandler(evt) {
+        evt.preventDefault();
+        this._callback.submitClick();
+    }
+    setSubmitFormHandler(callback) {
+        this._callback.submitClick = callback;
+        this.getElement().querySelector('.event').addEventListener('submit', this._setSubmitHandler);
+    }
+    _setResetHandler(evt) {
+        evt.preventDefault();
+        this._callback.resetClick();
+    }
+    setResetClickHandler(callback) {
+        this._callback.resetClick = callback;
+        this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._setResetHandler);
+    }
+    _setRollupClick(evt) {
+        evt.preventDefault();
+        this._callback.rollupClick();
+    }
+    setRollupClickHandler(callback) {
+        this._callback.rollupClick = callback;
+        this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._setRollupClick);
+    }
 
 }
-

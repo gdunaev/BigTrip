@@ -30,7 +30,7 @@ export default class Trip {
 
     _renderPoint(point) {
         const tripPointPresenter = new TripPointPresenter(this._tripEventsMain);
-        tripPointPresenter.start(new PointView(point), new PointEditorView(point));
+        tripPointPresenter.start(point);
     }
 
     _renderPoints() {
