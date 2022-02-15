@@ -15,7 +15,8 @@ export default class Trip {
         this._listEmptyView = new ListEmptyView(this._isEmpty);
         this._infoPoints = new InfoView(points);
         this._tripEventsMain = tripEventsMain;
-        // this._tripItem = new TripItem();
+        this._pointPresenter = {};
+        this._changeModePoint = this._changeModePoint.bind(this);
     }
 
     start() {
@@ -28,14 +29,23 @@ export default class Trip {
         this._renderPoints();
     }
 
+    _changeModePoint() {
+        // console.log(this)
+        Object
+            .values(this._pointPresenter)
+            .forEach((presenter) => presenter.resetView());
+    }
+
     _renderPoint(point) {
-        const tripPointPresenter = new TripPointPresenter(this._tripEventsMain);
-        tripPointPresenter.start(point);
+        const pointPresenter = new TripPointPresenter(this._tripEventsMain, this._changeModePoint);
+        pointPresenter.start(point);
+        this._pointPresenter[point.id] = pointPresenter;
     }
 
     _renderPoints() {
         this._points
             .forEach((point) => this._renderPoint(point));
+        // console.log(this._pointPresenter)
     }
 
     _renderMainInfo() {

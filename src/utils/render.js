@@ -14,56 +14,20 @@ const createElementDom = (template) => {
 }
 
 const replace = (newChild, oldChild) => {
-        if (newChild instanceof AbstractView) {
-            newChild = newChild.getElement();
-        }
-        if (oldChild instanceof AbstractView) {
-            oldChild = oldChild.getElement();
-        }
-        const parent = oldChild.parentElement;
-
-        if (parent === null || oldChild === null || newChild === null) {
-            throw new Error('Can\`t replace unexisting elements');
-        }
-
-        parent.replaceChild(newChild, oldChild);
+    if (newChild instanceof AbstractView) {
+        newChild = newChild.getElement();
     }
-    // const renderElement = (container, element, place) => {
+    if (oldChild instanceof AbstractView) {
+        oldChild = oldChild.getElement();
+    }
+    const parent = oldChild.parentElement;
 
-//     //проверка для DOM-элементов и компонентов, у DOM вызываем getElement
-//     if (container instanceof AbstractView) {
-//       container = container.getElement();
-//     }
-//     if (element instanceof AbstractView) {
-//       element = element.getElement();
-//     }
-//     switch (place) {
-//         case RenderPosition.AFTERBEGIN:
-//             container.prepend(element);
-//             break;
+    if (parent === null || oldChild === null || newChild === null) {
+        throw new Error('Can\`t replace unexisting elements');
+    }
 
-//         case RenderPosition.BEFOREEND:
-//             container.append(element);
-//             break;
-//     }
-// }
-
-// const replace = (newChild, oldChild) => {
-
-//     if (newChild instanceof AbstractView) {
-//         newChild = newChild.getElement();
-//     }
-//     if (oldChild instanceof AbstractView) {
-//         oldChild = oldChild.getElement();
-//     }
-//     const parent = oldChild.parentElement;
-
-//     if (parent === null || oldChild === null || newChild === null) {
-//         throw new Error('Can\`t replace unexisting elements');
-//     }
-
-//     parent.replaceChild(newChild, oldChild);
-// }
+    parent.replaceChild(newChild, oldChild);
+}
 
 const remove = (component) => {
 
@@ -75,49 +39,21 @@ const remove = (component) => {
 }
 
 const render = (container, element, place) => {
-        //проверка для DOM-элементов и компонентов, у DOM вызываем getElement
-        if (container instanceof AbstractView) {
-            container = container.getElement();
-        }
-        if (element instanceof AbstractView) {
-            element = element.getElement();
-        }
-        switch (place) {
-            case RenderPosition.AFTERBEGIN:
-                container.prepend(element);
-                break;
-            case RenderPosition.BEFOREEND:
-                container.append(element);
-                break;
-        }
+    //проверка для DOM-элементов и компонентов, у DOM вызываем getElement
+    if (container instanceof AbstractView) {
+        container = container.getElement();
     }
-    // const renderPointItem = (...rest) => {
-
-//   const [tripEventsMain, pointView, pointViewEditor] = rest;
-
-//   const replaceItemToForm = () =>{
-//     replace(pointViewEditor, pointView);
-//   }
-//   const replaceFormToItem = () =>{
-//     replace(pointView, pointViewEditor);
-//   }
-
-//   const onEscPressDown = (evt) =>{
-//     if (isEscEvent(evt)) {
-//       evt.preventDefault();
-//       replaceFormToItem();
-//     }
-//   }
-
-//   pointView.getRollupClickHandler(() => {
-//     replaceItemToForm();
-//     document.addEventListener('keydown', onEscPressDown, {once: true});
-//   });
-//   pointViewEditor.getSubmitFormHandler(replaceFormToItem);
-//   pointViewEditor.getResetClickHandler(replaceFormToItem);
-//   pointViewEditor.getRollupClickHandler(replaceFormToItem);
-
-//   renderElement(tripEventsMain, pointView, RenderPosition.BEFOREEND);
-// }
+    if (element instanceof AbstractView) {
+        element = element.getElement();
+    }
+    switch (place) {
+        case RenderPosition.AFTERBEGIN:
+            container.prepend(element);
+            break;
+        case RenderPosition.BEFOREEND:
+            container.append(element);
+            break;
+    }
+}
 
 export { createElementDom, RenderPosition, remove, render, replace }
