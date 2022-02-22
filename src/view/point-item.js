@@ -73,33 +73,33 @@ const createPointItemTemplate = (point) => {
 };
 
 export default class PointView extends AbstractView {
-    constructor(point) {
-        super();
-        this._point = point;
-        this._onRollupClick = this._onRollupClick.bind(this);
-        // this._isFavorite = false;
-    }
-    getTemplate() {
-        return createPointItemTemplate(this._point);
-    }
-    _onRollupClick(evt) {
-        evt.preventDefault();
-        this._callback.rollupClick();
-    }
-    setRollupClickHandler(callback) {
-        this._callback.rollupClick = callback;
-        this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._onRollupClick);
-    }
+  constructor(point) {
+    super();
+    this._point = point;
+    this._onRollupClick = this._onRollupClick.bind(this);
+    this._onFavoriteClick = this._onFavoriteClick.bind(this);
+    // this._favoriteClick = point;
+  }
+  getTemplate() {
+    return createPointItemTemplate(this._point);
+  }
+  _onRollupClick(evt) {
+    evt.preventDefault();
+    this._callback.rollupClick();
+  }
+  setRollupClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._onRollupClick);
+  }
 
-    // _onFavoriteClick(evt) {
-    //     evt.preventDefault();
-    //     // this._callback.favoriteClick();
-    //     //
-    //     console.log('11')
-    // }
-    // getFavoriteButtonHandler() {
-    //         // this._callback.favoriteClick = callback;
-    //         this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._onFavoriteClick);
-    //     }
-    //  event__favorite-btn--active
+  _onFavoriteClick(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setFavoriteButtonHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._onFavoriteClick);
+  }
+  //  event__favorite-btn--active
 }

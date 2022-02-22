@@ -9,21 +9,26 @@ const Mode = {
 }
 
 export default class TripItem {
-    constructor(tripEventsMain, changeMode) {
+    constructor(tripEventsMain, changeMode, changeData) {
         this._tripEventsMain = tripEventsMain;
         this._pointViewEditor = null;
         this._pointView = null;
         this._onEscPressDown = this._onEscPressDown.bind(this);
         this._mode = Mode.DEFAULT;
         this._changeMode = changeMode;
+        this._changeData = changeData;
     }
 
     start(point) {
+        this._point = point;
         this._pointViewEditor = new PointEditorView(point);
         this._pointView = new PointView(point);
 
         this._pointView.setRollupClickHandler(() => {
             this._replaceItemToForm();
+        });
+        this._pointView.setFavoriteButtonHandler(() => {
+          this._changeFavoriteButton();
         });
         // this._pointView.getFavoriteButtonHandler();
         this._pointViewEditor.setSubmitFormHandler(() => {
@@ -35,6 +40,12 @@ export default class TripItem {
         });
 
         render(this._tripEventsMain, this._pointView, RenderPosition.BEFOREEND);
+    }
+
+    _changeFavoriteButton() {
+      this._changeData(
+        Object.assign({}, this._point, {isFavorite: !this._point.isFavorite,},),
+      );
     }
 
     resetView() {

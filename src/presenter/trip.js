@@ -3,6 +3,7 @@ import ListEmptyView from "../view/list-empty.js";
 import PointEditorView from "../view/point-editor.js"
 import PointView from "../view/point-item.js";
 import { RenderPosition, render } from "../utils/render.js";
+import { updateItem } from "../utils/common.js";
 
 import InfoView from "../view/info.js";
 import TripPointPresenter from "./trip-point.js";
@@ -11,12 +12,13 @@ import TripPointPresenter from "./trip-point.js";
 export default class Trip {
     constructor(points, tripEventsMain) {
         this._points = points;
-        this._isEmpty = points.length === 0 ? true : false;
+        this._isEmpty = points.length === 0;
         this._listEmptyView = new ListEmptyView(this._isEmpty);
         this._infoPoints = new InfoView(points);
         this._tripEventsMain = tripEventsMain;
         this._pointPresenter = {};
         this._changeModePoint = this._changeModePoint.bind(this);
+        this._handlePointChange = this._handlePointChange.bind(this);
     }
 
     start() {
@@ -29,6 +31,14 @@ export default class Trip {
         this._renderPoints();
     }
 
+    _handlePointChange(updatedPoint) {
+      console.log(this._points)
+      this._points = updateItem(this._points, updatedPoint);
+      // this._taskPresenter[updatedTask.id].init(updatedTask);
+      // console.log(updatedPoint)
+      console.log(this._points)
+    }
+
     _changeModePoint() {
         // console.log(this)
         Object
@@ -37,7 +47,7 @@ export default class Trip {
     }
 
     _renderPoint(point) {
-        const pointPresenter = new TripPointPresenter(this._tripEventsMain, this._changeModePoint);
+        const pointPresenter = new TripPointPresenter(this._tripEventsMain, this._changeModePoint, this._handlePointChange);
         pointPresenter.start(point);
         this._pointPresenter[point.id] = pointPresenter;
     }
