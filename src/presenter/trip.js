@@ -32,18 +32,16 @@ export default class Trip {
     }
 
     _handlePointChange(updatedPoint) {
-      console.log(this._points)
       this._points = updateItem(this._points, updatedPoint);
-      // this._taskPresenter[updatedTask.id].init(updatedTask);
-      // console.log(updatedPoint)
-      console.log(this._points)
+      this._pointPresenter[updatedPoint.id].start(updatedPoint);
+    }
+
+    _clearAllPoints() {
+      Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
     }
 
     _changeModePoint() {
-        // console.log(this)
-        Object
-            .values(this._pointPresenter)
-            .forEach((presenter) => presenter.resetView());
+        Object.values(this._pointPresenter).forEach((presenter) => presenter.resetView());
     }
 
     _renderPoint(point) {
