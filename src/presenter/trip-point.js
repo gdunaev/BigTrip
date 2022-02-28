@@ -8,7 +8,7 @@ const Mode = {
   EDITING: 'EDITING',
 }
 
-export default class TripItem {
+export default class TripPointPresenter {
   constructor(tripEventsMain, changeMode, changeData) {
     this._tripEventsMain = tripEventsMain;
     this._pointViewEditor = null;

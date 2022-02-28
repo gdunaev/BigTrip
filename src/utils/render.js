@@ -1,6 +1,10 @@
 import { AbstractView } from "../view/abstract.js";
 // import { isEscEvent } from "./common.js";
-
+const SortMode = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
+}
 
 const RenderPosition = {
     AFTERBEGIN: 'afterbegin',
@@ -56,4 +60,4 @@ const render = (container, element, place) => {
     }
 }
 
-export { createElementDom, RenderPosition, remove, render, replace }
+export { createElementDom, RenderPosition, remove, render, replace, SortMode }

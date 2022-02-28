@@ -1,6 +1,6 @@
 import InfoView from "./view/info.js";
 import NavigationView from "./view/navigation.js";
-import FiltersView from "./view/filters.js";
+
 import SortView from "./view/sort.js";
 
 // import LoadingView from "./view/loading.js";
@@ -29,9 +29,7 @@ const presenter = new TripPresenter(points, tripEventsMain);
 const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
 render(tripControlsNavigation, new NavigationView(points), RenderPosition.BEFOREEND);
 
-//фильтры
-const tripControlsFilters = document.querySelector('.trip-controls__filters');
-render(tripControlsFilters, new FiltersView(points), RenderPosition.BEFOREEND);
+
 
 //сортировка
 render(tripEventsMain, new SortView(points), RenderPosition.BEFOREEND);
