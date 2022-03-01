@@ -24,6 +24,7 @@ export default class TripPresenter {
         this._changeModePoint = this._changeModePoint.bind(this);
         this._handlePointChange = this._handlePointChange.bind(this);
         // this._handleSortModeChange = this._handleSortModeChange.bind(this);
+        this._currentPoints = points;
         this._filterMode = null;
     }
 
@@ -32,30 +33,26 @@ export default class TripPresenter {
             render(this._tripEventsMain, this._listEmptyView, RenderPosition.BEFOREEND);
             return;
         }
-
         this._renderMainInfo();
         this._renderPoints();
         this._renderFilters();
     }
 
     _handleFilterChange() {
-      // - Сортируем задачи
-      // - Очищаем список
-      // - Рендерим список заново
-      // console.log(filter);
       this._filterMode = this._filtersView._filter;
-      // console.log(this._filterMode);
-      // const cPoints = this._points.slice();
-      if (SortMode.PAST === this._filterMode) {
-        console.log(getPastPoints(this._points));
+      switch (this._filterMode) {
+        case SortMode.PAST:
+          this._currentPoints = getPastPoints(this._points);
+          break;
+        case SortMode.FUTURE:
+          this._currentPoints = getFuturePoints(this._points);
+          break;
+        case SortMode.EVERYTHING:
+          this._currentPoints = this._points;
+          break;
       }
-      if (SortMode.FUTURE === this._filterMode) {
-        console.log( getFuturePoints(this._points));
-      }
-      if (SortMode.EVERYTHING === this._filterMode) {
-        console.log(this._points);
-      }
-
+      this._clearAllPoints();
+      this._renderPoints();
     }
 
     // _renderSort() {
@@ -83,8 +80,7 @@ export default class TripPresenter {
     }
 
     _renderPoints() {
-        this._points
-            .forEach((point) => this._renderPoint(point));
+      this._currentPoints.forEach((point) => this._renderPoint(point));
     }
 
     _renderMainInfo() {
