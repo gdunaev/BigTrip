@@ -25,9 +25,6 @@ const points = getPoints(COUNT_POINT);
 
 const presenter = new TripPresenter(points, tripEventsMain);
 
-//навигация
-const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
-render(tripControlsNavigation, new NavigationView(points), RenderPosition.BEFOREEND);
 
 
 

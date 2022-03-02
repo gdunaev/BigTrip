@@ -1,7 +1,4 @@
 import ListEmptyView from "../view/list-empty.js";
-// import { renderPointItem } from "../utils/render.js";
-import PointEditorView from "../view/point-editor.js"
-import PointView from "../view/point-item.js";
 import { RenderPosition, render } from "../utils/render.js";
 import { updateItem } from "../utils/common.js";
 
@@ -10,6 +7,7 @@ import TripPointPresenter from "./trip-point.js";
 import { SortMode } from "../utils/render.js";
 import FiltersView from "../view/filters.js";
 import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
+import NavigationView from "../view/navigation.js";
 
 
 export default class TripPresenter {
@@ -26,6 +24,7 @@ export default class TripPresenter {
         // this._handleSortModeChange = this._handleSortModeChange.bind(this);
         this._currentPoints = points;
         this._filterMode = null;
+        this._navigationView = new NavigationView(points);
     }
 
     start() {
@@ -34,25 +33,28 @@ export default class TripPresenter {
             return;
         }
         this._renderMainInfo();
+        this._renderNavigation();
         this._renderPoints();
+
         this._renderFilters();
+
     }
 
     _handleFilterChange() {
-      this._filterMode = this._filtersView._filter;
-      switch (this._filterMode) {
-        case SortMode.PAST:
-          this._currentPoints = getPastPoints(this._points);
-          break;
-        case SortMode.FUTURE:
-          this._currentPoints = getFuturePoints(this._points);
-          break;
-        case SortMode.EVERYTHING:
-          this._currentPoints = this._points;
-          break;
-      }
-      this._clearAllPoints();
-      this._renderPoints();
+        this._filterMode = this._filtersView._filter;
+        switch (this._filterMode) {
+            case SortMode.PAST:
+                this._currentPoints = getPastPoints(this._points);
+                break;
+            case SortMode.FUTURE:
+                this._currentPoints = getFuturePoints(this._points);
+                break;
+            case SortMode.EVERYTHING:
+                this._currentPoints = this._points;
+                break;
+        }
+        this._clearAllPoints();
+        this._renderPoints();
     }
 
     // _renderSort() {
@@ -61,12 +63,12 @@ export default class TripPresenter {
     // }
 
     _handlePointChange(updatedPoint) {
-      this._points = updateItem(this._points, updatedPoint);
-      this._pointPresenter[updatedPoint.id].start(updatedPoint);
+        this._points = updateItem(this._points, updatedPoint);
+        this._pointPresenter[updatedPoint.id].start(updatedPoint);
     }
 
     _clearAllPoints() {
-      Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
+        Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
     }
 
     _changeModePoint() {
@@ -80,7 +82,7 @@ export default class TripPresenter {
     }
 
     _renderPoints() {
-      this._currentPoints.forEach((point) => this._renderPoint(point));
+        this._currentPoints.forEach((point) => this._renderPoint(point));
     }
 
     _renderMainInfo() {
@@ -88,9 +90,15 @@ export default class TripPresenter {
         render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
     }
 
-  _renderFilters() {
-    const tripControlsFilters = document.querySelector('.trip-controls__filters');
-    render(tripControlsFilters, this._filtersView, RenderPosition.BEFOREEND);
-    this._filtersView.setFilterChangeHandler(() => { this._handleFilterChange() });
-  }
+    _renderFilters() {
+        const tripControlsFilters = document.querySelector('.trip-controls__filters');
+        render(tripControlsFilters, this._filtersView, RenderPosition.BEFOREEND);
+        this._filtersView.setFilterChangeHandler(() => { this._handleFilterChange() });
+    }
+
+    _renderNavigation() {
+        const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
+        render(tripControlsNavigation, this._navigationView, RenderPosition.BEFOREEND);
+    }
+
 }
