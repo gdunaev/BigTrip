@@ -74,12 +74,12 @@ const getCumulativeDate = (dateFrom, dateTo) => {
 }
 
 const getPastPoints = (points) => {
-    const pastPoint = points.filter((currentPoint) => { return dayjs().isAfter(currentPoint.dateFrom, 'D') });
+    const pastPoint = points.filter((currentPoint) => { return dayjs().isAfter(currentPoint.dateTo) });
     return pastPoint;
 }
 
 const getFuturePoints = (points) => {
-    const futurePoint = points.filter((currentPoint) => { return dayjs().isBefore(currentPoint.dateFrom, 'D') });
+    const futurePoint = points.filter((currentPoint) => { return dayjs().isBefore(currentPoint.dateFrom, 'D') || dayjs().isSame(currentPoint.dateFrom, 'D') });
     return futurePoint;
 }
 

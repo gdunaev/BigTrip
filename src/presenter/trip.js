@@ -43,6 +43,8 @@ export default class TripPresenter {
 
     _handleFilterChange() {
         this._filterMode = this._filtersView._filter;
+        document.getElementById("sort-day").checked = true;
+
         switch (this._filterMode) {
             case FilterMode.PAST:
                 this._currentPoints = getPastPoints(this._points);
