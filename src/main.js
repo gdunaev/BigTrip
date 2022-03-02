@@ -19,16 +19,6 @@ const tripEventsMain = pageBodyMain.querySelector('.trip-events');
 
 const points = getPoints(COUNT_POINT);
 
-// console.log(points)
-
-
-
 const presenter = new TripPresenter(points, tripEventsMain);
-
-
-
-
-//сортировка
-render(tripEventsMain, new SortView(points), RenderPosition.BEFOREEND);
 
 presenter.start();

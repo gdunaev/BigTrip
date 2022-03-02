@@ -8,6 +8,7 @@ import { SortMode } from "../utils/render.js";
 import FiltersView from "../view/filters.js";
 import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
 import NavigationView from "../view/navigation.js";
+import SortView from "../view/sort.js";
 
 
 export default class TripPresenter {
@@ -25,6 +26,7 @@ export default class TripPresenter {
         this._currentPoints = points;
         this._filterMode = null;
         this._navigationView = new NavigationView(points);
+        this._sortView = new SortView(this._points);
     }
 
     start() {
@@ -34,6 +36,7 @@ export default class TripPresenter {
         }
         this._renderMainInfo();
         this._renderNavigation();
+        this._renderSort();
         this._renderPoints();
 
         this._renderFilters();
@@ -99,6 +102,9 @@ export default class TripPresenter {
     _renderNavigation() {
         const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
         render(tripControlsNavigation, this._navigationView, RenderPosition.BEFOREEND);
+    }
+    _renderSort() {
+        render(this._tripEventsMain, this._sortView, RenderPosition.BEFOREEND);
     }
 
 }
