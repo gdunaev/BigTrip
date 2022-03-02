@@ -1,14 +1,14 @@
 import ListEmptyView from "../view/list-empty.js";
-import { RenderPosition, render } from "../utils/render.js";
-import { updateItem } from "../utils/common.js";
+import { RenderPosition, render, FilterMode, SortMode } from "../utils/render.js";
+import { updateItem, getSortPricePoints, getSortDayPoints, getSortTimePoints } from "../utils/common.js";
 
 import InfoView from "../view/info.js";
 import TripPointPresenter from "./trip-point.js";
-import { SortMode } from "../utils/render.js";
 import FiltersView from "../view/filters.js";
 import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
 import NavigationView from "../view/navigation.js";
 import SortView from "../view/sort.js";
+
 
 
 export default class TripPresenter {
@@ -22,9 +22,9 @@ export default class TripPresenter {
         this._pointPresenter = {};
         this._changeModePoint = this._changeModePoint.bind(this);
         this._handlePointChange = this._handlePointChange.bind(this);
-        // this._handleSortModeChange = this._handleSortModeChange.bind(this);
         this._currentPoints = points;
         this._filterMode = null;
+        this._sortMode = null;
         this._navigationView = new NavigationView(points);
         this._sortView = new SortView(this._points);
     }
@@ -38,21 +38,19 @@ export default class TripPresenter {
         this._renderNavigation();
         this._renderSort();
         this._renderPoints();
-
         this._renderFilters();
-
     }
 
     _handleFilterChange() {
         this._filterMode = this._filtersView._filter;
         switch (this._filterMode) {
-            case SortMode.PAST:
+            case FilterMode.PAST:
                 this._currentPoints = getPastPoints(this._points);
                 break;
-            case SortMode.FUTURE:
+            case FilterMode.FUTURE:
                 this._currentPoints = getFuturePoints(this._points);
                 break;
-            case SortMode.EVERYTHING:
+            case FilterMode.EVERYTHING:
                 this._currentPoints = this._points;
                 break;
         }
@@ -60,10 +58,22 @@ export default class TripPresenter {
         this._renderPoints();
     }
 
-    // _renderSort() {
-    //   render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
-    //   this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
-    // }
+    _handleSortModeChange() {
+        this._sortMode = this._sortView._sortMode;
+        switch (this._sortMode) {
+            case SortMode.DAY:
+                this._currentPoints = getSortDayPoints(this._points);
+                break;
+            case SortMode.TIME:
+                this._currentPoints = getSortTimePoints(this._points);
+                break;
+            case SortMode.PRICE:
+                this._currentPoints = getSortPricePoints(this._points);
+                break;
+        }
+        this._clearAllPoints();
+        this._renderPoints();
+    }
 
     _handlePointChange(updatedPoint) {
         this._points = updateItem(this._points, updatedPoint);
@@ -105,6 +115,7 @@ export default class TripPresenter {
     }
     _renderSort() {
         render(this._tripEventsMain, this._sortView, RenderPosition.BEFOREEND);
+        this._sortView.setSortModeChangeHandler(() => { this._handleSortModeChange() });
     }
 
 }

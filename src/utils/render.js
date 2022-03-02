@@ -1,15 +1,24 @@
 import { AbstractView } from "../view/abstract.js";
 // import { isEscEvent } from "./common.js";
+const FilterMode = {
+    EVERYTHING: 'everything',
+    FUTURE: 'future',
+    PAST: 'past',
+}
+
 const SortMode = {
-  EVERYTHING: 'everything',
-  FUTURE: 'future',
-  PAST: 'past',
+    DAY: 'day',
+    PRICE: 'price',
+    TIME: 'time',
+    OFFER: 'offer',
+    EVENT: 'event',
 }
 
 const RenderPosition = {
     AFTERBEGIN: 'afterbegin',
     BEFOREEND: 'beforeend',
 };
+
 
 const createElementDom = (template) => {
     const newElement = document.createElement('div');
@@ -60,4 +69,4 @@ const render = (container, element, place) => {
     }
 }
 
-export { createElementDom, RenderPosition, remove, render, replace, SortMode }
+export { createElementDom, RenderPosition, remove, render, replace, FilterMode, SortMode }
