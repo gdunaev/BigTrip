@@ -1,4 +1,6 @@
 import { AbstractView } from "./abstract.js";
+import flatpickr from "flatpickr";
+import '../../node_modules/flatpickr/dist/flatpickr.min.css'
 
 const createPointEditTemplate = (point) => {
 
@@ -160,7 +162,52 @@ export default class PointEditorView extends AbstractView {
         this._setSubmitHandler = this._setSubmitHandler.bind(this);
         this._setResetHandler = this._setResetHandler.bind(this);
         this._setRollupClick = this._setRollupClick.bind(this);
+        this._datepickerFrom = null;
+        this._datepickerTo = null;
+
+        this._setDatepicker();
     }
+
+    _setDatepicker() {
+      if (this._datepickerFrom) {
+        this._datepickerFrom.destroy();
+        this._datepickerFrom = null;
+      }
+      if (this._datepickerTo) {
+        this._datepickerTo.destroy();
+        this._datepickerTo = null;
+      }
+
+        this._datepickerFrom = flatpickr(
+          this.getElement().querySelector('#event-start-time-1'),
+          {
+            dateFormat: "d/m/y H:i",
+            enableTime: true,
+            defaultDate: this.getElement().querySelector('#event-start-time-1').value,
+            onChange: this._dateChangeHandler, // На событие flatpickr передаём наш колбэк
+          },
+        );
+        this._datepickerTo = flatpickr(
+          this.getElement().querySelector('#event-end-time-1'),
+          {
+            dateFormat: "d/m/y H:i",
+            enableTime: true,
+            defaultDate: this.getElement().querySelector('#event-start-time-1').value,
+            onChange: this._dateChangeHandler, // На событие flatpickr передаём наш колбэк
+          },
+        );
+    }
+
+    _dateChangeHandler([userDate]) {
+      this.updateData({
+        dueDate: userDate,
+      });
+    }
+
+    _dateChangeHandler() {
+      console.log('111')
+    }
+
     getTemplate() {
         return createPointEditTemplate(this._point);
     }
