@@ -1,40 +1,47 @@
-import { AbstractView } from "./abstract.js";
-import flatpickr from "flatpickr";
-import '../../node_modules/flatpickr/dist/flatpickr.min.css'
+import SmartView from './smart.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const createPointEditTemplate = (point) => {
+const FORMAT_DATE = 'd/m/y H:i';
+// eslint-disable-next-line camelcase
+const Type_Date = {
+  START: 'start',
+  END: 'end',
+};
 
-    const test = '';
-    const { typePoint, offers, destination, basePrice, name, dateFromEdit, dateToEdit } = point;
-    const typePointIcon = typePoint.toLowerCase();
-    const cancelDelete = "Delete";
+const createPointEditTemplate = (state) => {
 
-    const offersComponent = offers === undefined ? "" :
-        offers.map((currentPoint) => {
-            return `<div class="event__offer-selector">
+
+  const test = '';
+  const { typePoint, offers, destination, basePrice, name, dateFromEdit, dateToEdit, typePointState } = state;
+
+  console.log(typePointState)
+
+  const typePointIcon = typePoint.toLowerCase();
+  const cancelDelete = 'Delete';
+
+  const offersComponent = offers === undefined ? '' :
+    offers.map((currentPoint) => `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
         <label class="event__offer-label" for="event-offer-luggage-1">
           <span class="event__offer-title">${currentPoint.title}</span>
           +€&nbsp;
           <span class="event__offer-price">${currentPoint.price}</span>
         </label>
-    </div>`
-        }).join(" ");
+    </div>`).join(' ');
 
-    const descriptionComponent = destination === undefined ? '' : destination[0].description;
+  const descriptionComponent = destination === undefined ? '' : destination[0].description;
 
-    const photos = point.destination[0].pictures.map((currentPicture) => {
-        return `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`
-    }).join(" ");
+  const photos = state.destination[0].pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
 
-    const photosAll = `<div class="event__photos-container">
+  const photosAll = `<div class="event__photos-container">
                    <div class="event__photos-tape">
                        ${photos}
                      </div>
                    </div>`;
 
 
-    return `<ul class="trip-events__list">
+  return `<ul class="trip-events__list">
   <li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -99,7 +106,7 @@ const createPointEditTemplate = (point) => {
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-          ${typePoint}
+          ${typePointState !== null ? typePointState : typePoint}
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
           <datalist id="destination-list-1">
@@ -154,86 +161,124 @@ const createPointEditTemplate = (point) => {
 
 };
 
+export default class PointEditorView extends SmartView {
+// export default class PointEditorView extends AbstractView {
+  constructor(point) {
+    super();
+    this._point = point;
+    this._setSubmitHandler = this._setSubmitHandler.bind(this);
+    this._setResetHandler = this._setResetHandler.bind(this);
+    this._setRollupClick = this._setRollupClick.bind(this);
+    this._datePickerFrom = null;
+    this._datePickerTo = null;
+    this._dateChangeHandler = this._dateChangeHandler.bind(this);
 
-export default class PointEditorView extends AbstractView {
-    constructor(point) {
-        super();
-        this._point = point;
-        this._setSubmitHandler = this._setSubmitHandler.bind(this);
-        this._setResetHandler = this._setResetHandler.bind(this);
-        this._setRollupClick = this._setRollupClick.bind(this);
-        this._datepickerFrom = null;
-        this._datepickerTo = null;
+    this._state = PointEditorView.parseDataToState(this._point);
+    this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
+    this._setInnerHandlers();
+  }
 
-        this._setDatepicker();
+  _setInnerHandlers() {
+    this.getElement().querySelector('.event__type-list').addEventListener('click', this._changeEventTypeHandler);
+    this._setDatepicker(this._datePickerFrom, Type_Date.START);
+    this._setDatepicker(this._datePickerTo, Type_Date.END);
+  }
+
+  _setDatepicker(datePicker, typeDate) {
+    if (datePicker) {
+      datePicker.destroy();
+      datePicker = null;
     }
 
-    _setDatepicker() {
-      if (this._datepickerFrom) {
-        this._datepickerFrom.destroy();
-        this._datepickerFrom = null;
-      }
-      if (this._datepickerTo) {
-        this._datepickerTo.destroy();
-        this._datepickerTo = null;
-      }
+    datePicker = flatpickr(
+      this.getElement().querySelector(`#event-${typeDate}-time-1`),
+      {
+        dateFormat: FORMAT_DATE,
+        enableTime: true,
+        // eslint-disable-next-line camelcase
+        defaultDate: typeDate === Type_Date.START ? this._point.dateFromEdit : this._point.dateToEdit,
+        onChange: this._dateChangeHandler,
+      },
+    );
+  }
 
-        this._datepickerFrom = flatpickr(
-          this.getElement().querySelector('#event-start-time-1'),
-          {
-            dateFormat: "d/m/y H:i",
-            enableTime: true,
-            defaultDate: this.getElement().querySelector('#event-start-time-1').value,
-            onChange: this._dateChangeHandler, // На событие flatpickr передаём наш колбэк
-          },
-        );
-        this._datepickerTo = flatpickr(
-          this.getElement().querySelector('#event-end-time-1'),
-          {
-            dateFormat: "d/m/y H:i",
-            enableTime: true,
-            defaultDate: this.getElement().querySelector('#event-start-time-1').value,
-            onChange: this._dateChangeHandler, // На событие flatpickr передаём наш колбэк
-          },
-        );
-    }
+  _changeEventTypeHandler(evt) {
+    // evt.preventDefault();
+    // console.log(this._state)
+    // console.log(evt.target)
+    if (evt.target.tagName === 'LABEL' || this._state.typePoint !== evt.target.textContent) {
 
-    _dateChangeHandler([userDate]) {
       this.updateData({
-        dueDate: userDate,
-      });
+          typePointState: evt.target.textContent,
+        });
     }
+  }
 
-    _dateChangeHandler() {
-      console.log('111')
-    }
 
-    getTemplate() {
-        return createPointEditTemplate(this._point);
-    }
-    _setSubmitHandler(evt) {
-        evt.preventDefault();
-        this._callback.submitClick();
-    }
-    setSubmitFormHandler(callback) {
-        this._callback.submitClick = callback;
-        this.getElement().querySelector('.event').addEventListener('submit', this._setSubmitHandler);
-    }
-    _setResetHandler(evt) {
-        evt.preventDefault();
-        this._callback.resetClick();
-    }
-    setResetClickHandler(callback) {
-        this._callback.resetClick = callback;
-        this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._setResetHandler);
-    }
-    _setRollupClick(evt) {
-        evt.preventDefault();
-        this._callback.rollupClick();
-    }
-    setRollupClickHandler(callback) {
-        this._callback.rollupClick = callback;
-        this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._setRollupClick);
-    }
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setSubmitFormHandler(this._callback.submitClick);
+    this.setRollupClickHandler(this._callback.rollupClick);
+    this.setResetClickHandler(this._callback.resetClick);
+  }
+
+  static parseDataToState(data) {
+    // console.log(data)
+    return Object.assign(
+      {},
+      data,
+      {
+        typePointState: null,
+        // isRepeating: null,
+      },
+    );
+  }
+
+  static parseStateToData(state) {
+    data = Object.assign({}, state);
+
+    delete data.typePointState;
+    // delete data.isRepeating;
+
+    return data;
+  }
+
+  _dateChangeHandler() {
+    console.log('111---');
+  }
+
+  getTemplate() {
+    return createPointEditTemplate(this._state);
+  }
+
+  _setSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.submitClick();
+  }
+
+  setSubmitFormHandler(callback) {
+    this._callback.submitClick = callback;
+    this.getElement().querySelector('.event').addEventListener('submit', this._setSubmitHandler);
+  }
+
+  _setResetHandler(evt) {
+    evt.preventDefault();
+    this._callback.resetClick();
+  }
+
+  setResetClickHandler(callback) {
+    this._callback.resetClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._setResetHandler);
+  }
+
+  _setRollupClick(evt) {
+    evt.preventDefault();
+    this._callback.rollupClick();
+  }
+
+  setRollupClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._setRollupClick);
+  }
 
 }

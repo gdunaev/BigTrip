@@ -1,12 +1,12 @@
-import { RenderPosition, render, replace, remove } from "../utils/render.js";
-import { isEscEvent } from "../utils/common.js";
-import PointEditorView from "../view/point-editor.js";
-import PointView from "../view/point-item.js";
+import { RenderPosition, render, replace, remove } from '../utils/render.js';
+import { isEscEvent } from '../utils/common.js';
+import PointEditorView from '../view/point-editor.js';
+import PointView from '../view/point-item.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
-}
+};
 
 export default class TripPointPresenter {
   constructor(tripEventsMain, changeMode, changeData) {
@@ -25,13 +25,14 @@ export default class TripPointPresenter {
     const prevPointView = this._pointView;
     const prevPointViewEditor = this._pointViewEditor;
 
+    // console.log('111')
     this._pointViewEditor = new PointEditorView(point);
     this._pointView = new PointView(point);
 
-    this._pointView.setRollupClickHandler(() => { this._replaceItemToForm() });
-    this._pointView.setFavoriteButtonHandler(() => { this._changeFavoriteButton() });
-    this._pointViewEditor.setSubmitFormHandler(() => { this._replaceFormToItem() });
-    this._pointViewEditor.setRollupClickHandler(() => { this._replaceFormToItem() });
+    this._pointView.setRollupClickHandler(() => { this._replaceItemToForm(); });
+    this._pointView.setFavoriteButtonHandler(() => { this._changeFavoriteButton(); });
+    this._pointViewEditor.setSubmitFormHandler(() => { this._replaceFormToItem(); });
+    this._pointViewEditor.setRollupClickHandler(() => { this._replaceFormToItem(); });
 
     if (prevPointView === null || prevPointViewEditor === null) {
       render(this._tripEventsMain, this._pointView, RenderPosition.BEFOREEND);

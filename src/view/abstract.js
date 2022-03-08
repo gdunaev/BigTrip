@@ -25,4 +25,4 @@ class AbstractView {
     }
 }
 
-export {AbstractView}
+ export {AbstractView}

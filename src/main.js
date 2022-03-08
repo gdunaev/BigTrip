@@ -1,13 +1,3 @@
-import InfoView from "./view/info.js";
-import NavigationView from "./view/navigation.js";
-
-import SortView from "./view/sort.js";
-
-// import LoadingView from "./view/loading.js";
-// import { createStatsTemplate } from "./view/stats.js";
-// import { getPastPoints } from "./view/dayjs.js";
-// import { getFuturePoints } from "./view/dayjs.js";
-import { RenderPosition, render } from "./utils/render.js";
 import { getPoints } from "./view/get-points.js";
 import TripPresenter from "./presenter/trip.js";
 
