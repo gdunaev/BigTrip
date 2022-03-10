@@ -1,9 +1,9 @@
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import { OFFER } from './mock.js';
 
 const FORMAT_DATE = 'd/m/y H:i';
-// eslint-disable-next-line camelcase
 const Type_Date = {
   START: 'start',
   END: 'end',
@@ -13,12 +13,16 @@ const createPointEditTemplate = (state) => {
 
 
   const test = '';
-  const { typePoint, offers, destination, basePrice, name, dateFromEdit, dateToEdit, typePointState } = state;
+  const { typePoint, destination, basePrice, name, dateFromEdit, dateToEdit, typePointState } = state;
 
-  console.log(typePointState)
 
-  const typePointIcon = typePoint.toLowerCase();
+  const typePointIconTemplate = typePointState !== null ? typePointState.toLowerCase() : typePoint.toLowerCase();
+  const typePointTemplate = typePointState !== null ? typePointState : typePoint;
+
   const cancelDelete = 'Delete';
+  let offers = typePointState !== null ? OFFER.get(typePointState): state.offers;
+
+  // console.log(offers)
 
   const offersComponent = offers === undefined ? '' :
     offers.map((currentPoint) => `<div class="event__offer-selector">
@@ -48,7 +52,7 @@ const createPointEditTemplate = (state) => {
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/${typePointIcon}.png" alt="">
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${typePointIconTemplate}.png" alt="">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -57,47 +61,47 @@ const createPointEditTemplate = (state) => {
               <legend class="visually-hidden">Event type</legend>
 
               <div class="event__type-item">
-                <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+                <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${typePointIconTemplate === 'taxi' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
               </div>
 
               <div class="event__type-item">
-                <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" checked>
+                <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${typePointIconTemplate === 'bus' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
               </div>
 
               <div class="event__type-item">
-                <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+                <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${typePointIconTemplate === 'train' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
               </div>
 
               <div class="event__type-item">
-                <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+                <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${typePointIconTemplate === 'ship' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
               </div>
 
               <div class="event__type-item">
-                <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+                <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${typePointIconTemplate === 'drive' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
               </div>
 
               <div class="event__type-item">
-                <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
+                <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${typePointIconTemplate === 'flight' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
               </div>
 
               <div class="event__type-item">
-                <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+                <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${typePointIconTemplate === 'check-in' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
               </div>
 
               <div class="event__type-item">
-                <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+                <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${typePointIconTemplate === 'sightseeing' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
               </div>
 
               <div class="event__type-item">
-                <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+                <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${typePointIconTemplate === 'restaurant' ? 'checked' : ''}>
                 <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
               </div>
             </fieldset>
@@ -106,7 +110,7 @@ const createPointEditTemplate = (state) => {
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-          ${typePointState !== null ? typePointState : typePoint}
+          ${typePointTemplate}
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
           <datalist id="destination-list-1">
@@ -162,7 +166,6 @@ const createPointEditTemplate = (state) => {
 };
 
 export default class PointEditorView extends SmartView {
-// export default class PointEditorView extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
@@ -195,7 +198,6 @@ export default class PointEditorView extends SmartView {
       {
         dateFormat: FORMAT_DATE,
         enableTime: true,
-        // eslint-disable-next-line camelcase
         defaultDate: typeDate === Type_Date.START ? this._point.dateFromEdit : this._point.dateToEdit,
         onChange: this._dateChangeHandler,
       },
@@ -203,11 +205,9 @@ export default class PointEditorView extends SmartView {
   }
 
   _changeEventTypeHandler(evt) {
-    // evt.preventDefault();
-    // console.log(this._state)
     // console.log(evt.target)
-    if (evt.target.tagName === 'LABEL' || this._state.typePoint !== evt.target.textContent) {
-
+    if (evt.target.tagName === 'LABEL') {
+      // console.log(evt.target)
       this.updateData({
           typePointState: evt.target.textContent,
         });

@@ -10,8 +10,6 @@ export default class SmartView extends AbstractView {
     if (!update) {
       return;
     }
-    console.log('222')
-    console.log(this._state)
 
     this._state = Object.assign(
       {},
@@ -19,7 +17,7 @@ export default class SmartView extends AbstractView {
       update,
     );
 
-    console.log(this._state)
+    // console.log(this._state)
 
     if (justDataUpdating) {
       return;
