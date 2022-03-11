@@ -9,7 +9,7 @@ import { nanoid } from "nanoid";
 
 
 const PATH_PHOTOS = 'http://picsum.photos/300/200?r=';
-const TYPE_POINT = ['Taxi', 'Bus', 'Train', 'Ship', 'Transport', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
+const TYPE_POINT = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 const POINT_NAME = ['Питер', 'Москва', 'Кукуево', 'Рио', 'Париж', 'Ландон', 'Невада'];
 const DESTINATION_INFORMATION = [
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
