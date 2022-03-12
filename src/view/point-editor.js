@@ -1,7 +1,7 @@
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import { OFFER } from './mock.js';
+import { OFFER, POINT_DESCRIPTION } from './mock.js';
 
 const FORMAT_DATE = 'd/m/y H:i';
 const Type_Date = {
@@ -13,13 +13,15 @@ const createPointEditTemplate = (state) => {
 
 
     const test = '';
-    const { typePoint, destination, basePrice, name, dateFromEdit, dateToEdit, typePointState } = state;
+    const { typePoint, basePrice, dateFromEdit, dateToEdit, typePointState, dectinationState} = state;
 
-    //смена типа поездки (с доп.предложениями)
     const typePointIconTemplate = typePointState !== null ? typePointState.toLowerCase() : typePoint.toLowerCase();
     const typePointTemplate = typePointState !== null ? typePointState : typePoint;
     const offers = typePointState !== null ? OFFER.get(typePointState) : state.offers;
+    const destination = dectinationState !== null ? POINT_DESCRIPTION.get(dectinationState) : state.destination;
+    const name = dectinationState !== null ? dectinationState : state.name;
 
+    // console.log(destination)
     const cancelDelete = 'Delete';
 
 
@@ -37,9 +39,9 @@ const createPointEditTemplate = (state) => {
 
     const descriptionComponent = destination === undefined ? '' : destination[0].description;
 
-    const photos = state.destination[0].pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
+    const photos = destination[0].pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
 
-    const photosAll = `<div class="event__photos-container">
+    const photosComponent = `<div class="event__photos-container">
                    <div class="event__photos-tape">
                        ${photos}
                      </div>
@@ -156,7 +158,7 @@ const createPointEditTemplate = (state) => {
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
             <p class="event__destination-description">${descriptionComponent}</p>
-            ${photosAll}
+            ${photosComponent}
         </section>
       </section>
     </form>
@@ -179,13 +181,30 @@ export default class PointEditorView extends SmartView {
 
         this._state = PointEditorView.parseDataToState(this._point);
         this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
+        this._destinationInputHandler = this._destinationInputHandler.bind(this);
         this._setInnerHandlers();
+        // console.log('111')
     }
 
     _setInnerHandlers() {
         this.getElement().querySelector('.event__type-list').addEventListener('click', this._changeEventTypeHandler);
         this._setDatepicker(this._datePickerFrom, Type_Date.START);
         this._setDatepicker(this._datePickerTo, Type_Date.END);
+        this.getElement().querySelector('#event-destination-1').addEventListener('input', this._destinationInputHandler);
+    }
+
+    _checkDectination(dectination) {
+      if (POINT_DESCRIPTION.get(dectination) === undefined) {
+          return true;
+      }
+      return false;
+    }
+
+    _destinationInputHandler(evt) {
+      evt.preventDefault();
+      this.updateData({
+        dectinationState: evt.target.value,
+      }, this._checkDectination(evt.target.value));
     }
 
     _setDatepicker(datePicker, typeDate) {
@@ -236,6 +255,7 @@ export default class PointEditorView extends SmartView {
                 typePointState: null,
                 dateFromEditState: null,
                 dateToEditState: null,
+                dectinationState: null,
             },
         );
     }
@@ -246,6 +266,7 @@ export default class PointEditorView extends SmartView {
         delete data.typePointState;
         delete data.dateFromEditState;
         delete data.dateToEditState;
+        delete data.dectinationState;
 
         return data;
     }

@@ -36,9 +36,18 @@ const OFFER = new Map([
     ["Sightseeing", [{ "title": "С гидом", "price": 90 }, { "title": "остановка по требованию", "price": 110 }]],
 ]);
 
+const POINT_DESCRIPTION = new Map([
+  ['Питер', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
+  ['Москва', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
+  ['Кукуево', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
+  ['Рио', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
+  ['Париж', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
+  ['Ландон', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
+  ['Невада', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
+  ['Питер', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
+]);
 
-
-const getRandomDescription = () => {
+function getRandomDescription () {
     const countString = getRandomInteger(1, 5);
     let destination = '';
     for (let i = 1; i <= countString; i++) {
@@ -48,7 +57,7 @@ const getRandomDescription = () => {
     return destination;
 }
 
-const getArrayPictures = () => {
+function getArrayPictures () {
     let array = [];
     const countPhoto = getRandomInteger(3, 5);
     for (let i = 1; i <= countPhoto; i++) {
@@ -65,19 +74,6 @@ const getArrayPictures = () => {
     }
     return array;
 }
-
-
-const POINT_DESCRIPTION = new Map([
-    ['Питер', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
-    ['Москва', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
-    ['Кукуево', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
-    ['Рио', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
-    ['Париж', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
-    ['Ландон', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
-    ['Невада', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
-    ['Питер', [{ 'description': getRandomDescription(), 'pictures': getArrayPictures() }]],
-]);
-
 
 
 const createPoint = () => {
@@ -112,4 +108,4 @@ const createPoint = () => {
     };
 }
 
-export { createPoint, OFFER };
+export { createPoint, OFFER, POINT_DESCRIPTION };

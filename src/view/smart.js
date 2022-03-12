@@ -17,12 +17,9 @@ export default class SmartView extends AbstractView {
       update,
     );
 
-    // console.log(this._state)
-
     if (justDataUpdating) {
       return;
     }
-
 
     this.updateElement();
   }
