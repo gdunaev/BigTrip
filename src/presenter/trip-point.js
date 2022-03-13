@@ -74,6 +74,7 @@ export default class TripPointPresenter {
   }
 
   _replaceFormToItem() {
+    this._pointViewEditor.reset(this._point);
     replace(this._pointView, this._pointViewEditor);
     document.removeEventListener('keydown', this._onEscPressDown);
     this._mode = Mode.DEFAULT;

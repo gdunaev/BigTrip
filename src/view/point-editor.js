@@ -191,6 +191,13 @@ export default class PointEditorView extends SmartView {
     // console.log('111')
   }
 
+  reset(point) {
+    // console.log('1112')
+    this.updateData(
+      PointEditorView.parseDataToState(point),
+    );
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-list').addEventListener('click', this._changeEventTypeHandler);
     this._setDateFromPicker();
@@ -255,9 +262,6 @@ export default class PointEditorView extends SmartView {
       dateToState: this.getElement().querySelector(`#event-${TypeDate.END}-time-1`).value,
     });
   }
-
-
-
 
   _changeEventTypeHandler(evt) {
     if (evt.target.tagName === 'LABEL') {
