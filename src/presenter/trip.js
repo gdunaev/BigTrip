@@ -78,7 +78,9 @@ export default class TripPresenter {
     }
 
     _handlePointChange(updatedPoint) {
+      //  console.log(update)
         this._points = updateItem(this._points, updatedPoint);
+        // console.log(updatedPoint)
         this._pointPresenter[updatedPoint.id].start(updatedPoint);
     }
 
@@ -115,9 +117,9 @@ export default class TripPresenter {
         const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
         render(tripControlsNavigation, this._navigationView, RenderPosition.BEFOREEND);
     }
+
     _renderSort() {
         render(this._tripEventsMain, this._sortView, RenderPosition.BEFOREEND);
         this._sortView.setSortModeChangeHandler(() => { this._handleSortModeChange() });
     }
-
 }

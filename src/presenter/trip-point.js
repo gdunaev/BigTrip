@@ -17,6 +17,7 @@ export default class TripPointPresenter {
     this._mode = Mode.DEFAULT;
     this._changeMode = changeMode;
     this._changeData = changeData;
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
   }
 
   start(point) {
@@ -25,13 +26,14 @@ export default class TripPointPresenter {
     const prevPointView = this._pointView;
     const prevPointViewEditor = this._pointViewEditor;
 
-    // console.log('111')
+    // console.log('222', prevPointView, prevPointViewEditor)
+
     this._pointViewEditor = new PointEditorView(point);
     this._pointView = new PointView(point);
 
     this._pointView.setRollupClickHandler(() => { this._replaceItemToForm(); });
     this._pointView.setFavoriteButtonHandler(() => { this._changeFavoriteButton(); });
-    this._pointViewEditor.setSubmitFormHandler(() => { this._replaceFormToItem(); });
+    this._pointViewEditor.setSubmitFormHandler(this._handleFormSubmit);
     this._pointViewEditor.setRollupClickHandler(() => { this._replaceFormToItem(); });
 
     if (prevPointView === null || prevPointViewEditor === null) {
@@ -39,13 +41,19 @@ export default class TripPointPresenter {
       return;
     }
 
-    replace(this._pointView, prevPointView);
-    replace(this._pointViewEditor, prevPointViewEditor);
+    if (this._mode === Mode.DEFAULT) {
+      replace(this._pointView, prevPointView);
+    }
+
+    if (this._mode === Mode.EDITING) {
+      replace(this._pointViewEditor, prevPointViewEditor);
+    }
 
     remove(prevPointView);
     remove(prevPointViewEditor);
 
   }
+
 
 
   destroy() {
@@ -74,7 +82,9 @@ export default class TripPointPresenter {
   }
 
   _replaceFormToItem() {
-    this._pointViewEditor.reset(this._point);
+    //  console.log(isSubmit)isSubmit = false)
+
+    this._pointViewEditor.resetState(this._point);//, isSubmit, this._changeData);
     replace(this._pointView, this._pointViewEditor);
     document.removeEventListener('keydown', this._onEscPressDown);
     this._mode = Mode.DEFAULT;
@@ -86,4 +96,10 @@ export default class TripPointPresenter {
       this._replaceFormToItem();
     }
   }
+
+  _handleFormSubmit(point) {
+    this._changeData(Object.assign({}, point));
+    this._replaceFormToItem();
+  }
+
 }

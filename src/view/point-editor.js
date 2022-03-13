@@ -188,11 +188,9 @@ export default class PointEditorView extends SmartView {
     this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
     this._destinationInputHandler = this._destinationInputHandler.bind(this);
     this._setInnerHandlers();
-    // console.log('111')
   }
 
-  reset(point) {
-    // console.log('1112')
+  resetState(point) {
     this.updateData(
       PointEditorView.parseDataToState(point),
     );
@@ -291,7 +289,10 @@ export default class PointEditorView extends SmartView {
   }
 
   static parseStateToData(state) {
-    data = Object.assign({}, state);
+    const data = Object.assign({}, state,
+      {
+        typePoint: state.typePointState !== null ? state.typePointState : state.typePoint,
+      });
 
     delete data.typePointState;
     delete data.dectinationState;
@@ -308,7 +309,10 @@ export default class PointEditorView extends SmartView {
 
   _setSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.submitClick();
+    // console.log(this._state)
+    // const _state = PointEditorView.parseStateToData(this._state);
+    // console.log(_state)
+    this._callback.submitClick(PointEditorView.parseStateToData(this._state));//PointEditorView.parseStateToData(this._state)
   }
 
   setSubmitFormHandler(callback) {
@@ -318,11 +322,6 @@ export default class PointEditorView extends SmartView {
 
   _setResetHandler(evt) {
     evt.preventDefault();
-    // this.updateData({
-    //   typePointState: null,
-    //   dectinationState: null,
-    // });
-    // console.log('111')
     this._callback.resetClick();
   }
 
@@ -333,10 +332,6 @@ export default class PointEditorView extends SmartView {
 
   _setRollupClick(evt) {
     evt.preventDefault();
-    // this.updateData({
-    //   typePointState: null,
-    //   dectinationState: null,
-    // });
     this._callback.rollupClick();
   }
 
@@ -344,5 +339,4 @@ export default class PointEditorView extends SmartView {
     this._callback.rollupClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._setRollupClick);
   }
-
 }
