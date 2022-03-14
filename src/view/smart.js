@@ -21,7 +21,6 @@ export default class SmartView extends AbstractView {
       return;
     }
 
-    // console.log(this._state)
     this.updateElement();
   }
 
@@ -42,4 +41,3 @@ export default class SmartView extends AbstractView {
   }
 }
 
-// export {SmartView}

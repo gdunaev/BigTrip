@@ -76,14 +76,11 @@ export default class TripPointPresenter {
   _replaceItemToForm() {
     replace(this._pointViewEditor, this._pointView);
     document.addEventListener('keydown', this._onEscPressDown);
-
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceFormToItem() {
-    //  console.log(isSubmit)isSubmit = false)
-
     this._pointViewEditor.resetState(this._point);//, isSubmit, this._changeData);
     replace(this._pointView, this._pointViewEditor);
     document.removeEventListener('keydown', this._onEscPressDown);
@@ -101,5 +98,4 @@ export default class TripPointPresenter {
     this._changeData(Object.assign({}, point));
     this._replaceFormToItem();
   }
-
 }

@@ -27,19 +27,14 @@ const createElementDom = (template) => {
 }
 
 const replace = (newChild, oldChild) => {
-    // console.log('333', newChild,oldChild, oldChild.parentElement)
-
     if (newChild instanceof AbstractView) {
         newChild = newChild.getElement();
-        // console.log('444', newChild)
     }
     if (oldChild instanceof AbstractView) {
         oldChild = oldChild.getElement();
-        // console.log('555', oldChild, oldChild.parentElement)
     }
     const parent = oldChild.parentElement;
 
-    // console.log('333', parent, newChild, oldChild)
     if (parent === null || oldChild === null || newChild === null) {
         throw new Error('Can\`t replace unexisting elements');
     }

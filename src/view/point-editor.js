@@ -2,6 +2,7 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { OFFER, POINT_DESCRIPTION } from './mock.js';
+import {datesFields} from './dayjs.js';
 
 const FORMAT_DATE = 'd/m/y H:i';
 const TypeDate = {
@@ -250,14 +251,17 @@ export default class PointEditorView extends SmartView {
   }
 
   _dateFromChangeHandler() {
+    // console.log(this._dateFromPicker.selectedDates)
     this.updateData({
       dateFromState: this.getElement().querySelector(`#event-${TypeDate.START}-time-1`).value,
+      dateFromPicker: this._dateFromPicker.selectedDates,
     });
   }
 
   _dateToChangeHandler() {
     this.updateData({
       dateToState: this.getElement().querySelector(`#event-${TypeDate.END}-time-1`).value,
+      dateToPicker: this._dateToPicker.selectedDates,
     });
   }
 
@@ -284,20 +288,48 @@ export default class PointEditorView extends SmartView {
       dectinationState: null,
       dateFromState: null,
       dateToState: null,
+      dateFromPicker: null,
+      dateToPicker: null,
     },
     );
   }
 
+
+
   static parseStateToData(state) {
     const data = Object.assign({}, state,
-      {
+      Object.assign({},
+     {
         typePoint: state.typePointState !== null ? state.typePointState : state.typePoint,
-      });
+        offers: state.typePointState !== null ? OFFER.get(state.typePointState) : state.offers,
+        name: state.dectinationState !== null ? state.dectinationState : state.name,
+        destination: state.dectinationState !== null ? POINT_DESCRIPTION.get(state.dectinationState) : state.destination,
+      },
+      datesFields(state))
+    );
+
+      // console.log(state.dateFromPicker)
+      // const re = /[:, /,]/;
+      // let date = state.dateFromState.split();
+      // ['11', '03', '22', '02', '05']
+      // const date2 = date[2];
+      // date[2] = date[0];
+      // date[0] = date2;
+      // let arr = date.slice(0,1) ;
+      // new Array(COUNT_POINT).fill().map(createPoint).sort(compareDataFrom)
+
+      // 09/03/22 00:34
+
+      // console.log(dayjs(state.dateFromPicker))//dateToPicker
+      // var d = new Date('22 03 10');
+      // console.log(dayjs(d))
 
     delete data.typePointState;
     delete data.dectinationState;
     delete data.dateFromState;
     delete data.dateToState;
+    delete data.dateFromPicker;
+    delete data.dateToPicker;
 
     return data;
   }

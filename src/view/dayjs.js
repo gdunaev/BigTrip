@@ -14,9 +14,14 @@ const getStringDate = (partDate, symbol, isDay) => {
     }
 }
 
-const getMinMaxDurationDate = () => {
+const getMinMaxDurationDate = (dateA = null, dateB = null) => {
 
-    const dates = [getRandomDate(), getRandomDate()];
+  // console.log(dateA, dateB)
+
+  let dates = [dateA, dateB];
+  if (dateA === null) {
+    dates = [getRandomDate(), getRandomDate()];
+  }
 
     const minMaxDates = [];
     minMaxDates.push(dayjs.min(dates));
@@ -83,6 +88,41 @@ const getFuturePoints = (points) => {
     return futurePoint;
 }
 
+
+const datesFields = (state) => {
+
+  if (state.dateFromPicker === null && state.dateToPicker === null) {
+    return {}
+  }
+
+    // dateFrom: state.dateFromPicker !== null ? state.dateFromPicker : state.dateFrom,
+    //     dateTo: state.dateToPicker !== null ? state.dateToPicker : state.dateTo,
+
+    const dateFrom = state.dateFromPicker !== null ? dayjs(state.dateFromPicker) : state.dateFrom;
+    const dateTo = state.dateToPicker !== null ? dayjs(state.dateToPicker) : state.dateTo;
+    const dueDates = getMinMaxDurationDate(dateFrom, dateTo);
+    // dateFrom = dueDates[0];
+    // dateTo = dueDates[1];
+    const pointDuration = dueDates[2];
+
+// console.log(dateFrom,  dateTo,  pointDuration)
+
+    // return {}
+    return {
+        'dateFrom': dateFrom,
+        'dateFromOnlyDate': getOnlyDate(dateFrom),
+        'dateFromMonthDay': getMonthDay(dateFrom),
+        'dateFromHourMinute': getDateHourMinute(dateFrom),
+        'dateFromHour': getDateHour(dateFrom),
+        'dateFromEdit': getDateEdit(dateFrom),
+        dateTo,
+        'dateToHour': getDateHour(dateTo),
+        'dateToHourMinute': getDateHourMinute(dateTo),
+        'dateToEdit': getDateEdit(dateTo),
+        pointDuration,
+    };
+  }
+
 export {
     getDateHour,
     getMonthDay,
@@ -93,5 +133,6 @@ export {
     getDateEdit,
     getCumulativeDate,
     getPastPoints,
-    getFuturePoints
+    getFuturePoints,
+    datesFields
 }
