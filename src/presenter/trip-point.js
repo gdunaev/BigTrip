@@ -2,11 +2,9 @@ import { RenderPosition, render, replace, remove } from '../utils/render.js';
 import { isEscEvent } from '../utils/common.js';
 import PointEditorView from '../view/point-editor.js';
 import PointView from '../view/point-item.js';
+import {UserAction, UpdateType, Mode} from '../view/const.js';
 
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
+
 
 export default class TripPointPresenter {
   constructor(tripEventsMain, changeMode, changeData) {
@@ -55,16 +53,17 @@ export default class TripPointPresenter {
   }
 
 
-
   destroy() {
     remove(this._pointView);
     remove(this._pointViewEditor);
   }
 
   _changeFavoriteButton() {
-    this._changeData(
-      Object.assign({}, this._point, { isFavorite: !this._point.isFavorite, },),
-    );
+      this._changeData(
+        UserAction.UPDATE,
+        UpdateType.MINOR,
+        Object.assign({}, this._point, { isFavorite: !this._point.isFavorite, },),
+      );
   }
 
   resetView() {
@@ -95,7 +94,11 @@ export default class TripPointPresenter {
   }
 
   _handleFormSubmit(point) {
-    this._changeData(Object.assign({}, point));
+    this._changeData(
+      UserAction.UPDATE,
+      UpdateType.MINOR,
+      Object.assign({}, point));
+
     this._replaceFormToItem();
   }
 }

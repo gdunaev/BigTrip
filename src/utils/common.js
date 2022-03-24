@@ -9,20 +9,20 @@ const isEscEvent = (evt) => {
     return evt.key === 'Escape' || evt.key === 'Esc';
 }
 
-//сборка нового массива с заменой элемента
-const updateItem = (items, update) => {
-    const index = items.findIndex((item) => item.id === update.id);
+// //сборка нового массива с заменой элемента
+// const updateItem = (items, update) => {
+//     const index = items.findIndex((item) => item.id === update.id);
 
-    if (index === -1) {
-        return items;
-    }
+//     if (index === -1) {
+//         return items;
+//     }
 
-    return [
-        ...items.slice(0, index),
-        update,
-        ...items.slice(index + 1),
-    ];
-}
+//     return [
+//         ...items.slice(0, index),
+//         update,
+//         ...items.slice(index + 1),
+//     ];
+// }
 
 
 const comparePrice = (elementA, elementB) => {
@@ -58,4 +58,4 @@ const getSortTimePoints = (points) => {
     return sortPoints;
 }
 
-export { getRandomInteger, isEscEvent, updateItem, getSortPricePoints, getSortTimePoints, getSortDayPoints }
+export { getRandomInteger, isEscEvent, getSortPricePoints, getSortTimePoints, getSortDayPoints }

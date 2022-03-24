@@ -44,11 +44,15 @@ const replace = (newChild, oldChild) => {
 
 const remove = (component) => {
 
-    if (!(component instanceof AbstractView)) {
-        throw new Error('Can remove only components');
-    }
-    component.getElement().remove();
-    component.removeElement();
+  if (component === null) {
+    return;
+  }
+
+  if (!(component instanceof AbstractView)) {
+    throw new Error('Can remove only components');
+  }
+  component.getElement().remove();
+  component.removeElement();
 }
 
 const render = (container, element, place) => {
