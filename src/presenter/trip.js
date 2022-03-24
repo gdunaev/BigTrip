@@ -9,11 +9,16 @@ import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
 import NavigationView from "../view/navigation.js";
 import SortView from "../view/sort.js";
 
+const Mode = {
+    SORT: 'sort',
+    FILTER: 'filter'
+}
+
 
 
 export default class TripPresenter {
-    constructor(points, tripEventsMain) {
-        this._points = points;
+    constructor(points, tripEventsMain, pointsModel) {
+        // this._points = points;
         this._isEmpty = points.length === 0;
         this._listEmptyView = new ListEmptyView(this._isEmpty);
         this._infoPoints = new InfoView(points);
@@ -22,11 +27,14 @@ export default class TripPresenter {
         this._pointPresenter = {};
         this._changeModePoint = this._changeModePoint.bind(this);
         this._handlePointChange = this._handlePointChange.bind(this);
-        this._currentPoints = points;
+        // this._currentPoints = points;
+        this._currentMode = '';
         this._filterMode = null;
         this._sortMode = null;
         this._navigationView = new NavigationView(points);
         this._sortView = new SortView(this._points);
+
+        this._pointsModel = pointsModel;
     }
 
     start() {
@@ -41,45 +49,58 @@ export default class TripPresenter {
         this._renderFilters();
     }
 
+    _getPoints() {
+        const points = this._pointsModel.getPoints();
+
+        if (this._currentMode === Mode.SORT) {
+            switch (this._sortMode) {
+                case SortMode.DAY:
+                    return getSortDayPoints(points);
+                case SortMode.TIME:
+                    return getSortTimePoints(points);
+                case SortMode.PRICE:
+                    return getSortPricePoints(points);
+            }
+        }
+        
+        switch (this._filterMode) {
+            case FilterMode.PAST:
+                return getPastPoints(points);
+            case FilterMode.FUTURE:
+                return getFuturePoints(points);
+            case FilterMode.EVERYTHING:
+                return points;
+        }
+
+        return this._pointsModel.getPoints();
+    }
+
     _handleFilterChange() {
+        if (this._filterMode === this._filtersView._filter) {
+            return;
+        }
+        this._currentMode = Mode.FILTER;
         this._filterMode = this._filtersView._filter;
         document.getElementById('sort-day').checked = true;
 
-        switch (this._filterMode) {
-            case FilterMode.PAST:
-                this._currentPoints = getPastPoints(this._points);
-                break;
-            case FilterMode.FUTURE:
-                this._currentPoints = getFuturePoints(this._points);
-                break;
-            case FilterMode.EVERYTHING:
-                this._currentPoints = this._points;
-                break;
-        }
         this._clearAllPoints();
         this._renderPoints();
     }
 
     _handleSortModeChange() {
-        this._sortMode = this._sortView._sortMode;
-        switch (this._sortMode) {
-            case SortMode.DAY:
-                this._currentPoints = getSortDayPoints(this._points);
-                break;
-            case SortMode.TIME:
-                this._currentPoints = getSortTimePoints(this._points);
-                break;
-            case SortMode.PRICE:
-                this._currentPoints = getSortPricePoints(this._points);
-                break;
+        if (this._sortMode === this._sortView._sortMode) {
+            return;
         }
+        this._currentMode = Mode.SORT;
+        this._sortMode = this._sortView._sortMode;
+
         this._clearAllPoints();
         this._renderPoints();
     }
 
     _handlePointChange(updatedPoint) {
-      //  console.log(update)
-        this._points = updateItem(this._points, updatedPoint);
+        //  console.log(update)
+        // this._points = updateItem(this._points, updatedPoint);
         // console.log(updatedPoint)
         this._pointPresenter[updatedPoint.id].start(updatedPoint);
     }
@@ -99,7 +120,7 @@ export default class TripPresenter {
     }
 
     _renderPoints() {
-        this._currentPoints.forEach((point) => this._renderPoint(point));
+        this._getPoints().forEach((point) => this._renderPoint(point));
     }
 
     _renderMainInfo() {
