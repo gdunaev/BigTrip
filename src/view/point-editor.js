@@ -1,7 +1,7 @@
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import { OFFER, POINT_DESCRIPTION } from './mock.js';
+import { OFFER, POINT_DESCRIPTION, POINT_NAME} from './mock.js';
 import {datesFields} from './dayjs.js';
 
 const FORMAT_DATE = 'd/m/y H:i';
@@ -29,8 +29,13 @@ const createPointEditTemplate = (state) => {
   // console.log(this._dateFromPicker)
   const cancelDelete = 'Delete';
 
+  //подставляем наименование точек
+  let dataListTemplate = '';
+  POINT_NAME.forEach((point_name) => {
+    return dataListTemplate = dataListTemplate  + ` <option value=${point_name}>${point_name}</option>`;
+  });
 
-  // console.log(offers)
+ //  console.log('11', dataListTemplate)
 
   const offersComponent = offers === undefined ? '' :
     offers.map((currentPoint) => `<div class="event__offer-selector">
@@ -122,9 +127,7 @@ const createPointEditTemplate = (state) => {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
           <datalist id="destination-list-1">
-            <option value="${test}"></option>
-            <option value="${test}"></option>
-            <option value="${test}"></option>
+            ${dataListTemplate}
           </datalist>
         </div>
 
@@ -141,7 +144,7 @@ const createPointEditTemplate = (state) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

@@ -1,23 +1,6 @@
 import { AbstractView } from "../view/abstract.js";
 // import { isEscEvent } from "./common.js";
-const FilterMode = {
-    EVERYTHING: 'everything',
-    FUTURE: 'future',
-    PAST: 'past',
-}
-
-const SortMode = {
-    DAY: 'day',
-    PRICE: 'price',
-    TIME: 'time',
-    OFFER: 'offer',
-    EVENT: 'event',
-}
-
-const RenderPosition = {
-    AFTERBEGIN: 'afterbegin',
-    BEFOREEND: 'beforeend',
-};
+import { FilterMode, SortMode, RenderPosition } from "../view/const.js";
 
 
 const createElementDom = (template) => {

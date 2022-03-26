@@ -108,4 +108,4 @@ const createPoint = () => {
     };
 }
 
-export { createPoint, OFFER, POINT_DESCRIPTION };
+export { createPoint, OFFER, POINT_DESCRIPTION, POINT_NAME};

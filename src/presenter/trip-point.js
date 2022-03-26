@@ -2,7 +2,7 @@ import { RenderPosition, render, replace, remove } from '../utils/render.js';
 import { isEscEvent } from '../utils/common.js';
 import PointEditorView from '../view/point-editor.js';
 import PointView from '../view/point-item.js';
-import {UserAction, UpdateType, Mode} from '../view/const.js';
+import {UserAction, UpdateType, ModeEditing} from '../view/const.js';
 
 
 
@@ -12,7 +12,7 @@ export default class TripPointPresenter {
     this._pointViewEditor = null;
     this._pointView = null;
     this._onEscPressDown = this._onEscPressDown.bind(this);
-    this._mode = Mode.DEFAULT;
+    this._mode = ModeEditing.DEFAULT;
     this._changeMode = changeMode;
     this._changeData = changeData;
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -39,11 +39,11 @@ export default class TripPointPresenter {
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {
+    if (this._mode === ModeEditing.DEFAULT) {
       replace(this._pointView, prevPointView);
     }
 
-    if (this._mode === Mode.EDITING) {
+    if (this._mode === ModeEditing.EDITING) {
       replace(this._pointViewEditor, prevPointViewEditor);
     }
 
@@ -67,7 +67,7 @@ export default class TripPointPresenter {
   }
 
   resetView() {
-    if (this._mode !== Mode.DEFAULT) {
+    if (this._mode !== ModeEditing.DEFAULT) {
       this._replaceFormToItem();
     }
   }
@@ -76,14 +76,14 @@ export default class TripPointPresenter {
     replace(this._pointViewEditor, this._pointView);
     document.addEventListener('keydown', this._onEscPressDown);
     this._changeMode();
-    this._mode = Mode.EDITING;
+    this._mode = ModeEditing.EDITING;
   }
 
   _replaceFormToItem() {
     this._pointViewEditor.resetState(this._point);//, isSubmit, this._changeData);
     replace(this._pointView, this._pointViewEditor);
     document.removeEventListener('keydown', this._onEscPressDown);
-    this._mode = Mode.DEFAULT;
+    this._mode = ModeEditing.DEFAULT;
   }
 
   _onEscPressDown(evt) {

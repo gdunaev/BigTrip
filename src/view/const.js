@@ -10,7 +10,32 @@ export const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
-export const Mode = {
+export const ModeEditing = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
+};
+
+export const FilterMode = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
+}
+
+export const SortMode = {
+  DAY: 'day',
+  PRICE: 'price',
+  TIME: 'time',
+  OFFER: 'offer',
+  EVENT: 'event',
+}
+
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+
+export const Mode = {
+  FILTER: 'filter',
+  SORT: 'sort',
 };

@@ -1,5 +1,5 @@
 import ListEmptyView from "../view/list-empty.js";
-import { RenderPosition, render, FilterMode, SortMode } from "../utils/render.js";
+import { RenderPosition, render, FilterMode, SortMode, remove } from "../utils/render.js";
 import { getSortPricePoints, getSortDayPoints, getSortTimePoints } from "../utils/common.js";
 
 import InfoView from "../view/info.js";
@@ -27,20 +27,22 @@ export default class TripPresenter {
         this._tripEventsMain = tripEventsMain;
         this._pointPresenter = {};
         this._changeModePoint = this._changeModePoint.bind(this);
-        // this._handlePointChange = this._handlePointChange.bind(this);
+        //
         this._currentMode = '';
         this._filterMode = null;
-        this._sortMode = null;
+        this._sortMode = SortMode.DAY;
         this._navigationView = new NavigationView(points);
         // this._sortView = new SortView(this._points);
 
         this._pointsModel = pointsModel;
         this._handleViewAction = this._handleViewAction.bind(this);
         this._handleModelEvent = this._handleModelEvent.bind(this);
-        this._pointsModel.addObserver(this._handleModelEvent);
+        // this._handlePointChange = this._handlePointChange.bind(this);
 
+        this._pointsModel.addObserver(this._handleModelEvent);
         this._sortView = null;
-        // this._loadMoreButtonComponent = null;
+        this._handleFilterChange = this._handleFilterChange.bind(this);
+        this._handleSortModeChange = this._handleSortModeChange.bind(this);
     }
 
     start() {
@@ -50,7 +52,7 @@ export default class TripPresenter {
         }
         this._renderMainInfo();
         this._renderNavigation();
-        this._renderSort();
+        // this._renderSort();
         this._renderPoints();
         this._renderFilters();
     }
@@ -58,6 +60,9 @@ export default class TripPresenter {
     _getPoints() {
         const points = this._pointsModel.getPoints();
 
+        console.log(this._currentMode)
+
+        //здесь текущий режим - Сортировка (день, время, цена) или Фильтрация (все, будущие, прошлые)
         if (this._currentMode === Mode.SORT) {
             switch (this._sortMode) {
                 case SortMode.DAY:
@@ -87,22 +92,14 @@ export default class TripPresenter {
         }
         this._currentMode = Mode.FILTER;
         this._filterMode = this._filtersView._filter;
-        document.getElementById('sort-day').checked = true;
+        // document.getElementById('sort-day').checked = true;
+        //  console.log(this._currentMode, this._filterMode)
 
         this._clearAllPoints();
         this._renderPoints();
     }
 
-    _handleSortModeChange(sortMode) {
-        if (this._sortMode === sortMode) {
-            return;
-        }
-        this._currentMode = Mode.SORT;
-        this._sortMode = sortMode;
 
-        this._clearAllPoints({resetRenderedPointCount: true});
-        this._renderPoints();
-    }
 
     _handleViewAction(actionType, updateType, update) {
       // console.log(actionType, updateType, update);
@@ -124,7 +121,7 @@ export default class TripPresenter {
     }
 
     _handleModelEvent(updateType, point) {
-      // console.log(updateType, data);
+       console.log(updateType, point);
       // В зависимости от типа изменений решаем, что делать:
       // - обновить часть списка (например, когда поменялось описание)
       // - обновить список (например, когда задача ушла в архив)
@@ -146,6 +143,36 @@ export default class TripPresenter {
           break;
       }
     }
+
+// {resetRenderedPointCount = false, resetSortType = false} = {}
+  _clearAllPoints({ resetRenderedPointCount = false, resetSortType = false } = {}) {
+
+    Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
+
+    remove(this._sortView);
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DEFAULT;
+    }
+    // console.log('111', this._currentSortType)
+  }
+
+
+
+  _handleSortModeChange(sortMode) {
+    // console.log('222', this)
+
+    if (this._sortMode === sortMode) {
+      return;
+    }
+    this._currentMode = Mode.SORT;
+    this._sortMode = sortMode;
+
+
+    this._clearAllPoints({resetRenderedPointCount: true});//
+    this._renderPoints();
+  }
 
     // _handlePointChange(updatedPoint) {
     //     //  console.log(update)
@@ -169,7 +196,9 @@ export default class TripPresenter {
     }
 
     _renderPoints() {
-        this._getPoints().forEach((point) => this._renderPoint(point));
+      this._renderSort();
+
+      this._getPoints().forEach((point) => this._renderPoint(point));
     }
 
     _renderMainInfo() {
@@ -192,6 +221,7 @@ export default class TripPresenter {
 
         // this._sortView.setSortModeChangeHandler(() => { this._handleSortModeChange() });
 
+        // console.log('111', this._sortMode)
         if (this._sortView !== null) {
           this._sortView = null;
         }
@@ -203,29 +233,5 @@ export default class TripPresenter {
     }
 
 
-    _clearAllPoints({resetRenderedPointCount = false, resetSortType = false} = {}) {
 
-    // _clearBoard({resetRenderedPointCount = false, resetSortType = false} = {}) {
-      // const taskCount = this._getPoints().length;
-
-      Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
-      this._pointPresenter = {};
-
-      remove(this._sortView);
-      // remove(this._noTaskComponent);
-      // remove(this._loadMoreButtonComponent);
-
-      // if (resetRenderedTaskCount) {
-      //   this._renderedTaskCount = TASK_COUNT_PER_STEP;
-      // } else {
-      //   // На случай, если перерисовка доски вызвана
-      //   // уменьшением количества задач (например, удаление или перенос в архив)
-      //   // нужно скорректировать число показанных задач
-      //   this._renderedTaskCount = Math.min(taskCount, this._renderedTaskCount);
-      // }
-
-      if (resetSortType) {
-        this._currentSortType = SortType.DEFAULT;
-      }
-    }
 }
