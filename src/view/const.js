@@ -40,4 +40,3 @@ export const Mode = {
   SORT: 'sort',
 };
 
-SortType
