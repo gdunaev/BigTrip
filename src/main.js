@@ -1,12 +1,14 @@
 import { getPoints } from "./view/get-points.js";
 import TripPresenter from "./presenter/trip.js";
 import PointsModel from './model/points.js';
-import FilterModel from './model/filter.js';
+import FilterModel from './model/filter-model.js';
+import FilterPresenter from './presenter/filter-presenter.js';
 
 
 const COUNT_POINT = 10;
 const pageBodyMain = document.querySelector('.page-body__page-main');
 const tripEventsMain = pageBodyMain.querySelector('.trip-events');
+const tripControlsFilters = document.querySelector('.trip-controls__filters');
 
 
 
@@ -17,6 +19,9 @@ pointsModel.setPoints(points);
 
 const filterModel = new FilterModel();
 
-const presenter = new TripPresenter(points, tripEventsMain, pointsModel);
+const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, pointsModel);
+filterPresenter.init();
+
+const presenter = new TripPresenter(points, tripEventsMain, pointsModel, filterModel);
 
 presenter.start();

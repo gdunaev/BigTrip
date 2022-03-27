@@ -4,7 +4,7 @@ import { getSortPricePoints, getSortDayPoints, getSortTimePoints } from "../util
 
 import InfoView from "../view/info.js";
 import TripPointPresenter from "./trip-point.js";
-import FiltersView from "../view/filters.js";
+import FiltersView from "../view/filter-view.js";
 import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
 import NavigationView from "../view/navigation.js";
 import SortView from "../view/sort.js";
@@ -20,7 +20,7 @@ import { Mode, UpdateType, UserAction, FilterType, RenderPosition, SortMode } fr
 
 
 export default class TripPresenter {
-    constructor(points, tripEventsMain, pointsModel) {
+    constructor(points, tripEventsMain, pointsModel, filterModel) {
         // this._points = points;
         this._isEmpty = points.length === 0;
         this._listEmptyView = new ListEmptyView(this._isEmpty);
@@ -37,11 +37,14 @@ export default class TripPresenter {
         // this._sortView = new SortView(this._points);
 
         this._pointsModel = pointsModel;
+        this._filterModel = filterModel;
         this._handleViewAction = this._handleViewAction.bind(this);
         this._handleModelEvent = this._handleModelEvent.bind(this);
         // this._handlePointChange = this._handlePointChange.bind(this);
 
         this._pointsModel.addObserver(this._handleModelEvent);
+        this._filterModel.addObserver(this._handleModelEvent);
+
         this._sortView = null;
         this._handleFilterChange = this._handleFilterChange.bind(this);
         this._handleSortModeChange = this._handleSortModeChange.bind(this);
@@ -56,13 +59,27 @@ export default class TripPresenter {
         this._renderNavigation();
         // this._renderSort();
         this._renderPoints();
-        this._renderFilters();
+        // this._renderFilters();
     }
 
     _getPoints() {
+
+
+     this._filterType = this._filterModel.getActiveFilter();
+    // const filtredTasks = filter[filterType](tasks);
+
+    // switch (this._currentSortType) {
+    //   case SortType.DATE_UP:
+    //     return filtredTasks.sort(sortTaskUp);
+    //   case SortType.DATE_DOWN:
+    //     return filtredTasks.sort(sortTaskDown);
+    // }
+
+    // return filtredTasks;
+
         const points = this._pointsModel.getPoints();
 
-        console.log(this._currentMode)
+        console.log(this._filterType)
 
         //здесь текущий режим - Сортировка (день, время, цена) или Фильтрация (все, будущие, прошлые)
         if (this._currentMode === Mode.SORT) {
@@ -155,7 +172,7 @@ export default class TripPresenter {
     remove(this._sortView);
 
     if (resetSortType) {
-      this._currentSortType = SortType.DEFAULT;
+      this._currentSortType = SortMode.DAY;
     }
     // console.log('111', this._currentSortType)
   }
@@ -175,17 +192,6 @@ export default class TripPresenter {
     this._clearAllPoints({resetRenderedPointCount: true});//
     this._renderPoints();
   }
-
-    // _handlePointChange(updatedPoint) {
-    //     //  console.log(update)
-    //     // this._points = updateItem(this._points, updatedPoint);
-    //     // console.log(updatedPoint)
-    //     this._pointPresenter[updatedPoint.id].start(updatedPoint);
-    // }
-
-    // _clearAllPoints() {
-    //     Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
-    // }
 
     _changeModePoint() {
         Object.values(this._pointPresenter).forEach((presenter) => presenter.resetView());
@@ -220,8 +226,6 @@ export default class TripPresenter {
     }
 
     _renderSort() {
-
-        // this._sortView.setSortModeChangeHandler(() => { this._handleSortModeChange() });
 
         // console.log('111', this._sortMode)
         if (this._sortView !== null) {
