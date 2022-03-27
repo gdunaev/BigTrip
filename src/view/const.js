@@ -39,3 +39,5 @@ export const Mode = {
   FILTER: 'filter',
   SORT: 'sort',
 };
+
+SortType
