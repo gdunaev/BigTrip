@@ -1,6 +1,6 @@
 import { AbstractView } from "../view/abstract.js";
 // import { isEscEvent } from "./common.js";
-import { FilterMode, SortMode, RenderPosition } from "../view/const.js";
+import { RenderPosition } from "../view/const.js";
 
 
 const createElementDom = (template) => {
@@ -56,4 +56,4 @@ const render = (container, element, place) => {
     }
 }
 
-export { createElementDom, RenderPosition, remove, render, replace, FilterMode, SortMode }
+export { createElementDom, remove, render, replace }

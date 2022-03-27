@@ -1,8 +1,8 @@
-import { RenderPosition, render, replace, remove } from '../utils/render.js';
+import { render, replace, remove } from '../utils/render.js';
 import { isEscEvent } from '../utils/common.js';
 import PointEditorView from '../view/point-editor.js';
 import PointView from '../view/point-item.js';
-import {UserAction, UpdateType, ModeEditing} from '../view/const.js';
+import {UserAction, UpdateType, ModeEditing, RenderPosition} from '../view/const.js';
 
 
 
@@ -61,7 +61,7 @@ export default class TripPointPresenter {
   _changeFavoriteButton() {
       this._changeData(
         UserAction.UPDATE,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign({}, this._point, { isFavorite: !this._point.isFavorite, },),
       );
   }

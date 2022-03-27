@@ -15,7 +15,7 @@ export const ModeEditing = {
   EDITING: 'EDITING',
 };
 
-export const FilterMode = {
+export const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PAST: 'past',

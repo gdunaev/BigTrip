@@ -1,5 +1,5 @@
 import ListEmptyView from "../view/list-empty.js";
-import { RenderPosition, render, FilterMode, SortMode, remove } from "../utils/render.js";
+import { render, remove } from "../utils/render.js";
 import { getSortPricePoints, getSortDayPoints, getSortTimePoints } from "../utils/common.js";
 
 import InfoView from "../view/info.js";
@@ -8,12 +8,14 @@ import FiltersView from "../view/filters.js";
 import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
 import NavigationView from "../view/navigation.js";
 import SortView from "../view/sort.js";
-import { Mode, UpdateType, UserAction } from "../view/const.js";
+import { Mode, UpdateType, UserAction, FilterType, RenderPosition, SortMode } from "../view/const.js";
 
-// const Mode = {
-//     SORT: 'sort',
-//     FILTER: 'filter'
-// }
+// const filters = [
+//   {
+//     type: 'everething',
+//     name: 'EVERYTHING',
+//   },
+// ];
 
 
 
@@ -23,13 +25,13 @@ export default class TripPresenter {
         this._isEmpty = points.length === 0;
         this._listEmptyView = new ListEmptyView(this._isEmpty);
         this._infoPoints = new InfoView(points);
-        this._filtersView = new FiltersView(points);
+        this._filtersView = new FiltersView(FilterType.EVERYTHING);
         this._tripEventsMain = tripEventsMain;
         this._pointPresenter = {};
         this._changeModePoint = this._changeModePoint.bind(this);
         //
         this._currentMode = '';
-        this._filterMode = null;
+        this._filterType = null;
         this._sortMode = SortMode.DAY;
         this._navigationView = new NavigationView(points);
         // this._sortView = new SortView(this._points);
@@ -74,12 +76,12 @@ export default class TripPresenter {
             }
         }
 
-        switch (this._filterMode) {
-            case FilterMode.PAST:
+        switch (this._filterType) {
+            case FilterType.PAST:
                 return getPastPoints(points);
-            case FilterMode.FUTURE:
+            case FilterType.FUTURE:
                 return getFuturePoints(points);
-            case FilterMode.EVERYTHING:
+            case FilterType.EVERYTHING:
                 return points;
         }
 
@@ -87,13 +89,13 @@ export default class TripPresenter {
     }
 
     _handleFilterChange() {
-        if (this._filterMode === this._filtersView._filter) {
+        if (this._filterType === this._filtersView._filter) {
             return;
         }
         this._currentMode = Mode.FILTER;
-        this._filterMode = this._filtersView._filter;
+        this._filterType = this._filtersView._filter;
         // document.getElementById('sort-day').checked = true;
-        //  console.log(this._currentMode, this._filterMode)
+        //  console.log(this._currentMode, this._filterType)
 
         this._clearAllPoints();
         this._renderPoints();

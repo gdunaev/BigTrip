@@ -1,6 +1,7 @@
 import { getPoints } from "./view/get-points.js";
 import TripPresenter from "./presenter/trip.js";
 import PointsModel from './model/points.js';
+import FilterModel from './model/filter.js';
 
 
 const COUNT_POINT = 10;
@@ -13,6 +14,8 @@ const points = getPoints(COUNT_POINT);
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
+
+const filterModel = new FilterModel();
 
 const presenter = new TripPresenter(points, tripEventsMain, pointsModel);
 
