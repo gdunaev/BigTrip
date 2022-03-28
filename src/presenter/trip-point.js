@@ -16,6 +16,8 @@ export default class TripPointPresenter {
     this._changeMode = changeMode;
     this._changeData = changeData;
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   start(point) {
@@ -33,6 +35,7 @@ export default class TripPointPresenter {
     this._pointView.setFavoriteButtonHandler(() => { this._changeFavoriteButton(); });
     this._pointViewEditor.setSubmitFormHandler(this._handleFormSubmit);
     this._pointViewEditor.setRollupClickHandler(() => { this._replaceFormToItem(); });
+    this._pointViewEditor.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevPointView === null || prevPointViewEditor === null) {
       render(this._tripEventsMain, this._pointView, RenderPosition.BEFOREEND);
@@ -52,6 +55,28 @@ export default class TripPointPresenter {
 
   }
 
+  // _handleFormSubmit(update) {
+  //   // Проверяем, поменялись ли в задаче данные, которые попадают под фильтрацию,
+  //   // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
+  //   const isMinorUpdate =
+  //     !isDatesEqual(this._task.dueDate, update.dueDate) ||
+  //     isTaskRepeating(this._task.repeating) !== isTaskRepeating(update.repeating);
+
+  //   this._changeData(
+  //     UserAction.UPDATE_TASK,
+  //     isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+  //     update,
+  //   );
+  //   this._replaceFormToCard();
+  // }
+
+  _handleDeleteClick(point) {
+    this._changeData(
+      UserAction.DELETE,
+      UpdateType.MINOR,
+      point,
+    );
+  }
 
   destroy() {
     remove(this._pointView);

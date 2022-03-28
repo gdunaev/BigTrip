@@ -32,6 +32,7 @@ export const SortMode = {
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
+  AFTEREND: 'afterEnd',
 };
 
 

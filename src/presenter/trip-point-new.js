@@ -6,15 +6,16 @@ import { nanoid } from 'nanoid';
 
 
 export default class PointNewPresenter {
-    constructor(tripEventsMain, changeData) {
-        this._tripEventsMain = tripEventsMain;
+    constructor(changeData) {
+      this._tripEventsTripSort = null;
+      // this._tripEventsMain = tripEventsMain;
         this._pointViewEditor = null;
         this._mode = ModeEditing.DEFAULT;
         this._changeData = changeData;
         this._state = this._getEmptyPoint();
         this._onEscPressDown = this._onEscPressDown.bind(this);
         this._handleFormSubmit = this._handleFormSubmit.bind(this);
-        this._setResetHandler = this._setResetHandler.bind(this);
+        this._setDeleteHandler = this._setDeleteHandler.bind(this);
     }
 
     _getEmptyPoint() {
@@ -42,20 +43,24 @@ export default class PointNewPresenter {
 
 
     start() {
-        // console.log('33', this._pointViewEditor)
+        // console.log('33', this._tripEventsTripSort)
         if (this._pointViewEditor !== null) {
             return;
         }
+        this._tripEventsTripSort = document.querySelector('.trip-events__trip-sort');
+
         this._pointViewEditor = new PointEditorView(this._state);
         this._pointViewEditor.setSubmitFormHandler(this._handleFormSubmit);
-        this._pointViewEditor.setResetClickHandler(this._setResetHandler);
+        this._pointViewEditor.setDeleteClickHandler(this._setDeleteHandler);
+        this._pointViewEditor.setRollupClickHandler(this._setDeleteHandler);
         document.addEventListener('keydown', this._onEscPressDown);
 
-        render(this._tripEventsMain, this._pointViewEditor, RenderPosition.AFTERBEGIN);
+        render(this._tripEventsTripSort, this._pointViewEditor, RenderPosition.AFTEREND);
+        // replace(new, old);
     }
 
 
-    _setResetHandler() {
+    _setDeleteHandler() {
         this.destroy();
     }
 

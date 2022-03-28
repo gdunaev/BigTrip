@@ -186,12 +186,13 @@ export default class PointEditorView extends SmartView {
     super();
     this._point = point;
     this._setSubmitHandler = this._setSubmitHandler.bind(this);
-    this._setResetHandler = this._setResetHandler.bind(this);
+    // this._setResetHandler = this._setResetHandler.bind(this);
     this._setRollupClick = this._setRollupClick.bind(this);
     this._dateFromPicker = null;
     this._dateToPicker = null;
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
 
     this._state = PointEditorView.parseDataToState(this._point);
     this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
@@ -200,7 +201,30 @@ export default class PointEditorView extends SmartView {
     this._setInnerHandlers();
   }
 
-  
+  // Перегружаем метод родителя removeElement,
+  // чтобы при удалении удалялся более ненужный календарь
+  removeElement() {
+    super.removeElement();
+
+    if (this._dateFromPicker) {
+      this._dateFromPicker.destroy();
+      this._dateFromPicker = null;
+    }
+    if (this._dateToPicker) {
+      this._dateToPicker.destroy();
+      this._dateToPicker = null;
+    }
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(PointEditorView.parseDataToState(this._point));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
+  }
 
   resetState(point) {
     this.updateData(
@@ -298,7 +322,8 @@ export default class PointEditorView extends SmartView {
     this._setInnerHandlers();
     this.setSubmitFormHandler(this._callback.submitClick);
     this.setRollupClickHandler(this._callback.rollupClick);
-    this.setResetClickHandler(this._callback.resetClick);
+    // this.setResetClickHandler(this._callback.resetClick);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   static parseDataToState(data) {
@@ -375,15 +400,7 @@ export default class PointEditorView extends SmartView {
     this.getElement().querySelector('.event').addEventListener('submit', this._setSubmitHandler);
   }
 
-  _setResetHandler(evt) {
-    evt.preventDefault();
-    this._callback.resetClick();
-  }
 
-  setResetClickHandler(callback) {
-    this._callback.resetClick = callback;
-    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._setResetHandler);
-  }
 
   _setRollupClick(evt) {
     evt.preventDefault();
