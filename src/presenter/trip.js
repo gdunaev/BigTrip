@@ -43,7 +43,7 @@ export default class TripPresenter {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
     this._sortView = null;
-    this._handleFilterChange = this._handleFilterChange.bind(this);
+    // this._handleFilterChange = this._handleFilterChange.bind(this);
     this._handleSortModeChange = this._handleSortModeChange.bind(this);
 
     this._pointNewPresenter = new PointNewPresenter(this._handleViewAction);
@@ -67,9 +67,10 @@ export default class TripPresenter {
     this._sortMode = SortMode.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.start();
-
   }
 
+
+  //получает точки (с сортировкой или фильтрацией) перед отрисовкой
   _getPoints() {
     this._filterType = this._filterModel.getActiveFilter();
 
@@ -99,22 +100,25 @@ export default class TripPresenter {
     return this._pointsModel.getPoints();
   }
 
-  _handleFilterChange() {
-    if (this._filterType === this._filtersView._filter) {
-      return;
-    }
-    this._currentMode = Mode.FILTER;
-    this._filterType = this._filtersView._filter;
-    this._clearAllPoints();
-    this._renderPoints();
-  }
+  // _handleFilterChange() {
+  //   console.log('222', this._filterType)
+  //   if (this._filterType === this._filtersView._filter) {
+  //     return;
+  //   }
+  //   this._currentMode = Mode.FILTER;
+  //   this._filterType = this._filtersView._filter;
+
+  //   this._clearAllPoints();
+  //   this._renderPoints();
+  // }
 
   _handleViewAction(actionType, updateType, update) {
-    // console.log(actionType, updateType, update);
+    //  console.log('00', actionType, updateType, update);
     // Здесь будем вызывать обновление модели.
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
     // update - обновленные данные
+
     switch (actionType) {
       case UserAction.UPDATE:
         this._pointsModel.updatePoint(updateType, update);
@@ -129,7 +133,7 @@ export default class TripPresenter {
   }
 
   _handleModelEvent(updateType, point) {
-    //  console.log(updateType, point);
+      // console.log('11', updateType, point);
     // В зависимости от типа изменений решаем, что делать:
     // - обновить часть списка (например, когда поменялось описание)
     // - обновить список (например, когда задача ушла в архив)

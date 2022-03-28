@@ -45,11 +45,14 @@ export default class FilterPresenter {
   }
 
   _handleFilterTypeChange(filterType) {
-    // console.log('22', filterType)
+    //  console.log('22', filterType)
     if (this._filterModel.getActiveFilter() === filterType) {
       return;
     }
 
+    // this._currentMode = Mode.FILTER;
+    // this._filterType = this._filtersView._filter;
+    // console.log('33', filterType)
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
