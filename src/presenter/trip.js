@@ -9,6 +9,7 @@ import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
 import NavigationView from "../view/navigation.js";
 import SortView from "../view/sort.js";
 import { Mode, UpdateType, UserAction, FilterType, RenderPosition, SortMode } from "../view/const.js";
+import PointNewPresenter from "./trip-new.js";
 
 // const filters = [
 //   {
@@ -34,20 +35,18 @@ export default class TripPresenter {
         this._filterType = null;
         this._sortMode = SortMode.DAY;
         this._navigationView = new NavigationView(points);
-        // this._sortView = new SortView(this._points);
-
         this._pointsModel = pointsModel;
         this._filterModel = filterModel;
         this._handleViewAction = this._handleViewAction.bind(this);
         this._handleModelEvent = this._handleModelEvent.bind(this);
-        // this._handlePointChange = this._handlePointChange.bind(this);
 
         this._pointsModel.addObserver(this._handleModelEvent);
         this._filterModel.addObserver(this._handleModelEvent);
-
         this._sortView = null;
         this._handleFilterChange = this._handleFilterChange.bind(this);
         this._handleSortModeChange = this._handleSortModeChange.bind(this);
+
+        this._pointNewPresenter = new PointNewPresenter(this._tripEventsMain, this._handleViewAction);
     }
 
     start() {
@@ -60,6 +59,12 @@ export default class TripPresenter {
         // this._renderSort();
         this._renderPoints();
         // this._renderFilters();
+    }
+
+    createPoint() {
+      this._sortMode = SortMode.DAY;
+      this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      this._pointNewPresenter.start();
     }
 
     _getPoints() {
@@ -165,6 +170,8 @@ export default class TripPresenter {
 
 // {resetRenderedPointCount = false, resetSortType = false} = {}
   _clearAllPoints({ resetRenderedPointCount = false, resetSortType = false } = {}) {
+
+    this._pointNewPresenter.destroy();
 
     Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
     this._pointPresenter = {};

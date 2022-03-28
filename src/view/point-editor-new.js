@@ -1,8 +1,8 @@
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import { OFFER, POINT_DESCRIPTION, POINT_NAME } from './mock.js';
-import { datesFields } from './dayjs.js';
+import { OFFER, POINT_DESCRIPTION, POINT_NAME} from './mock.js';
+import {datesFields} from './dayjs.js';
 
 const FORMAT_DATE = 'd/m/y H:i';
 const TypeDate = {
@@ -10,22 +10,21 @@ const TypeDate = {
   END: 'end',
 };
 
+const createPointEditTemplate = () => {
 
-const createPointEditTemplate = (state) => {
-
-  // const test = getEmptyPoint();
-
-  const { typePoint, basePrice, dateFromState, dateToState, typePointState, dectinationState, priceState } = state;
+  const test = '';
+  // const { typePoint, basePrice, dateFromState, dateToState, typePointState, dectinationState } = state;
 
   //отрисовка состояния при смене типа и места назначения.
-  let typePointIconTemplate = typePointState !== null ? typePointState.toLowerCase() : typePoint.toLowerCase();
-  const typePointTemplate = typePointState !== null ? typePointState : typePoint;
-  const offers = typePointState !== null ? OFFER.get(typePointState) : state.offers;
-  const destination = dectinationState !== null ? POINT_DESCRIPTION.get(dectinationState) : state.destination;
-  const name = dectinationState !== null ? dectinationState : state.name;
-  const dateFromEdit = dateFromState !== null ? dateFromState : state.dateFromEdit;
-  const dateToEdit = dateToState !== null ? dateToState : state.dateToEdit;
-  const price = priceState !== null ? priceState : state.basePrice;
+  const basePrice = '';
+  const typePoint = '';
+  let typePointIconTemplate = '';
+  const typePointTemplate = '';
+  const offers = undefined;
+  const destination = undefined;
+  const name = '';
+  const dateFromEdit = '';
+  const dateToEdit = '';
 
   // console.log(dateFromState)
   // console.log(dateFromEdit)
@@ -35,10 +34,10 @@ const createPointEditTemplate = (state) => {
   //подставляем наименование точек
   let dataListTemplate = '';
   POINT_NAME.forEach((point_name) => {
-    return dataListTemplate = dataListTemplate + ` <option value=${point_name}>${point_name}</option>`;
+    return dataListTemplate = dataListTemplate  + ` <option value=${point_name}>${point_name}</option>`;
   });
 
-  typePointIconTemplate = typePointIconTemplate !== '' ? `img/icons/${typePointIconTemplate}.png` : '';
+ //  console.log('11', dataListTemplate)
 
   const offersComponent = offers === undefined ? '' :
     offers.map((currentPoint) => `<div class="event__offer-selector">
@@ -52,7 +51,9 @@ const createPointEditTemplate = (state) => {
 
   const descriptionComponent = destination === undefined ? '' : destination[0].description;
 
-  const photos = destination === undefined ? '' :  destination[0].pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
+  const photos = '';//destination[0].pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
+
+  typePointIconTemplate = '';
 
   const photosComponent = `<div class="event__photos-container">
                    <div class="event__photos-tape">
@@ -147,7 +148,7 @@ const createPointEditTemplate = (state) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
+          <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -181,26 +182,25 @@ const createPointEditTemplate = (state) => {
 
 
 
-export default class PointEditorView extends SmartView {
-  constructor(point) {
+
+export default class PointEditorNewView extends SmartView {
+  constructor() {
     super();
-    this._point = point;
     this._setSubmitHandler = this._setSubmitHandler.bind(this);
     this._setResetHandler = this._setResetHandler.bind(this);
-    this._setRollupClick = this._setRollupClick.bind(this);
+    // this._setRollupClick = this._setRollupClick.bind(this);
     this._dateFromPicker = null;
     this._dateToPicker = null;
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
 
-    this._state = PointEditorView.parseDataToState(this._point);
+    this._point = this._getEmptyPoint();
+    // console.log(this._point)
+    this._state = PointEditorNewView.parseDataToState(this._point);
     this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
     this._destinationInputHandler = this._destinationInputHandler.bind(this);
-    this._priceInputHandler = this._priceInputHandler.bind(this);
     this._setInnerHandlers();
   }
-
-  
 
   resetState(point) {
     this.updateData(
@@ -208,12 +208,34 @@ export default class PointEditorView extends SmartView {
     );
   }
 
+  _getEmptyPoint() {
+    return {
+      'id':'',
+      'typePoint': '',
+      'name': '',
+      'basePrice': 0,
+      'dateFrom': '',
+      'dateFromOnlyDate': '',
+      'dateFromMonthDay': '',
+      'dateFromHourMinute': '',
+      'dateFromHour': '',
+      'dateFromEdit': '',
+      'dateTo': '',
+      'dateToHour': '',
+      'dateToHourMinute': '',
+      'dateToEdit': '',
+      'pointDuration': '',
+      'destination': '',
+      'isFavorite': '',
+      'offers': undefined,
+  };
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-list').addEventListener('click', this._changeEventTypeHandler);
     this._setDateFromPicker();
     this._setDateToPicker();
     this.getElement().querySelector('#event-destination-1').addEventListener('input', this._destinationInputHandler);
-    this.getElement().querySelector('#event-price-1').addEventListener('input', this._priceInputHandler);
   }
 
   _checkDectination(dectination) {
@@ -221,14 +243,6 @@ export default class PointEditorView extends SmartView {
       return true;
     }
     return false;
-  }
-
-  _priceInputHandler(evt) {
-    evt.preventDefault();
-    this.updateData({
-      // dectinationState: evt.target.value,
-      priceState: evt.target.value,
-    }, true);
   }
 
   _destinationInputHandler(evt) {
@@ -287,6 +301,7 @@ export default class PointEditorView extends SmartView {
 
   _changeEventTypeHandler(evt) {
     if (evt.target.tagName === 'LABEL') {
+      console.log('344')
       this.updateData({
         typePointState: evt.target.textContent,
       });
@@ -310,7 +325,6 @@ export default class PointEditorView extends SmartView {
       dateToState: null,
       dateFromPicker: null,
       dateToPicker: null,
-      priceState: null,
     },
     );
   }
@@ -320,31 +334,30 @@ export default class PointEditorView extends SmartView {
   static parseStateToData(state) {
     const data = Object.assign({}, state,
       Object.assign({},
-        {
-          typePoint: state.typePointState !== null ? state.typePointState : state.typePoint,
-          offers: state.typePointState !== null ? OFFER.get(state.typePointState) : state.offers,
-          name: state.dectinationState !== null ? state.dectinationState : state.name,
-          destination: state.dectinationState !== null ? POINT_DESCRIPTION.get(state.dectinationState) : state.destination,
-          basePrice: state.priceState !== null ? state.priceState : state.basePrice,
-        },
-        datesFields(state))
+     {
+        typePoint: state.typePointState !== null ? state.typePointState : state.typePoint,
+        offers: state.typePointState !== null ? OFFER.get(state.typePointState) : state.offers,
+        name: state.dectinationState !== null ? state.dectinationState : state.name,
+        destination: state.dectinationState !== null ? POINT_DESCRIPTION.get(state.dectinationState) : state.destination,
+      },
+      datesFields(state))
     );
 
-    // console.log(state.dateFromPicker)
-    // const re = /[:, /,]/;
-    // let date = state.dateFromState.split();
-    // ['11', '03', '22', '02', '05']
-    // const date2 = date[2];
-    // date[2] = date[0];
-    // date[0] = date2;
-    // let arr = date.slice(0,1) ;
-    // new Array(COUNT_POINT).fill().map(createPoint).sort(compareDataFrom)
+      // console.log(state.dateFromPicker)
+      // const re = /[:, /,]/;
+      // let date = state.dateFromState.split();
+      // ['11', '03', '22', '02', '05']
+      // const date2 = date[2];
+      // date[2] = date[0];
+      // date[0] = date2;
+      // let arr = date.slice(0,1) ;
+      // new Array(COUNT_POINT).fill().map(createPoint).sort(compareDataFrom)
 
-    // 09/03/22 00:34
+      // 09/03/22 00:34
 
-    // console.log(dayjs(state.dateFromPicker))//dateToPicker
-    // var d = new Date('22 03 10');
-    // console.log(dayjs(d))
+      // console.log(dayjs(state.dateFromPicker))//dateToPicker
+      // var d = new Date('22 03 10');
+      // console.log(dayjs(d))
 
     delete data.typePointState;
     delete data.dectinationState;
@@ -352,14 +365,14 @@ export default class PointEditorView extends SmartView {
     delete data.dateToState;
     delete data.dateFromPicker;
     delete data.dateToPicker;
-    delete data.priceState;
 
     return data;
   }
 
 
   getTemplate() {
-    return createPointEditTemplate(this._state);
+    // console.log(createPointEditTemplate())
+    return createPointEditTemplate();
   }
 
   _setSubmitHandler(evt) {
@@ -385,10 +398,15 @@ export default class PointEditorView extends SmartView {
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._setResetHandler);
   }
 
-  _setRollupClick(evt) {
-    evt.preventDefault();
-    this._callback.rollupClick();
-  }
+  // _setRollupClick(evt) {
+  //   evt.preventDefault();
+  //   this._callback.rollupClick();
+  // }
+
+  // setRollupClickHandler(callback) {
+  //   this._callback.rollupClick = callback;
+  //   this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._setRollupClick);
+  // }
 
   setRollupClickHandler(callback) {
     this._callback.rollupClick = callback;

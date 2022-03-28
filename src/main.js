@@ -25,3 +25,8 @@ filterPresenter.init();
 const presenter = new TripPresenter(points, tripEventsMain, pointsModel, filterModel);
 
 presenter.start();
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+    evt.preventDefault();
+    presenter.createPoint();
+  });
