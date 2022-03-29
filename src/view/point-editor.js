@@ -3,6 +3,8 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { OFFER, POINT_DESCRIPTION, POINT_NAME } from './mock.js';
 import { datesFields } from './dayjs.js';
+import he from 'he';
+
 
 const FORMAT_DATE = 'd/m/y H:i';
 const TypeDate = {
@@ -27,7 +29,7 @@ const createPointEditTemplate = (state) => {
   const dateToEdit = dateToState !== null ? dateToState : state.dateToEdit;
   const price = priceState !== null ? priceState : state.basePrice;
 
-  // console.log(dateFromState)
+  //  console.log('11', he.encode(name))
   // console.log(dateFromEdit)
   // console.log(this._dateFromPicker)
   const cancelDelete = 'Delete';
@@ -128,7 +130,7 @@ const createPointEditTemplate = (state) => {
           <label class="event__label  event__type-output" for="event-destination-1">
           ${typePointTemplate}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(name)}" list="destination-list-1">
           <datalist id="destination-list-1">
             ${dataListTemplate}
           </datalist>
@@ -147,7 +149,7 @@ const createPointEditTemplate = (state) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
+          <input class="event__input  event__input--price" id="event-price-1" type="number" min = "0" name="event-price" value="${price}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
