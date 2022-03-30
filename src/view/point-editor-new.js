@@ -301,7 +301,7 @@ export default class PointEditorNewView extends SmartView {
 
   _changeEventTypeHandler(evt) {
     if (evt.target.tagName === 'LABEL') {
-      console.log('344')
+      // console.log('344')
       this.updateData({
         typePointState: evt.target.textContent,
       });
