@@ -8,7 +8,6 @@ import { nanoid } from 'nanoid';
 export default class PointNewPresenter {
     constructor(changeData) {
       this._tripEventsTripSort = null;
-      // this._tripEventsMain = tripEventsMain;
         this._pointViewEditor = null;
         this._mode = ModeEditing.DEFAULT;
         this._changeData = changeData;
@@ -43,7 +42,6 @@ export default class PointNewPresenter {
 
 
     start() {
-        // console.log('33', this._tripEventsTripSort)
         if (this._pointViewEditor !== null) {
             return;
         }
@@ -56,7 +54,6 @@ export default class PointNewPresenter {
         document.addEventListener('keydown', this._onEscPressDown);
 
         render(this._tripEventsTripSort, this._pointViewEditor, RenderPosition.AFTEREND);
-        // replace(new, old);
     }
 
 

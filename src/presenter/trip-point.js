@@ -26,8 +26,6 @@ export default class TripPointPresenter {
     const prevPointView = this._pointView;
     const prevPointViewEditor = this._pointViewEditor;
 
-    // console.log('222', prevPointView, prevPointViewEditor)
-
     this._pointViewEditor = new PointEditorView(point);
     this._pointView = new PointView(point);
 
@@ -54,21 +52,6 @@ export default class TripPointPresenter {
     remove(prevPointViewEditor);
 
   }
-
-  // _handleFormSubmit(update) {
-  //   // Проверяем, поменялись ли в задаче данные, которые попадают под фильтрацию,
-  //   // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
-  //   const isMinorUpdate =
-  //     !isDatesEqual(this._task.dueDate, update.dueDate) ||
-  //     isTaskRepeating(this._task.repeating) !== isTaskRepeating(update.repeating);
-
-  //   this._changeData(
-  //     UserAction.UPDATE_TASK,
-  //     isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
-  //     update,
-  //   );
-  //   this._replaceFormToCard();
-  // }
 
   _handleDeleteClick(point) {
     this._changeData(
@@ -105,7 +88,7 @@ export default class TripPointPresenter {
   }
 
   _replaceFormToItem() {
-    this._pointViewEditor.resetState(this._point);//, isSubmit, this._changeData);
+    this._pointViewEditor.resetState(this._point);
     replace(this._pointView, this._pointViewEditor);
     document.removeEventListener('keydown', this._onEscPressDown);
     this._mode = ModeEditing.DEFAULT;

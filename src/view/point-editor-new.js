@@ -13,11 +13,9 @@ const TypeDate = {
 const createPointEditTemplate = () => {
 
   const test = '';
-  // const { typePoint, basePrice, dateFromState, dateToState, typePointState, dectinationState } = state;
 
   //отрисовка состояния при смене типа и места назначения.
   const basePrice = '';
-  const typePoint = '';
   let typePointIconTemplate = '';
   const typePointTemplate = '';
   const offers = undefined;
@@ -25,10 +23,6 @@ const createPointEditTemplate = () => {
   const name = '';
   const dateFromEdit = '';
   const dateToEdit = '';
-
-  // console.log(dateFromState)
-  // console.log(dateFromEdit)
-  // console.log(this._dateFromPicker)
   const cancelDelete = 'Delete';
 
   //подставляем наименование точек
@@ -37,7 +31,6 @@ const createPointEditTemplate = () => {
     return dataListTemplate = dataListTemplate  + ` <option value=${point_name}>${point_name}</option>`;
   });
 
- //  console.log('11', dataListTemplate)
 
   const offersComponent = offers === undefined ? '' :
     offers.map((currentPoint) => `<div class="event__offer-selector">
@@ -50,11 +43,8 @@ const createPointEditTemplate = () => {
     </div>`).join(' ');
 
   const descriptionComponent = destination === undefined ? '' : destination[0].description;
-
-  const photos = '';//destination[0].pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
-
+  const photos = '';
   typePointIconTemplate = '';
-
   const photosComponent = `<div class="event__photos-container">
                    <div class="event__photos-tape">
                        ${photos}
@@ -181,21 +171,17 @@ const createPointEditTemplate = () => {
 };
 
 
-
-
 export default class PointEditorNewView extends SmartView {
   constructor() {
     super();
     this._setSubmitHandler = this._setSubmitHandler.bind(this);
     this._setResetHandler = this._setResetHandler.bind(this);
-    // this._setRollupClick = this._setRollupClick.bind(this);
     this._dateFromPicker = null;
     this._dateToPicker = null;
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
 
     this._point = this._getEmptyPoint();
-    // console.log(this._point)
     this._state = PointEditorNewView.parseDataToState(this._point);
     this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
     this._destinationInputHandler = this._destinationInputHandler.bind(this);
@@ -285,7 +271,6 @@ export default class PointEditorNewView extends SmartView {
   }
 
   _dateFromChangeHandler() {
-    // console.log(this._dateFromPicker.selectedDates)
     this.updateData({
       dateFromState: this.getElement().querySelector(`#event-${TypeDate.START}-time-1`).value,
       dateFromPicker: this._dateFromPicker.selectedDates,
@@ -301,7 +286,6 @@ export default class PointEditorNewView extends SmartView {
 
   _changeEventTypeHandler(evt) {
     if (evt.target.tagName === 'LABEL') {
-      // console.log('344')
       this.updateData({
         typePointState: evt.target.textContent,
       });
@@ -330,7 +314,6 @@ export default class PointEditorNewView extends SmartView {
   }
 
 
-
   static parseStateToData(state) {
     const data = Object.assign({}, state,
       Object.assign({},
@@ -342,22 +325,6 @@ export default class PointEditorNewView extends SmartView {
       },
       datesFields(state))
     );
-
-      // console.log(state.dateFromPicker)
-      // const re = /[:, /,]/;
-      // let date = state.dateFromState.split();
-      // ['11', '03', '22', '02', '05']
-      // const date2 = date[2];
-      // date[2] = date[0];
-      // date[0] = date2;
-      // let arr = date.slice(0,1) ;
-      // new Array(COUNT_POINT).fill().map(createPoint).sort(compareDataFrom)
-
-      // 09/03/22 00:34
-
-      // console.log(dayjs(state.dateFromPicker))//dateToPicker
-      // var d = new Date('22 03 10');
-      // console.log(dayjs(d))
 
     delete data.typePointState;
     delete data.dectinationState;
@@ -371,16 +338,12 @@ export default class PointEditorNewView extends SmartView {
 
 
   getTemplate() {
-    // console.log(createPointEditTemplate())
     return createPointEditTemplate();
   }
 
   _setSubmitHandler(evt) {
     evt.preventDefault();
-    // console.log(this._state)
-    // const _state = PointEditorView.parseStateToData(this._state);
-    // console.log(_state)
-    this._callback.submitClick(PointEditorView.parseStateToData(this._state));//PointEditorView.parseStateToData(this._state)
+    this._callback.submitClick(PointEditorView.parseStateToData(this._state));
   }
 
   setSubmitFormHandler(callback) {
@@ -397,16 +360,6 @@ export default class PointEditorNewView extends SmartView {
     this._callback.resetClick = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._setResetHandler);
   }
-
-  // _setRollupClick(evt) {
-  //   evt.preventDefault();
-  //   this._callback.rollupClick();
-  // }
-
-  // setRollupClickHandler(callback) {
-  //   this._callback.rollupClick = callback;
-  //   this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._setRollupClick);
-  // }
 
   setRollupClickHandler(callback) {
     this._callback.rollupClick = callback;

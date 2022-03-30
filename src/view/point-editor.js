@@ -14,10 +14,7 @@ const TypeDate = {
 
 
 const createPointEditTemplate = (state) => {
-
-  // const test = getEmptyPoint();
-
-  const { typePoint, basePrice, dateFromState, dateToState, typePointState, dectinationState, priceState } = state;
+  const { typePoint, dateFromState, dateToState, typePointState, dectinationState, priceState } = state;
 
   //отрисовка состояния при смене типа и места назначения.
   let typePointIconTemplate = typePointState !== null ? typePointState.toLowerCase() : typePoint.toLowerCase();
@@ -28,10 +25,6 @@ const createPointEditTemplate = (state) => {
   const dateFromEdit = dateFromState !== null ? dateFromState : state.dateFromEdit;
   const dateToEdit = dateToState !== null ? dateToState : state.dateToEdit;
   const price = priceState !== null ? priceState : state.basePrice;
-
-  //  console.log('11', he.encode(name))
-  // console.log(dateFromEdit)
-  // console.log(this._dateFromPicker)
   const cancelDelete = 'Delete';
 
   //подставляем наименование точек
@@ -159,8 +152,6 @@ const createPointEditTemplate = (state) => {
         </button>
       </header>
 
-
-
       <section class="event__details">
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -188,14 +179,12 @@ export default class PointEditorView extends SmartView {
     super();
     this._point = point;
     this._setSubmitHandler = this._setSubmitHandler.bind(this);
-    // this._setResetHandler = this._setResetHandler.bind(this);
     this._setRollupClick = this._setRollupClick.bind(this);
     this._dateFromPicker = null;
     this._dateToPicker = null;
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
-
     this._state = PointEditorView.parseDataToState(this._point);
     this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
     this._destinationInputHandler = this._destinationInputHandler.bind(this);
@@ -252,7 +241,6 @@ export default class PointEditorView extends SmartView {
   _priceInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      // dectinationState: evt.target.value,
       priceState: evt.target.value,
     }, true);
   }
@@ -297,7 +285,6 @@ export default class PointEditorView extends SmartView {
   }
 
   _dateFromChangeHandler() {
-    // console.log(this._dateFromPicker.selectedDates)
     this.updateData({
       dateFromState: this.getElement().querySelector(`#event-${TypeDate.START}-time-1`).value,
       dateFromPicker: this._dateFromPicker.selectedDates,
@@ -324,7 +311,6 @@ export default class PointEditorView extends SmartView {
     this._setInnerHandlers();
     this.setSubmitFormHandler(this._callback.submitClick);
     this.setRollupClickHandler(this._callback.rollupClick);
-    // this.setResetClickHandler(this._callback.resetClick);
     this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
@@ -357,22 +343,6 @@ export default class PointEditorView extends SmartView {
         datesFields(state))
     );
 
-    // console.log(state.dateFromPicker)
-    // const re = /[:, /,]/;
-    // let date = state.dateFromState.split();
-    // ['11', '03', '22', '02', '05']
-    // const date2 = date[2];
-    // date[2] = date[0];
-    // date[0] = date2;
-    // let arr = date.slice(0,1) ;
-    // new Array(COUNT_POINT).fill().map(createPoint).sort(compareDataFrom)
-
-    // 09/03/22 00:34
-
-    // console.log(dayjs(state.dateFromPicker))//dateToPicker
-    // var d = new Date('22 03 10');
-    // console.log(dayjs(d))
-
     delete data.typePointState;
     delete data.dectinationState;
     delete data.dateFromState;
@@ -391,9 +361,6 @@ export default class PointEditorView extends SmartView {
 
   _setSubmitHandler(evt) {
     evt.preventDefault();
-    // console.log(this._state)
-    // const _state = PointEditorView.parseStateToData(this._state);
-    // console.log(_state)
     this._callback.submitClick(PointEditorView.parseStateToData(this._state));//PointEditorView.parseStateToData(this._state)
   }
 

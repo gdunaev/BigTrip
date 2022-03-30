@@ -1,7 +1,6 @@
 import ListEmptyView from "../view/list-empty.js";
 import { render, remove } from "../utils/render.js";
 import { getSortPricePoints, getSortDayPoints, getSortTimePoints } from "../utils/common.js";
-
 import InfoView from "../view/info.js";
 import TripPointPresenter from "./trip-point.js";
 import FiltersView from "../view/filter-view.js";
@@ -11,18 +10,10 @@ import SortView from "../view/sort.js";
 import { Mode, UpdateType, UserAction, FilterType, RenderPosition, SortMode } from "../view/const.js";
 import PointNewPresenter from "./trip-point-new.js";
 
-// const filters = [
-//   {
-//     type: 'everething',
-//     name: 'EVERYTHING',
-//   },
-// ];
-
 
 
 export default class TripPresenter {
   constructor(points, tripEventsMain, pointsModel, filterModel) {
-    // this._points = points;
     this._isEmpty = points.length === 0;
     this._listEmptyView = new ListEmptyView(this._isEmpty);
     this._infoPoints = new InfoView(points);
@@ -43,9 +34,7 @@ export default class TripPresenter {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
     this._sortView = null;
-    // this._handleFilterChange = this._handleFilterChange.bind(this);
     this._handleSortModeChange = this._handleSortModeChange.bind(this);
-
     this._pointNewPresenter = new PointNewPresenter(this._handleViewAction);
   }
 
@@ -56,9 +45,7 @@ export default class TripPresenter {
     }
     this._renderMainInfo();
     this._renderNavigation();
-    // this._renderSort();
     this._renderPoints();
-    // this._renderFilters();
   }
 
 
@@ -100,25 +87,7 @@ export default class TripPresenter {
     return this._pointsModel.getPoints();
   }
 
-  // _handleFilterChange() {
-  //   console.log('222', this._filterType)
-  //   if (this._filterType === this._filtersView._filter) {
-  //     return;
-  //   }
-  //   this._currentMode = Mode.FILTER;
-  //   this._filterType = this._filtersView._filter;
-
-  //   this._clearAllPoints();
-  //   this._renderPoints();
-  // }
-
   _handleViewAction(actionType, updateType, update) {
-    //  console.log('00', actionType, updateType, update);
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
-
     switch (actionType) {
       case UserAction.UPDATE:
         this._pointsModel.updatePoint(updateType, update);
@@ -133,24 +102,15 @@ export default class TripPresenter {
   }
 
   _handleModelEvent(updateType, point) {
-      // console.log('11', updateType, point);
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
-
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this._pointPresenter[point.id].start(point);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
         this._clearAllPoints();
         this._renderPoints();
         break;
       case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
         this._clearAllPoints({ setCurrentMode: true, resetSortType: true });
         this._renderPoints();
         break;
@@ -174,25 +134,21 @@ export default class TripPresenter {
     if(setCurrentMode) {
       this._currentMode = Mode.FILTER;
     }
-    
-    // console.log('111', this._currentSortType)
   }
 
   _handleSortModeChange(sortMode) {
-    // console.log('222', this)
-
     if (this._sortMode === sortMode) {
       return;
     }
     this._currentMode = Mode.SORT;
     this._sortMode = sortMode;
 
-
     this._clearAllPoints();//
     this._renderPoints();
   }
 
   _changeModePoint() {
+    this._pointNewPresenter.destroy(); //закрывает открытую форму новой точки
     Object.values(this._pointPresenter).forEach((presenter) => presenter.resetView());
   }
 
@@ -225,8 +181,6 @@ export default class TripPresenter {
   }
 
   _renderSort() {
-
-    // console.log('111', this._sortMode)
     if (this._sortView !== null) {
       this._sortView = null;
     }

@@ -11,7 +11,6 @@ const tripEventsMain = pageBodyMain.querySelector('.trip-events');
 const tripControlsFilters = document.querySelector('.trip-controls__filters');
 
 
-
 const points = getPoints(COUNT_POINT);
 
 const pointsModel = new PointsModel();
