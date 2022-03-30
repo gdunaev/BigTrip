@@ -8,8 +8,10 @@ export default class FilterModel extends Observer {
   }
 
   setFilter(updateType, filter) {
+    
     this._activeFilter = filter;
     this._notify(updateType, filter);
+    // console.log(this._activeFilter)
   }
 
   getActiveFilter() {

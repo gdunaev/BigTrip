@@ -62,7 +62,7 @@ export default class TripPresenter {
   }
 
 
-  //при нажатии на кнопку Добавить новую (New event)
+  //при нажатии на кнопку "Добавить новую (New event)"
   createPoint() {
     this._sortMode = SortMode.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
@@ -151,24 +151,30 @@ export default class TripPresenter {
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
-        this._clearAllPoints({ resetRenderedPointCount: true, resetSortType: true });
+        this._clearAllPoints({ setCurrentMode: true, resetSortType: true });
         this._renderPoints();
         break;
     }
   }
 
-  _clearAllPoints({ resetRenderedPointCount = false, resetSortType = false } = {}) {
+  _clearAllPoints({ setCurrentMode = false, resetSortType = false } = {}) {
 
     this._pointNewPresenter.destroy();
-
     Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
     this._pointPresenter = {};
 
     remove(this._sortView);
 
     if (resetSortType) {
-      this._currentSortType = SortMode.DAY;
+      this._sortMode = SortMode.DAY;
     }
+
+    //если обновление типа MAJOR (это значит что нажата смена фильтров),
+    //то устанавливаем текущий режим сортировки точек.
+    if(setCurrentMode) {
+      this._currentMode = Mode.FILTER;
+    }
+    
     // console.log('111', this._currentSortType)
   }
 
