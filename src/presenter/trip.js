@@ -5,7 +5,7 @@ import InfoView from "../view/info.js";
 import TripPointPresenter from "./trip-point.js";
 import FiltersView from "../view/filter-view.js";
 import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
-import NavigationView from "../view/navigation.js";
+import SiteMenuView from "../view/site-menu.js";
 import SortView from "../view/sort.js";
 import { Mode, UpdateType, UserAction, FilterType, RenderPosition, SortMode } from "../view/const.js";
 import PointNewPresenter from "./trip-point-new.js";
@@ -25,7 +25,7 @@ export default class TripPresenter {
     this._currentMode = '';
     this._filterType = null;
     this._sortMode = SortMode.DAY;
-    this._navigationView = new NavigationView(points);
+    this._siteMenuView = new SiteMenuView(points);
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -44,7 +44,7 @@ export default class TripPresenter {
       return;
     }
     this._renderMainInfo();
-    this._renderNavigation();
+    // this._renderNavigation();
     this._renderPoints();
   }
 
@@ -165,8 +165,8 @@ export default class TripPresenter {
   }
 
   _renderMainInfo() {
-    const tripMain = document.querySelector('.trip-main');
-    render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
+    // const tripMain = document.querySelector('.trip-main');
+    // render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
   }
 
   _renderFilters() {
@@ -175,10 +175,10 @@ export default class TripPresenter {
     this._filtersView.setFilterChangeHandler(() => { this._handleFilterChange() });
   }
 
-  _renderNavigation() {
-    const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
-    render(tripControlsNavigation, this._navigationView, RenderPosition.BEFOREEND);
-  }
+  // _renderNavigation() {
+    // const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
+    // render(tripControlsNavigation, this._siteMenuView, RenderPosition.BEFOREEND);
+  // }
 
   _renderSort() {
     if (this._sortView !== null) {

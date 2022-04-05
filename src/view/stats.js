@@ -1,37 +1,98 @@
-import {AbstractView} from "./abstract.js";
+// import {AbstractView} from "./abstract.js";
 
-const createStatsTemplate = (isStats) => {
+// const createStatisticsTemplate = (isStats) => {
 
-    if (isStats) {
-        return `<section class="statistics">
-  <h2 class="visually-hidden">Trip statistics</h2>
+//     if (isStats) {
+//         return `<section class="statistics">
+//   <h2 class="visually-hidden">Trip statistics</h2>
 
-  <!-- Пример диаграмм -->
-  <img src="img/big-trip-stats-markup.png" alt="Пример диаграмм">
+//   <!-- Пример диаграмм -->
+//   <img src="img/big-trip-stats-markup.png" alt="Пример диаграмм">
 
-  <div class="statistics__item">
-    <canvas class="statistics__chart" id="money" width="900"></canvas>
-  </div>
+//   <div class="statistics__item">
+//     <canvas class="statistics__chart" id="money" width="900"></canvas>
+//   </div>
 
-  <div class="statistics__item">
-    <canvas class="statistics__chart" id="type" width="900"></canvas>
-  </div>
+//   <div class="statistics__item">
+//     <canvas class="statistics__chart" id="type" width="900"></canvas>
+//   </div>
 
-  <div class="statistics__item">
-    <canvas class="statistics__chart" id="time" width="900"></canvas>
-  </div>
-</section>`;
-    }
-    return '';
+//   <div class="statistics__item">
+//     <canvas class="statistics__chart" id="time" width="900"></canvas>
+//   </div>
+// </section>`;
+//     }
+//     return '';
 
-};
+// };
 
-export default class StatsView extends AbstractView {
-  constructor(isStats) {
-      super();
-      this._isStats = isStats;
-  }
-  getTemplate() {
-      return createStatsTemplate(this._isStats);
-  }
-}
+// export default class StatisticsView extends SmartView {
+//   constructor(tasks) {
+//     super();
+
+//     this._data = {
+//       tasks,
+//       // По условиям техзадания по умолчанию интервал - неделя от текущей даты
+//       dateFrom: (() => {
+//         const daysToFullWeek = 6;
+//         return dayjs().subtract(daysToFullWeek, 'day').toDate();
+//       })(),
+//       dateTo: dayjs().toDate(),
+//     };
+
+//     this._dateChangeHandler = this._dateChangeHandler.bind(this);
+
+//     this._setCharts();
+//     this._setDatepicker();
+//   }
+
+//   removeElement() {
+//     super.removeElement();
+
+//     if (this._datepicker) {
+//       this._datepicker.destroy();
+//       this._datepicker = null;
+//     }
+//   }
+
+//   getTemplate() {
+//     return createStatisticsTemplate(this._data);
+//   }
+
+//   restoreHandlers() {
+//     this._setCharts();
+//     this._setDatepicker();
+//   }
+
+//   _dateChangeHandler([dateFrom, dateTo]) {
+//     if (!dateFrom || !dateTo) {
+//       return;
+//     }
+
+//     this.updateData({
+//       dateFrom,
+//       dateTo,
+//     });
+//   }
+
+//   _setDatepicker() {
+//     if (this._datepicker) {
+//       this._datepicker.destroy();
+//       this._datepicker = null;
+//     }
+
+//     this._datepicker = flatpickr(
+//       this.getElement().querySelector('.statistic__period-input'),
+//       {
+//         mode: 'range',
+//         dateFormat: 'j F',
+//         defaultDate: [this._data.dateFrom, this._data.dateTo],
+//         onChange: this._dateChangeHandler,
+//       },
+//     );
+//   }
+
+//   _setCharts() {
+//     // Нужно отрисовать два графика
+//   }
+// }

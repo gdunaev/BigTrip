@@ -41,3 +41,7 @@ export const Mode = {
   SORT: 'sort',
 };
 
+export const MenuItem = {
+  TABLE: 'Table',
+  STATS: 'Stats',
+};
