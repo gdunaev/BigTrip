@@ -13,6 +13,8 @@ const COUNT_POINT = 10;
 const pageBodyMain = document.querySelector('.page-body__page-main');
 const tripEventsMain = pageBodyMain.querySelector('.trip-events');
 const tripControlsFilters = document.querySelector('.trip-controls__filters');
+const pageBodyContainer = pageBodyMain.querySelector('.page-body__container');
+
 
 
 const points = getPoints(COUNT_POINT);
@@ -64,7 +66,8 @@ filterPresenter.init();
 presenter.start();
 
 statisticsComponent = new StatisticsView(pointsModel.getPoints());
-render(pageBodyMain, statisticsComponent, RenderPosition.BEFOREEND);
+render(pageBodyContainer, statisticsComponent, RenderPosition.BEFOREEND);
+statisticsComponent.start();
 
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
