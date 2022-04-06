@@ -5,10 +5,11 @@ import SmartView from './smart.js';
 const createStatisticsTemplate = (isStats) => {
 
   // if (isStats) {
-      return `<section class="statistics">
-<h2 class="visually-hidden">Trip statistics</h2>
+      return `<section class="statistics visually-hidden">
+<h2>Trip statistics</h2>
 
 <!-- Пример диаграмм -->
+<img src="img/big-trip-stats-markup.png" alt="Пример диаграмм">
 
 <div class="statistics__item">
   <canvas class="statistics__chart statistics__chart--money" id="money" width="900"></canvas>
@@ -107,7 +108,7 @@ return new Chart(moneyCtx, {
 
 
 const renderTypeChart = (typeCtx, points) => {
-  
+
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
@@ -192,6 +193,7 @@ export default class StatisticsView extends SmartView {
     this._setCharts();
   }
 
+
   removeElement() {
     super.removeElement();
 
@@ -219,12 +221,12 @@ export default class StatisticsView extends SmartView {
 
     // const {tasks, dateFrom, dateTo} = this._data;
 
-    const moneyCtx = document.querySelector('.statistics__chart--money');
-    const typeCtx = document.querySelector('.statistics__chart--transport');
-    const timeCtx = document.querySelector('.statistics__chart--time');
+    // const moneyCtx = document.querySelector('.statistics__chart--money');
+    // const typeCtx = document.querySelector('.statistics__chart--transport');
+    // const timeCtx = document.querySelector('.statistics__chart--time');
 
-    this._moneyChart = renderMoneyChart(moneyCtx, this._points);
-    this._typeChart = renderTypeChart(typeCtx, this._points);
-    this._timeChart = renderTimeChart(timeCtx, this._points);
+    // this._moneyChart = renderMoneyChart(moneyCtx, this._points);
+    // this._typeChart = renderTypeChart(typeCtx, this._points);
+    // this._timeChart = renderTimeChart(timeCtx, this._points);
   }
 }

@@ -45,9 +45,9 @@ const handleSiteMenuClick = (menuItem) => {
 
   switch (menuItem) {
     case MenuItem.TABLE:
-      presenter.start();
+      // presenter.start();
       // console.log('33', menuItem)
-      remove(statisticsComponent);
+      // remove(statisticsComponent);
       break;
     case MenuItem.STATS:
       // presenter.destroy();
@@ -56,14 +56,15 @@ const handleSiteMenuClick = (menuItem) => {
       break;
   }
 };
+
+
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 filterPresenter.init();
 presenter.start();
 
-
-
-
+statisticsComponent = new StatisticsView(pointsModel.getPoints());
+render(pageBodyMain, statisticsComponent, RenderPosition.BEFOREEND);
 
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
