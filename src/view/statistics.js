@@ -32,9 +32,40 @@ const createStatisticsTemplate = (isStats) => {
 
 };
 
-
+const compareSum = (elemA, elemB) => {
+  return elemB - elemA;
+}
 
 const renderMoneyChart = (moneyCtx, points) => {
+
+  console.log(points)
+const table = {};
+const res = points.filter(({typePoint, basePrice}) => {
+  // console.log(typePoint, basePrice)
+
+  if(table[typePoint]){
+    // let sum = table[typePoint];
+    table[typePoint] = table[typePoint] + basePrice;
+  } else {
+    table[typePoint] = basePrice;
+  }
+
+
+});
+// .sort(compareSum);
+console.log(table);
+let sortable = Object.entries(table);
+
+sortable.sort((a, b) => {
+  // console.log(a[1], a)
+  return b[1] -  a[1]  ;
+});
+
+// const test = Object.values(table).sort(compareSum);
+console.log(sortable);
+// test.forEach(element => {
+//   console.log(element);
+// });
 
 moneyCtx.height = BAR_HEIGHT * 5;
 
