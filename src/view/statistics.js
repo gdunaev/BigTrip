@@ -1,7 +1,8 @@
 import SmartView from './smart.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { getSumAndTypes } from '../utils/statistics.js';
+import { getSumAndTypes, getTypesCount, getTime } from '../utils/statistics.js';
+import { getTypeDuration } from './dayjs.js';
 
 const BAR_HEIGHT = 55;
 
@@ -26,16 +27,11 @@ const createStatisticsTemplate = () => {
   <canvas class="statistics__chart statistics__chart--time" id="time" width="900"></canvas>
 </div>
 </section>`;
-  // }
-  // return '';
 
 };
 
 
-
 const renderMoneyChart = (moneyCtx, points) => {
-
-  console.log(points)
 
   const {sum, types} = getSumAndTypes(points);
   moneyCtx.height = BAR_HEIGHT * 5;
@@ -108,19 +104,19 @@ const renderMoneyChart = (moneyCtx, points) => {
 };
 
 
-
 const renderTypeChart = (typeCtx, points) => {
 
   typeCtx.height = BAR_HEIGHT * 5;
 
+  const {count, types} = getTypesCount(points);
 
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],
+      labels: types,
       datasets: [{
-        data: [4, 3, 2, 1, 1, 1],
+        data: count,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -181,15 +177,17 @@ const renderTypeChart = (typeCtx, points) => {
 };
 
 const renderTimeChart = (timeCtx, points) => {
+
   timeCtx.height = BAR_HEIGHT * 5;
+  const {time, types} = getTime(points);
 
   return new Chart(timeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],
+      labels: types,
       datasets: [{
-        data: [4000, 300, 100, 160, 150, 100],
+        data: time,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -204,7 +202,7 @@ const renderTimeChart = (timeCtx, points) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: (val) => `€ ${val}`,
+          formatter: (val) => `${getTypeDuration(val)}`,
         },
       },
       title: {
@@ -250,20 +248,15 @@ const renderTimeChart = (timeCtx, points) => {
 };
 
 
-
 export default class StatisticsView extends SmartView {
   constructor(points) {
     super();
 
     this._points = points;
-
     this._moneyChart = null;
     this._typeChart = null;
     this._timeChart = null;
-
   }
-
-  // setCharts();
 
   removeElement() {
     super.removeElement();
@@ -290,10 +283,7 @@ export default class StatisticsView extends SmartView {
       this._timeChart = null;
     }
 
-    // const {tasks, dateFrom, dateTo} = this._data;
-
     const moneyCtx = document.querySelector('.statistics__chart--money');
-    //  console.log('11', moneyCtx)
     const typeCtx = document.querySelector('.statistics__chart--transport');
     const timeCtx = document.querySelector('.statistics__chart--time');
 

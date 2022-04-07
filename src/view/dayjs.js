@@ -46,6 +46,29 @@ const getMinMaxDurationDate = (dateA = null, dateB = null) => {
     return minMaxDates;
 }
 
+const getPointDurationMinute = (dateMin, dateMax) => {
+
+      //получим разницу в миллисекундах, и посчитаем минуты
+      return Math.trunc(dateMax.diff(dateMin) / 60000);
+        
+  }
+
+  //пребразуем кол-во минут в строку - 00D 00H 00M
+  const getTypeDuration = (minute) => {
+
+    const durationMin = minute % 60;
+    const durationHourAll = (minute - durationMin) / 60;
+    const durationHour = durationHourAll % 24;
+    const durationDay = (durationHourAll - durationHour) / 24;
+    const isDay = durationDay === 0 ? false : true;
+
+    let durationPoint = getStringDate(durationMin, 'M', false);
+    durationPoint = getStringDate(durationHour, 'H', isDay) + durationPoint;
+    durationPoint = getStringDate(durationDay, 'D', isDay) + durationPoint;
+    return durationPoint;  
+}
+  
+
 const getRandomDate = () => {
     return dayjs(dayjs().add(getRandomInteger(-4320, 4320), 'minute').toDate());
 }
@@ -134,5 +157,7 @@ export {
     getCumulativeDate,
     getPastPoints,
     getFuturePoints,
-    datesFields
+    datesFields,
+    getPointDurationMinute,
+    getTypeDuration
 }
