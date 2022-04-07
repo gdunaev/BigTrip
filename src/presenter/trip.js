@@ -25,7 +25,7 @@ export default class TripPresenter {
     this._currentMode = '';
     this._filterType = null;
     this._sortMode = SortMode.DAY;
-    this._siteMenuView = new SiteMenuView(points);
+    // this._siteMenuView = new SiteMenuView(points);
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._handleViewAction = this._handleViewAction.bind(this);

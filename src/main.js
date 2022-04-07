@@ -42,19 +42,25 @@ const tripControlsNavigation = document.querySelector('.trip-controls__navigatio
 render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
 
 const handleSiteMenuClick = (menuItem) => {
-  //  console.log('11', menuItem)
+    // console.log('11', menuItem)
   // siteMenuComponent.setMenuItem(MenuItem.STATS);
 
   switch (menuItem) {
     case MenuItem.TABLE:
       // presenter.start();
       // console.log('33', menuItem)
-      // remove(statisticsComponent);
+      if(statisticsComponent !== null) {
+        // console.log('33', statisticsComponent)
+        statisticsComponent.hideStatictics();
+        // remove(statisticsComponent);
+        console.log('44', statisticsComponent)
+      }
+
       break;
     case MenuItem.STATS:
-      // presenter.destroy();
-      // statisticsComponent = new StatisticsView(pointsModel.getPoints());
-      // render(tripEventsMain, statisticsComponent, RenderPosition.BEFOREEND);
+      statisticsComponent = new StatisticsView(pointsModel.getPoints());
+      render(pageBodyContainer, statisticsComponent, RenderPosition.BEFOREEND);
+      statisticsComponent.start();
       break;
   }
 };
@@ -65,9 +71,9 @@ siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 filterPresenter.init();
 presenter.start();
 
-statisticsComponent = new StatisticsView(pointsModel.getPoints());
-render(pageBodyContainer, statisticsComponent, RenderPosition.BEFOREEND);
-statisticsComponent.start();
+// statisticsComponent = new StatisticsView(pointsModel.getPoints());
+// render(pageBodyContainer, statisticsComponent, RenderPosition.BEFOREEND);
+// statisticsComponent.start();
 
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {

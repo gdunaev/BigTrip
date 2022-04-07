@@ -29,10 +29,10 @@ export default class SiteMenuView extends AbstractView {
     items.forEach((element) => {element.textContent === menuItem ? element.className = 'trip-tabs__btn trip-tabs__btn--active' : element.className = 'trip-tabs__btn' });
 
 
-    this.hide();
-    if (MenuItem.STATS === menuItem) {
-      this.show();
-    }
+    // this._hide();
+    // if (MenuItem.STATS === menuItem) {
+      // this._show();
+    // }
 
     evt.preventDefault();
     this._callback.menuClick(menuItem);

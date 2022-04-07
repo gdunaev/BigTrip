@@ -7,9 +7,9 @@ import { getTypeDuration } from './dayjs.js';
 const BAR_HEIGHT = 55;
 
 const createStatisticsTemplate = () => {
-  // console.log('222', )
+  // console.log('222', ) visually-hidden
   // if (isStats) {
-  return `<section class="statistics visually-hidden">
+  return `<section class="statistics">
 <h2>Trip statistics</h2>
 
 <!-- Пример диаграмм -->
@@ -102,7 +102,6 @@ const renderMoneyChart = (moneyCtx, points) => {
     },
   })
 };
-
 
 const renderTypeChart = (typeCtx, points) => {
 
@@ -259,24 +258,32 @@ export default class StatisticsView extends SmartView {
   }
 
   removeElement() {
+    // console.log('77', this._element)
     super.removeElement();
 
-    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
-      this._moneyChart = null;
-      this._typeChart = null;
-      this._timeChart = null;
-    }
+    // if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
+    //   this._moneyChart = null;
+    //   this._typeChart = null;
+    //   this._timeChart = null;
+    // }
   }
 
   getTemplate() {
     return createStatisticsTemplate(this._data);
   }
 
-  restoreHandlers() {
-    this._setCharts();
+  hideStatictics() {
+    this.hide();
+    this.removeElement();
   }
+  // restoreHandlers() {
+  //   this._setCharts();
+  // }
 
   start() {
+
+    // this._removeElement();
+
     if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
       this._moneyChart = null;
       this._typeChart = null;
@@ -288,7 +295,9 @@ export default class StatisticsView extends SmartView {
     const timeCtx = document.querySelector('.statistics__chart--time');
 
     this._moneyChart = renderMoneyChart(moneyCtx, this._points);
-    this._typeChart = renderTypeChart(typeCtx, this._points);
-    this._timeChart = renderTimeChart(timeCtx, this._points);
+    this._typeChart =    renderTypeChart(typeCtx, this._points);
+    this._timeChart =    renderTimeChart(timeCtx, this._points);
+
+    this.show();
   }
 }
