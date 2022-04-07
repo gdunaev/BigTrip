@@ -1,24 +1,22 @@
-// import dayjs from 'dayjs';
-// import isBetween from 'dayjs/plugin/isBetween';
+const getSumAndTypes = (points) => {
+  
+    //отбор в отдельный объект с суммированием цен по типу точки
+    const sum = {};
+    points.filter(({ typePoint, basePrice }) => {
+      (sum[typePoint]) ? sum[typePoint] = sum[typePoint] + basePrice : sum[typePoint] = basePrice;
+    });
+  
+    //сортировка по убыванию и создание объекта с готовыми для диаграммы массивами
+    const sumTypesPoint = {
+      types: [],
+      sum: [],
+    };
+    Object.entries(sum).sort((a, b) => { return b[1] - a[1] }).forEach(elem => {
+      sumTypesPoint.types.push(elem[0]);
+      sumTypesPoint.sum.push(elem[1]);
+    });
+  
+    return sumTypesPoint;
+  };
 
-// dayjs.extend(isBetween);
-
-// export const countCompletedTaskInDateRange = (tasks, dateFrom, dateTo) => {
-//   return tasks.reduce((counter, task) => {
-//     if (task.dueDate === null) {
-//       return counter;
-//     }
-
-//     // С помощью day.js проверям, сколько задач с дедлайном
-//     // попадают в диапазон дат
-//     if (
-//       dayjs(task.dueDate).isSame(dateFrom) ||
-//       dayjs(task.dueDate).isBetween(dateFrom, dateTo) ||
-//       dayjs(task.dueDate).isSame(dateTo)
-//     ) {
-//       return counter + 1;
-//     }
-
-//     return counter;
-//   }, 0);
-// };
+  export {getSumAndTypes}

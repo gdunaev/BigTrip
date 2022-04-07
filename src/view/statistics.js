@@ -1,15 +1,14 @@
-import dayjs from 'dayjs';
-import flatpickr from 'flatpickr';
 import SmartView from './smart.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { getSumAndTypes } from '../utils/statistics.js';
 
 const BAR_HEIGHT = 55;
 
-const createStatisticsTemplate = (isStats) => {
+const createStatisticsTemplate = () => {
   // console.log('222', )
   // if (isStats) {
-      return `<section class="statistics visually-hidden">
+  return `<section class="statistics visually-hidden">
 <h2>Trip statistics</h2>
 
 <!-- Пример диаграмм -->
@@ -32,108 +31,80 @@ const createStatisticsTemplate = (isStats) => {
 
 };
 
-const compareSum = (elemA, elemB) => {
-  return elemB - elemA;
-}
+
 
 const renderMoneyChart = (moneyCtx, points) => {
 
   console.log(points)
-const table = {};
-const res = points.filter(({typePoint, basePrice}) => {
-  // console.log(typePoint, basePrice)
 
-  if(table[typePoint]){
-    // let sum = table[typePoint];
-    table[typePoint] = table[typePoint] + basePrice;
-  } else {
-    table[typePoint] = basePrice;
-  }
+  const {sum, types} = getSumAndTypes(points);
+  moneyCtx.height = BAR_HEIGHT * 5;
 
 
-});
-// .sort(compareSum);
-console.log(table);
-let sortable = Object.entries(table);
-
-sortable.sort((a, b) => {
-  // console.log(a[1], a)
-  return b[1] -  a[1]  ;
-});
-
-// const test = Object.values(table).sort(compareSum);
-console.log(sortable);
-// test.forEach(element => {
-//   console.log(element);
-// });
-
-moneyCtx.height = BAR_HEIGHT * 5;
-
-
-return new Chart(moneyCtx, {
-  plugins: [ChartDataLabels],
-  type: 'horizontalBar',
-  data: {
-    labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],
-    datasets: [{
-      data: [400, 300, 200, 160, 150, 100],
-      backgroundColor: '#ffffff',
-      hoverBackgroundColor: '#ffffff',
-      anchor: 'start',
-    }],
-  },
-  options: {
-    plugins: {
-      datalabels: {
-        font: {
-          size: 13,
+  return new Chart(moneyCtx, {
+    plugins: [ChartDataLabels],
+    type: 'horizontalBar',
+    data: {
+      labels: types,
+      datasets: [{
+        data: sum,
+        backgroundColor: '#ffffff',
+        hoverBackgroundColor: '#ffffff',
+        anchor: 'start',
+      }],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13,
+          },
+          color: '#000000',
+          anchor: 'end',
+          align: 'start',
+          formatter: (val) => `€ ${val}`,
         },
-        color: '#000000',
-        anchor: 'end',
-        align: 'start',
-        formatter: (val) => `€ ${val}`,
+      },
+      title: {
+        display: true,
+        text: 'MONEY',
+        fontColor: '#000000',
+        fontSize: 23,
+        position: 'left',
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#000000',
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          minBarLength: 50,
+        }],
+      },
+      legend: {
+        display: false,
+      },
+      tooltips: {
+        enabled: false,
       },
     },
-    title: {
-      display: true,
-      text: 'MONEY',
-      fontColor: '#000000',
-      fontSize: 23,
-      position: 'left',
-    },
-    scales: {
-      yAxes: [{
-        ticks: {
-          fontColor: '#000000',
-          padding: 5,
-          fontSize: 13,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false,
-        },
-        barThickness: 44,
-      }],
-      xAxes: [{
-        ticks: {
-          display: false,
-          beginAtZero: true,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false,
-        },
-        minBarLength: 50,
-      }],
-    },
-    legend: {
-      display: false,
-    },
-    tooltips: {
-      enabled: false,
-    },
-  },
-})
+  })
 };
 
 
@@ -321,7 +292,7 @@ export default class StatisticsView extends SmartView {
 
     // const {tasks, dateFrom, dateTo} = this._data;
 
-     const moneyCtx = document.querySelector('.statistics__chart--money');
+    const moneyCtx = document.querySelector('.statistics__chart--money');
     //  console.log('11', moneyCtx)
     const typeCtx = document.querySelector('.statistics__chart--transport');
     const timeCtx = document.querySelector('.statistics__chart--time');
