@@ -5,10 +5,27 @@ import { getSumAndTypes, getTypesCount, getTime } from '../utils/statistics.js';
 import { getTypeDuration } from './dayjs.js';
 
 const BAR_HEIGHT = 55;
+const ConstantChart = {
+  BAR: 'horizontalBar', 
+  DATA_COLOR: '#ffffff',
+  ANCHOR_SET: 'start', 
+  ANCHOR_LABEL: 'end',
+  COLOR: '#000000',
+  BAR_THICKNESS: 44,
+  MIN_BAR_LENGTH: 50,
+  ALIGN: 'start', 
+  TITLE_POSITION: 'left',
+  DATA_SIZE: 13,
+  TICK_SIZE: 13,
+  TITLE_SIZE: 23,
+  COEFFICIENT: 5,
+  PADDING: 5,
+  TEXT_MONEY: 'MONEY',
+  TEXT_TYPE: 'TYPE',
+  TEXT_TIME: 'TYPE',
+}
 
 const createStatisticsTemplate = () => {
-  // console.log('222', ) visually-hidden
-  // if (isStats) {
   return `<section class="statistics">
 <h2>Trip statistics</h2>
 
@@ -30,56 +47,56 @@ const createStatisticsTemplate = () => {
 
 };
 
-
 const renderMoneyChart = (moneyCtx, points) => {
 
   const {sum, types} = getSumAndTypes(points);
-  moneyCtx.height = BAR_HEIGHT * 5;
+  moneyCtx.height = BAR_HEIGHT * ConstantChart.COEFFICIENT;
 
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
-    type: 'horizontalBar',
+    type: ConstantChart.BAR,
     data: {
       labels: types,
       datasets: [{
         data: sum,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
+        backgroundColor: ConstantChart.DATA_COLOR,
+        hoverBackgroundColor: ConstantChart.DATA_COLOR,
+        anchor: ConstantChart.ANCHOR_SET,
+        barThickness: ConstantChart.BAR_THICKNESS,
+        minBarLength: ConstantChart.MIN_BAR_LENGTH,
       }],
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13,
+            size: ConstantChart.DATA_SIZE,
           },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
+          color: ConstantChart.COLOR,
+          anchor: ConstantChart.ANCHOR_LABEL,
+          align: ConstantChart.ALIGN,
           formatter: (val) => `€ ${val}`,
         },
       },
       title: {
         display: true,
-        text: 'MONEY',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
+        text: ConstantChart.TEXT_MONEY,
+        fontColor: ConstantChart.COLOR,
+        fontSize: ConstantChart.TITLE_SIZE,
+        position: ConstantChart.TITLE_POSITION,
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
+            fontColor: ConstantChart.COLOR,
+            padding: ConstantChart.PADDING,
+            fontSize: ConstantChart.TICK_SIZE,
           },
           gridLines: {
             display: false,
             drawBorder: false,
           },
-          barThickness: 44,
         }],
         xAxes: [{
           ticks: {
@@ -90,7 +107,6 @@ const renderMoneyChart = (moneyCtx, points) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: 50,
         }],
       },
       legend: {
@@ -105,53 +121,54 @@ const renderMoneyChart = (moneyCtx, points) => {
 
 const renderTypeChart = (typeCtx, points) => {
 
-  typeCtx.height = BAR_HEIGHT * 5;
+  typeCtx.height = BAR_HEIGHT * ConstantChart.COEFFICIENT;
 
   const {count, types} = getTypesCount(points);
 
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
-    type: 'horizontalBar',
+    type: ConstantChart.BAR,
     data: {
       labels: types,
       datasets: [{
         data: count,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
+        backgroundColor: ConstantChart.DATA_COLOR,
+        hoverBackgroundColor: ConstantChart.DATA_COLOR,
+        anchor: ConstantChart.ANCHOR_SET,
+        barThickness: ConstantChart.BAR_THICKNESS,
+        minBarLength: ConstantChart.MIN_BAR_LENGTH,
       }],
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13,
+            size: ConstantChart.DATA_SIZE,
           },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
+          color: ConstantChart.COLOR,
+          anchor: ConstantChart.ANCHOR_LABEL,
+          align: ConstantChart.ALIGN,
           formatter: (val) => `${val}x`,
         },
       },
       title: {
         display: true,
-        text: 'TYPE',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
+        text: ConstantChart.TEXT_TYPE,
+        fontColor: ConstantChart.COLOR,
+        fontSize: ConstantChart.TITLE_SIZE,
+        position: ConstantChart.TITLE_POSITION,
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
+            fontColor: ConstantChart.COLOR,
+            padding: ConstantChart.PADDING,
+            fontSize: ConstantChart.TICK_SIZE,
           },
           gridLines: {
             display: false,
             drawBorder: false,
           },
-          barThickness: 44,
         }],
         xAxes: [{
           ticks: {
@@ -162,7 +179,6 @@ const renderTypeChart = (typeCtx, points) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: 50,
         }],
       },
       legend: {
@@ -177,52 +193,53 @@ const renderTypeChart = (typeCtx, points) => {
 
 const renderTimeChart = (timeCtx, points) => {
 
-  timeCtx.height = BAR_HEIGHT * 5;
+  timeCtx.height = BAR_HEIGHT * ConstantChart.COEFFICIENT;
   const {time, types} = getTime(points);
 
   return new Chart(timeCtx, {
     plugins: [ChartDataLabels],
-    type: 'horizontalBar',
+    type: ConstantChart.BAR,
     data: {
       labels: types,
       datasets: [{
         data: time,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
+        backgroundColor: ConstantChart.DATA_COLOR,
+        hoverBackgroundColor: ConstantChart.DATA_COLOR,
+        anchor: ConstantChart.ANCHOR_SET,
+        barThickness: ConstantChart.BAR_THICKNESS,
+        minBarLength: ConstantChart.MIN_BAR_LENGTH,
       }],
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 13,
+            size: ConstantChart.DATA_SIZE,
           },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
+          color: ConstantChart.COLOR,
+          anchor: ConstantChart.ANCHOR_LABEL,
+          align: ConstantChart.ALIGN,
           formatter: (val) => `${getTypeDuration(val)}`,
         },
       },
       title: {
         display: true,
-        text: 'TIME',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
+        text: ConstantChart.TEXT_TIME,
+        fontColor: ConstantChart.COLOR,
+        fontSize: ConstantChart.TITLE_SIZE,
+        position: ConstantChart.TITLE_POSITION,
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
+            fontColor: ConstantChart.COLOR,
+            padding: ConstantChart.PADDING,
+            fontSize: ConstantChart.TICK_SIZE,
           },
           gridLines: {
             display: false,
             drawBorder: false,
           },
-          barThickness: 44,
         }],
         xAxes: [{
           ticks: {
@@ -233,7 +250,6 @@ const renderTimeChart = (timeCtx, points) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: 50,
         }],
       },
       legend: {
@@ -250,53 +266,27 @@ const renderTimeChart = (timeCtx, points) => {
 export default class StatisticsView extends SmartView {
   constructor(points) {
     super();
-
     this._points = points;
-    this._moneyChart = null;
-    this._typeChart = null;
-    this._timeChart = null;
   }
 
   removeElement() {
-    // console.log('77', this._element)
     super.removeElement();
-
-    // if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
-    //   this._moneyChart = null;
-    //   this._typeChart = null;
-    //   this._timeChart = null;
-    // }
   }
 
   getTemplate() {
     return createStatisticsTemplate(this._data);
   }
 
-  hideStatictics() {
-    this.hide();
-    this.removeElement();
-  }
-  // restoreHandlers() {
-  //   this._setCharts();
-  // }
 
   start() {
-
-    // this._removeElement();
-
-    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
-      this._moneyChart = null;
-      this._typeChart = null;
-      this._timeChart = null;
-    }
 
     const moneyCtx = document.querySelector('.statistics__chart--money');
     const typeCtx = document.querySelector('.statistics__chart--transport');
     const timeCtx = document.querySelector('.statistics__chart--time');
 
-    this._moneyChart = renderMoneyChart(moneyCtx, this._points);
-    this._typeChart =    renderTypeChart(typeCtx, this._points);
-    this._timeChart =    renderTimeChart(timeCtx, this._points);
+    renderMoneyChart(moneyCtx, this._points);
+    renderTypeChart(typeCtx, this._points);
+    renderTimeChart(timeCtx, this._points);
 
     this.show();
   }

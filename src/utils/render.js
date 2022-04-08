@@ -37,7 +37,7 @@ const remove = (component) => {
 
   component.getElement().remove();
   component.removeElement();
-  console.log('66', component, component.getElement())
+//   console.log('66', component, component.getElement())
 }
 
 const render = (container, element, place) => {

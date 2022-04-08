@@ -42,20 +42,15 @@ const tripControlsNavigation = document.querySelector('.trip-controls__navigatio
 render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
 
 const handleSiteMenuClick = (menuItem) => {
-    // console.log('11', menuItem)
-  // siteMenuComponent.setMenuItem(MenuItem.STATS);
+
+  if(statisticsComponent !== null) {
+    statisticsComponent.hide();
+    remove(statisticsComponent);
+    statisticsComponent = null;
+  }
 
   switch (menuItem) {
     case MenuItem.TABLE:
-      // presenter.start();
-      // console.log('33', menuItem)
-      if(statisticsComponent !== null) {
-        // console.log('33', statisticsComponent)
-        statisticsComponent.hideStatictics();
-        // remove(statisticsComponent);
-        console.log('44', statisticsComponent)
-      }
-
       break;
     case MenuItem.STATS:
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
@@ -80,3 +75,5 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
     evt.preventDefault();
     presenter.createPoint();
   });
+
+ 
