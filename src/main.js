@@ -75,5 +75,5 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
     evt.preventDefault();
     presenter.createPoint();
   });
+// console.log('112')
 
- 

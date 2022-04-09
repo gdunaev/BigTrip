@@ -6,14 +6,14 @@ import { getTypeDuration } from './dayjs.js';
 
 const BAR_HEIGHT = 55;
 const ConstantChart = {
-  BAR: 'horizontalBar', 
+  BAR: 'horizontalBar',
   DATA_COLOR: '#ffffff',
-  ANCHOR_SET: 'start', 
+  ANCHOR_SET: 'start',
   ANCHOR_LABEL: 'end',
   COLOR: '#000000',
   BAR_THICKNESS: 44,
   MIN_BAR_LENGTH: 50,
-  ALIGN: 'start', 
+  ALIGN: 'start',
   TITLE_POSITION: 'left',
   DATA_SIZE: 13,
   TICK_SIZE: 13,

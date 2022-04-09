@@ -12,7 +12,6 @@ const TypeDate = {
   END: 'end',
 };
 
-
 const createPointEditTemplate = (state) => {
   const { typePoint, dateFromState, dateToState, typePointState, dectinationState, priceState } = state;
 
@@ -224,6 +223,7 @@ export default class PointEditorView extends SmartView {
   }
 
   _setInnerHandlers() {
+    // console.log('44')
     this.getElement().querySelector('.event__type-list').addEventListener('click', this._changeEventTypeHandler);
     this._setDateFromPicker();
     this._setDateToPicker();
@@ -241,7 +241,7 @@ export default class PointEditorView extends SmartView {
   _priceInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      priceState: evt.target.value,
+      priceState: Number(evt.target.value),
     }, true);
   }
 

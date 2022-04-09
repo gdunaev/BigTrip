@@ -51,6 +51,7 @@ export default class TripPresenter {
 
   //при нажатии на кнопку "Добавить новую (New event)"
   createPoint() {
+    // console.log('11222')
     this._sortMode = SortMode.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.start();
