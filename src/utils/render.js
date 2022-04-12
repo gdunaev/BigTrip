@@ -1,6 +1,6 @@
 import { AbstractView } from "../view/abstract.js";
 // import { isEscEvent } from "./common.js";
-import { RenderPosition } from "../view/const.js";
+import { RenderPosition } from "../const.js";
 
 
 const createElementDom = (template) => {

@@ -1,5 +1,5 @@
 import { AbstractView } from "./abstract.js";
-import { FilterType } from "./const.js";
+import { FilterType } from "../const.js";
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
 

@@ -7,21 +7,22 @@ import FiltersView from "../view/filter-view.js";
 import { getFuturePoints, getPastPoints } from "../view/dayjs.js";
 import SiteMenuView from "../view/site-menu.js";
 import SortView from "../view/sort.js";
-import { Mode, UpdateType, UserAction, FilterType, RenderPosition, SortMode } from "../view/const.js";
+import { Mode, UpdateType, UserAction, FilterType, RenderPosition, SortMode } from "../const.js";
 import PointNewPresenter from "./trip-point-new.js";
+import LoadingView from '../view/loading.js';
 
 
 
 export default class TripPresenter {
-  constructor(points, tripEventsMain, pointsModel, filterModel) {
-    this._isEmpty = points.length === 0;
+  constructor(tripEventsMain, pointsModel, filterModel, api) {
+    this._isEmpty = false;
     this._listEmptyView = new ListEmptyView(this._isEmpty);
-    this._infoPoints = new InfoView(points);
+    this._infoPoints = new InfoView();
     this._filtersView = new FiltersView(FilterType.EVERYTHING);
     this._tripEventsMain = tripEventsMain;
     this._pointPresenter = {};
     this._changeModePoint = this._changeModePoint.bind(this);
-    //
+
     this._currentMode = '';
     this._filterType = null;
     this._sortMode = SortMode.DAY;
@@ -36,6 +37,10 @@ export default class TripPresenter {
     this._sortView = null;
     this._handleSortModeChange = this._handleSortModeChange.bind(this);
     this._pointNewPresenter = new PointNewPresenter(this._handleViewAction);
+
+    this._isLoading = true;
+    this._loadingComponent = new LoadingView();
+    this._api = api;
   }
 
   start() {
@@ -43,11 +48,10 @@ export default class TripPresenter {
       render(this._tripEventsMain, this._listEmptyView, RenderPosition.BEFOREEND);
       return;
     }
-    this._renderMainInfo();
+    // this._renderMainInfo();
     // this._renderNavigation();
     this._renderPoints();
   }
-
 
   //при нажатии на кнопку "Добавить новую (New event)"
   createPoint() {
@@ -56,7 +60,6 @@ export default class TripPresenter {
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.start();
   }
-
 
   //получает точки (с сортировкой или фильтрацией) перед отрисовкой
   _getPoints() {
@@ -92,6 +95,11 @@ export default class TripPresenter {
     switch (actionType) {
       case UserAction.UPDATE:
         this._pointsModel.updatePoint(updateType, update);
+
+        this._api.updateTask(update).then((response) => {
+          this._tasksModel.updateTask(updateType, response);
+        });
+
         break;
       case UserAction.ADD:
         this._pointsModel.addPoint(updateType, update);
@@ -115,7 +123,16 @@ export default class TripPresenter {
         this._clearAllPoints({ setCurrentMode: true, resetSortType: true });
         this._renderPoints();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderPoints();
+        break;
     }
+  }
+
+  _renderLoading() {
+    // render(this._boardComponent, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _clearAllPoints({ setCurrentMode = false, resetSortType = false } = {}) {
@@ -125,6 +142,7 @@ export default class TripPresenter {
     this._pointPresenter = {};
 
     remove(this._sortView);
+    remove(this._loadingComponent);
 
     if (resetSortType) {
       this._sortMode = SortMode.DAY;
@@ -160,14 +178,27 @@ export default class TripPresenter {
   }
 
   _renderPoints() {
+
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
+    const points = this._getPoints();
+    const pointCount = points.length;
+
+    if (pointCount === 0) {
+      this._renderNoPoints();
+      return;
+    }
+
     this._renderSort();
 
-    this._getPoints().forEach((point) => this._renderPoint(point));
+    points.forEach((point) => this._renderPoint(point));
   }
 
-  _renderMainInfo() {
-    // const tripMain = document.querySelector('.trip-main');
-    // render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
+  _renderNoTasks() {
+    render(this._boardComponent, this._noTaskComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderFilters() {
@@ -176,10 +207,6 @@ export default class TripPresenter {
     this._filtersView.setFilterChangeHandler(() => { this._handleFilterChange() });
   }
 
-  // _renderNavigation() {
-    // const tripControlsNavigation = document.querySelector('.trip-controls__navigation');
-    // render(tripControlsNavigation, this._siteMenuView, RenderPosition.BEFOREEND);
-  // }
 
   _renderSort() {
     if (this._sortView !== null) {

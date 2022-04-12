@@ -1,7 +1,7 @@
 import { render, remove } from '../utils/render.js';
 import { isEscEvent } from '../utils/common.js';
 import PointEditorView from '../view/point-editor.js';
-import { UserAction, UpdateType, ModeEditing, RenderPosition } from '../view/const.js';
+import { UserAction, UpdateType, ModeEditing, RenderPosition } from '../const.js';
 import { nanoid } from 'nanoid';
 
 

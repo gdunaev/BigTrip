@@ -2,7 +2,7 @@ import { render, replace, remove } from '../utils/render.js';
 import { isEscEvent } from '../utils/common.js';
 import PointEditorView from '../view/point-editor.js';
 import PointView from '../view/point-item.js';
-import {UserAction, UpdateType, ModeEditing, RenderPosition} from '../view/const.js';
+import {UserAction, UpdateType, ModeEditing, RenderPosition} from '../const.js';
 
 
 
