@@ -1,5 +1,10 @@
 import Observer from '../utils/observer.js';
 
+const OFFER = new Map([]);
+
+
+
+
 export default class PointsModel extends Observer {
   constructor() {
     super();
@@ -8,7 +13,22 @@ export default class PointsModel extends Observer {
 
   setPoints(updateType, points) {
     this._points = points.slice();
+
+    this._points = adaptData(this._points);
+
     this._notify(updateType);
+  }
+
+  adaptData(points) {
+
+    points.forEach(point => {
+      const type = point.typePoint;
+      const offers = point.offers;
+      offers.forEach(offer => {
+        OFFER.set(type, offer);
+      });
+    });
+    return points;
   }
 
   getPoints() {
@@ -60,18 +80,30 @@ export default class PointsModel extends Observer {
       {},
       point,
       {
-        dueDate: point.due_date !== null ? new Date(point.due_date) : point.due_date, // На клиенте дата хранится как экземпляр Date
-        isArchive: point.is_archived,
+        // dueDate: point.due_date !== null ? new Date(point.due_date) : point.due_date, // На клиенте дата хранится как экземпляр Date
+        // isArchive: point.is_archived,
+        // isFavorite: point.is_favorite,
+        // repeating: point.repeating_days,
+
+
+        typePoint: point.type,
+        dateFrom: point.date_from,
+        basePrice: point.base_price,
+        dateTo: point.date_to,
+
         isFavorite: point.is_favorite,
-        repeating: point.repeating_days,
+        // typePoint: point.type,
+        // typePoint: point.type,
+
       },
     );
 
     // Ненужные ключи мы удаляем
-    delete adaptedPoint.due_date;
-    delete adaptedPoint.is_archived;
+    delete adaptedPoint.type;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.base_price;
+    delete adaptedPoint.date_to;
     delete adaptedPoint.is_favorite;
-    delete adaptedPoint.repeating_days;
 
     return adaptedPoint;
   }
