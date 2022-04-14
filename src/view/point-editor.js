@@ -2,9 +2,10 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 // import { POINT_DESCRIPTION, POINT_NAME } from './mock.js';
-import { datesFields } from './dayjs.js';
+import { setDatesFields, getDateEdit } from './dayjs.js';
 import he from 'he';
 import {OFFER, POINT_DESCRIPTION, POINT_NAME} from '../model/points.js';
+// import dayjs from 'dayjs';
 
 
 const FORMAT_DATE = 'd/m/y H:i';
@@ -14,21 +15,32 @@ const TypeDate = {
 };
 
 const createPointEditTemplate = (state) => {
+
+
   const { typePoint, dateFromState, dateToState, typePointState, dectinationState, priceState } = state;
+
+
 
   //отрисовка состояния при смене типа и места назначения.
   let typePointIconTemplate = typePointState !== null ? typePointState.toLowerCase() : typePoint.toLowerCase();
   const typePointTemplate = typePointState !== null ? typePointState : typePoint;
   const offers = typePointState !== null ? OFFER.get(typePointState) : state.offers;
   const destination = dectinationState !== null ? POINT_DESCRIPTION.get(dectinationState) : state.destination;
-  const name = dectinationState !== null ? dectinationState : state.name;
-  const dateFromEdit = dateFromState !== null ? dateFromState : state.dateFromEdit;
-  const dateToEdit = dateToState !== null ? dateToState : state.dateToEdit;
+
+  // console.log('222', destination)
+  const name = dectinationState !== null ? dectinationState : state.destination.name;
+  // console.log('33', name)
+  // console.log('66', getDateEdit(state.dateFrom), )
+  // debugger;
+  const dateFromEdit = dateFromState !== null ? dateFromState : getDateEdit(state.dateFrom);
+  const dateToEdit = dateToState !== null ? dateToState : getDateEdit(state.dateTo);
   const price = priceState !== null ? priceState : state.basePrice;
   const cancelDelete = 'Delete';
 
-  //подставляем наименование точек
+    //подставляем наименование точек
   let dataListTemplate = '';
+
+
   POINT_NAME.forEach((point_name) => {
     return dataListTemplate = dataListTemplate + ` <option value=${point_name}>${point_name}</option>`;
   });
@@ -44,10 +56,12 @@ const createPointEditTemplate = (state) => {
           <span class="event__offer-price">${currentPoint.price}</span>
         </label>
     </div>`).join(' ');
+    // console.log('66', offersComponent)
+    //
 
-  const descriptionComponent = destination === undefined ? '' : destination[0].description;
+  const descriptionComponent = destination === undefined ? '' : destination.description;
 
-  const photos = destination === undefined ? '' :  destination[0].pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
+  const photos = destination === undefined ? '' :  destination.pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
 
   const photosComponent = `<div class="event__photos-container">
                    <div class="event__photos-tape">
@@ -55,8 +69,13 @@ const createPointEditTemplate = (state) => {
                      </div>
                    </div>`;
 
+  // console.log('66',  dataListTemplate, dateFromEdit);
+ //,  dataListTemplate,  dateFromEdit, dateToEdit,price, cancelDelete,
+//       offersComponent, descriptionComponent, photosComponent)
+//  debugger;
+// photosComponent1
 
-  return `<ul class="trip-events__list">
+  const textTemplate = `<ul class="trip-events__list">
   <li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -170,12 +189,16 @@ const createPointEditTemplate = (state) => {
   </ul>
   `;
 
+  //  console.log('88', textTemplate)
+  return textTemplate;
+
 };
 
 
 
 export default class PointEditorView extends SmartView {
   constructor(point) {
+
     super();
     this._point = point;
     this._setSubmitHandler = this._setSubmitHandler.bind(this);
@@ -185,11 +208,16 @@ export default class PointEditorView extends SmartView {
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+
+    // console.log('666', this._point);
     this._state = PointEditorView.parseDataToState(this._point);
     this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
     this._destinationInputHandler = this._destinationInputHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
+
+    // console.log('444', this._point);
     this._setInnerHandlers();
+    // console.log('33', );
   }
 
   // Перегружаем метод родителя removeElement,
@@ -225,9 +253,11 @@ export default class PointEditorView extends SmartView {
 
   _setInnerHandlers() {
     // console.log('44')
+    // console.log('88', this.getElement())
     this.getElement().querySelector('.event__type-list').addEventListener('click', this._changeEventTypeHandler);
     this._setDateFromPicker();
     this._setDateToPicker();
+
     this.getElement().querySelector('#event-destination-1').addEventListener('input', this._destinationInputHandler);
     this.getElement().querySelector('#event-price-1').addEventListener('input', this._priceInputHandler);
   }
@@ -307,7 +337,6 @@ export default class PointEditorView extends SmartView {
     }
   }
 
-
   restoreHandlers() {
     this._setInnerHandlers();
     this.setSubmitFormHandler(this._callback.submitClick);
@@ -316,6 +345,8 @@ export default class PointEditorView extends SmartView {
   }
 
   static parseDataToState(data) {
+
+    // console.log('22', data)
     return Object.assign({},
       data, {
       typePointState: null,
@@ -329,9 +360,8 @@ export default class PointEditorView extends SmartView {
     );
   }
 
-
-
   static parseStateToData(state) {
+    // console.log('22', state)
     const data = Object.assign({}, state,
       Object.assign({},
         {
@@ -341,7 +371,7 @@ export default class PointEditorView extends SmartView {
           destination: state.dectinationState !== null ? POINT_DESCRIPTION.get(state.dectinationState) : state.destination,
           basePrice: state.priceState !== null ? state.priceState : state.basePrice,
         },
-        datesFields(state))
+        setDatesFields(state))
     );
 
     delete data.typePointState;
@@ -355,8 +385,9 @@ export default class PointEditorView extends SmartView {
     return data;
   }
 
-
   getTemplate() {
+    // let dfddf = createPointEditTemplate(this._state)
+    // console.log('111', dfddf)
     return createPointEditTemplate(this._state);
   }
 
@@ -369,8 +400,6 @@ export default class PointEditorView extends SmartView {
     this._callback.submitClick = callback;
     this.getElement().querySelector('.event').addEventListener('submit', this._setSubmitHandler);
   }
-
-
 
   _setRollupClick(evt) {
     evt.preventDefault();

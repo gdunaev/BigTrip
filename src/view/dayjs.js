@@ -50,7 +50,7 @@ const getPointDurationMinute = (dateMin, dateMax) => {
 
       //получим разницу в миллисекундах, и посчитаем минуты
       return Math.trunc(dateMax.diff(dateMin) / 60000);
-        
+
   }
 
   //пребразуем кол-во минут в строку - 00D 00H 00M
@@ -65,32 +65,32 @@ const getPointDurationMinute = (dateMin, dateMax) => {
     let durationPoint = getStringDate(durationMin, 'M', false);
     durationPoint = getStringDate(durationHour, 'H', isDay) + durationPoint;
     durationPoint = getStringDate(durationDay, 'D', isDay) + durationPoint;
-    return durationPoint;  
+    return durationPoint;
 }
-  
+
 
 const getRandomDate = () => {
     return dayjs(dayjs().add(getRandomInteger(-4320, 4320), 'minute').toDate());
 }
 
 const getDateHour = (date) => {
-    return date.format('HH:mm');
+    return dayjs(date).format('HH:mm');
 }
 
 const getMonthDay = (date) => {
-    return date.format('MMM DD');
+    return dayjs(date).format('MMM DD');
 }
 
 const getOnlyDate = (date) => {
-    return date.format('YYYY-MM-DD');
+    return dayjs(date).format('YYYY-MM-DD');
 }
 
 const getDateHourMinute = (date) => {
-    return date.format('YYYY-MM-DDTHH:mm');
+    return dayjs(date).format('YYYY-MM-DDTHH:mm');
 }
 
 const getDateEdit = (date) => {
-    return date.format('DD/MM/YY HH:mm');
+    return dayjs(date).format('DD/MM/YY HH:mm');
 }
 
 const getCumulativeDate = (dateFrom, dateTo) => {
@@ -112,7 +112,7 @@ const getFuturePoints = (points) => {
 }
 
 
-const datesFields = (state) => {
+const setDatesFields = (state) => {
 
   if (state.dateFromPicker === null && state.dateToPicker === null) {
     return {}
@@ -157,7 +157,7 @@ export {
     getCumulativeDate,
     getPastPoints,
     getFuturePoints,
-    datesFields,
+    setDatesFields,
     getPointDurationMinute,
     getTypeDuration
 }

@@ -22,6 +22,7 @@ export default class TripPointPresenter {
 
   start(point) {
     this._point = point;
+    // console.log('555', this._point);
 
     const prevPointView = this._pointView;
     const prevPointViewEditor = this._pointViewEditor;
@@ -29,11 +30,17 @@ export default class TripPointPresenter {
     this._pointViewEditor = new PointEditorView(point);
     this._pointView = new PointView(point);
 
+
+
     this._pointView.setRollupClickHandler(() => { this._replaceItemToForm(); });
+
+    // console.log('222', this._pointView);
     this._pointView.setFavoriteButtonHandler(() => { this._changeFavoriteButton(); });
     this._pointViewEditor.setSubmitFormHandler(this._handleFormSubmit);
     this._pointViewEditor.setRollupClickHandler(() => { this._replaceFormToItem(); });
     this._pointViewEditor.setDeleteClickHandler(this._handleDeleteClick);
+
+
 
     if (prevPointView === null || prevPointViewEditor === null) {
       render(this._tripEventsMain, this._pointView, RenderPosition.BEFOREEND);
@@ -50,6 +57,8 @@ export default class TripPointPresenter {
 
     remove(prevPointView);
     remove(prevPointViewEditor);
+
+
 
   }
 

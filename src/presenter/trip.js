@@ -39,7 +39,7 @@ export default class TripPresenter {
     this._pointNewPresenter = new PointNewPresenter(this._handleViewAction);
 
     this._isLoading = true;
-    this._loadingComponent = new LoadingView();
+    this._loadingComponent = new LoadingView(this._isLoading);
     this._api = api;
   }
 
@@ -111,6 +111,7 @@ export default class TripPresenter {
   }
 
   _handleModelEvent(updateType, point) {
+
     switch (updateType) {
       case UpdateType.PATCH:
         this._pointPresenter[point.id].start(point);
@@ -124,9 +125,12 @@ export default class TripPresenter {
         this._renderPoints();
         break;
       case UpdateType.INIT:
+
         this._isLoading = false;
         remove(this._loadingComponent);
+
         this._renderPoints();
+
         break;
     }
   }
@@ -172,7 +176,7 @@ export default class TripPresenter {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new TripPointPresenter(this._tripEventsMain, this._changeModePoint, this._handleViewAction,);
+    const pointPresenter = new TripPointPresenter(this._tripEventsMain, this._changeModePoint, this._handleViewAction);
     pointPresenter.start(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
@@ -184,7 +188,9 @@ export default class TripPresenter {
       return;
     }
 
+
     const points = this._getPoints();
+
     const pointCount = points.length;
 
     if (pointCount === 0) {
@@ -197,8 +203,8 @@ export default class TripPresenter {
     points.forEach((point) => this._renderPoint(point));
   }
 
-  _renderNoTasks() {
-    render(this._boardComponent, this._noTaskComponent, RenderPosition.AFTERBEGIN);
+  _renderNoPoints() {
+    // render(this._boardComponent, this._noTaskComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderFilters() {

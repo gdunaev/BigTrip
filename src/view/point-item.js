@@ -1,5 +1,6 @@
 import { AbstractView } from "./abstract.js";
 import he from 'he';
+import { getOnlyDate, getMonthDay, getDateHourMinute,  getDateHour} from "./dayjs.js";
 
 
 
@@ -9,16 +10,24 @@ const createPointItemTemplate = (point) => {
         isFavorite,
         offers,
         typePoint,
-        dateFromOnlyDate,
-        dateFromMonthDay,
-        name,
-        dateFromHourMinute,
-        dateFromHour,
-        dateToHourMinute,
-        dateToHour,
+        dateFrom,
+        destination,
+        // dateFromHourMinute,
+        // dateFromHour,
+        dateTo,
+        // dateToHourMinute,
+        // dateToHour,
         pointDuration,
         basePrice
     } = point;
+
+    const dateFromOnlyDate = getOnlyDate(dateFrom);
+    const dateFromMonthDay = getMonthDay(dateFrom);
+    const dateFromHourMinute = getDateHourMinute(dateFrom);
+    const  dateFromHour = getDateHour(dateFrom);
+   const  dateToHourMinute = getDateHourMinute(dateTo);
+   const  dateToHour = getDateHour(dateTo);
+  //  const name = point.destination.name;
 
     const basePriceString = String(basePrice);
     // console.log(basePriceString)
@@ -37,6 +46,8 @@ const createPointItemTemplate = (point) => {
 
     const typePointIcon = typePoint.toLowerCase();
 
+    // console.log('111', point) //, typePointIcon, offersComponent,  basePriceString)
+
     return `<ul class="trip-events__list">
             <li class="trip-events__item">
               <div class="event">
@@ -44,7 +55,7 @@ const createPointItemTemplate = (point) => {
               <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${typePointIcon}.png" alt="Event type icon">
               </div>
-              <h3 class="event__title">${typePoint} ${he.encode(name)}</h3>
+              <h3 class="event__title">${typePoint} ${he.encode(destination.name)}</h3>
               <div class="event__schedule">
                 <p class="event__time">
                 <time class="event__start-time" datetime=${dateFromHourMinute}>${dateFromHour}</time>
@@ -84,6 +95,7 @@ export default class PointView extends AbstractView {
     // this._favoriteClick = point;
   }
   getTemplate() {
+    // console.log('000', createPointItemTemplate(this._point))
     return createPointItemTemplate(this._point);
   }
   _onRollupClick(evt) {
@@ -92,6 +104,7 @@ export default class PointView extends AbstractView {
   }
   setRollupClickHandler(callback) {
     this._callback.rollupClick = callback;
+    // console.log('111', this.getElement())
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._onRollupClick);
   }
 

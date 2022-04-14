@@ -6,8 +6,6 @@ const POINT_DESCRIPTION = new Map([]);
 const POINT_NAME = [];
 
 
-
-
 export default class PointsModel extends Observer {
   constructor() {
     super();
@@ -18,22 +16,24 @@ export default class PointsModel extends Observer {
     this._points = points.slice();
 
     if (UpdateType.INIT === updateType) {
-      this._points = this.parseData(this._points);
+      this._points = this._parseData(this._points);
     }
+
+
 
     this._notify(updateType);
   }
 
-  parseData(points) {
-    // console.log('222', points);
+  _parseData(points) {
     points.forEach((point) => {
-      // console.log('111', point.typePoint, point.offers)
        OFFER.set(point.typePoint, point.offers);
-       POINT_DESCRIPTION.set(point.name, point.destination);
-       POINT_NAME.push(point.name);
+       POINT_DESCRIPTION.set(point.destination.name, point.destination);
+       if(!POINT_NAME.includes(point.destination.name)) {
+        POINT_NAME.push(point.destination.name);
+       }
     });
 
-    // console.log(OFFER)
+    //  console.log(POINT_DESCRIPTION)
     return points;
   }
 
