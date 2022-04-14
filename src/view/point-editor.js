@@ -1,9 +1,10 @@
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import { OFFER, POINT_DESCRIPTION, POINT_NAME } from './mock.js';
+// import { POINT_DESCRIPTION, POINT_NAME } from './mock.js';
 import { datesFields } from './dayjs.js';
 import he from 'he';
+import {OFFER, POINT_DESCRIPTION, POINT_NAME} from '../model/points.js';
 
 
 const FORMAT_DATE = 'd/m/y H:i';

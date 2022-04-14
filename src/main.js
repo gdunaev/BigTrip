@@ -78,13 +78,13 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
 // console.log('112')
 
 api.getPoints().then((points) => {
-  console.log(points)
-  pointsModel.setPoints(points);
+  // console.log(points)
+  pointsModel.setPoints(UpdateType.INIT, points);
   render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
-    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 }).catch(() => {
-  pointsModel.setPoints(UpdateType.INIT, []);
-  render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
-    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  // pointsModel.setPoints(UpdateType.INIT, []);
+  // render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
+  //   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 });
 

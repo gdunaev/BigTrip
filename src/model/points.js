@@ -1,6 +1,9 @@
 import Observer from '../utils/observer.js';
+import {UpdateType}from '../const.js';
 
 const OFFER = new Map([]);
+const POINT_DESCRIPTION = new Map([]);
+const POINT_NAME = [];
 
 
 
@@ -14,20 +17,23 @@ export default class PointsModel extends Observer {
   setPoints(updateType, points) {
     this._points = points.slice();
 
-    this._points = adaptData(this._points);
+    if (UpdateType.INIT === updateType) {
+      this._points = this.parseData(this._points);
+    }
 
     this._notify(updateType);
   }
 
-  adaptData(points) {
-
-    points.forEach(point => {
-      const type = point.typePoint;
-      const offers = point.offers;
-      offers.forEach(offer => {
-        OFFER.set(type, offer);
-      });
+  parseData(points) {
+    // console.log('222', points);
+    points.forEach((point) => {
+      // console.log('111', point.typePoint, point.offers)
+       OFFER.set(point.typePoint, point.offers);
+       POINT_DESCRIPTION.set(point.name, point.destination);
+       POINT_NAME.push(point.name);
     });
+
+    // console.log(OFFER)
     return points;
   }
 
@@ -129,3 +135,5 @@ export default class PointsModel extends Observer {
     return adaptedPoint;
   }
 }
+
+export {OFFER, POINT_DESCRIPTION, POINT_NAME}
