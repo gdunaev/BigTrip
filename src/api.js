@@ -1,4 +1,4 @@
-import TasksModel from './model/points.js';
+import PointModel from './model/points.js';
 
 const Method = {
   GET: 'GET',
@@ -19,18 +19,18 @@ export default class Api {
   getPoints() {
     return this._load({url: 'points'})
       .then(Api.toJSON)
-      .then((tasks) => tasks.map(TasksModel.adaptToClient));;
+      .then((points) => points.map(PointModel.adaptToClient));;
   }
 
-  updateTask(point) {
+  updatePoint(point) {
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(TasksModel.adaptToServer(task)),
+      body: JSON.stringify(PointModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.toJSON)
-      .then(TasksModel.adaptToClient);
+      .then(PointModel.adaptToClient);
   }
 
   _load({

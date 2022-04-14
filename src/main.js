@@ -78,6 +78,7 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
 // console.log('112')
 
 api.getPoints().then((points) => {
+  console.log(points)
   pointsModel.setPoints(points);
   render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
