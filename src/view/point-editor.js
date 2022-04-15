@@ -16,25 +16,30 @@ const TypeDate = {
 
 const createPointEditTemplate = (state) => {
 
+  //  console.log(state)
+
 
   const { typePoint, dateFromState, dateToState, typePointState, dectinationState, priceState } = state;
 
+  // console.log(dectinationState.name)
 
 
   //отрисовка состояния при смене типа и места назначения.
-  let typePointIconTemplate = typePointState !== null ? typePointState.toLowerCase() : typePoint.toLowerCase();
-  const typePointTemplate = typePointState !== null ? typePointState : typePoint;
-  const offers = typePointState !== null ? OFFER.get(typePointState) : state.offers;
-  const destination = dectinationState !== null ? POINT_DESCRIPTION.get(dectinationState) : state.destination;
-
-  // console.log('222', destination)
-  const name = dectinationState !== null ? dectinationState : state.destination.name;
-  // console.log('33', name)
+  let typePointIconTemplate = typePointState !== '' ? typePointState.toLowerCase() : typePoint.toLowerCase();
+  const typePointTemplate = typePointState !== '' ? typePointState : typePoint;
+  const offers = typePointState !== '' ? OFFER.get(typePointState) : state.offers !== [] ? state.offers : [];
+  const destination = dectinationState.name !== '' ? POINT_DESCRIPTION.get(dectinationState.name) : state.destination;
+  const name = destination === undefined ? '' : destination.name;
+  const descriptionComponent = destination === undefined ? '' : destination.description;
+  const photos = destination === undefined ? '' : destination.pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
   // console.log('66', getDateEdit(state.dateFrom), )
   // debugger;
-  const dateFromEdit = dateFromState !== null ? dateFromState : getDateEdit(state.dateFrom);
-  const dateToEdit = dateToState !== null ? dateToState : getDateEdit(state.dateTo);
-  const price = priceState !== null ? priceState : state.basePrice;
+  const dateFromEdit = dateFromState !== '' ? dateFromState : state.dateFrom !== '' ? getDateEdit(state.dateFrom) : '';
+
+  // console.log('66',state.dateFrom)
+
+  const dateToEdit = dateToState !== '' ? dateToState : state.dateTo !== '' ? getDateEdit(state.dateTo) : '';
+  const price = priceState !== '' ? priceState : state.basePrice;
   const cancelDelete = 'Delete';
 
     //подставляем наименование точек
@@ -42,7 +47,7 @@ const createPointEditTemplate = (state) => {
 
 
   POINT_NAME.forEach((point_name) => {
-    return dataListTemplate = dataListTemplate + ` <option value=${point_name}>${point_name}</option>`;
+    return dataListTemplate = dataListTemplate + ` <option value="${point_name}">${point_name}</option>`;
   });
 
   typePointIconTemplate = typePointIconTemplate !== '' ? `img/icons/${typePointIconTemplate}.png` : '';
@@ -56,12 +61,6 @@ const createPointEditTemplate = (state) => {
           <span class="event__offer-price">${currentPoint.price}</span>
         </label>
     </div>`).join(' ');
-    // console.log('66', offersComponent)
-    //
-
-  const descriptionComponent = destination === undefined ? '' : destination.description;
-
-  const photos = destination === undefined ? '' :  destination.pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
 
   const photosComponent = `<div class="event__photos-container">
                    <div class="event__photos-tape">
@@ -75,7 +74,7 @@ const createPointEditTemplate = (state) => {
 //  debugger;
 // photosComponent1
 
-  const textTemplate = `<ul class="trip-events__list">
+  return `<ul class="trip-events__list">
   <li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -189,9 +188,6 @@ const createPointEditTemplate = (state) => {
   </ul>
   `;
 
-  //  console.log('88', textTemplate)
-  return textTemplate;
-
 };
 
 
@@ -262,8 +258,8 @@ export default class PointEditorView extends SmartView {
     this.getElement().querySelector('#event-price-1').addEventListener('input', this._priceInputHandler);
   }
 
-  _checkDectination(dectination) {
-    if (POINT_DESCRIPTION.get(dectination) === undefined) {
+  _checkDectination(dectinationName) {
+    if (POINT_DESCRIPTION.get(dectinationName) === undefined) {
       return true;
     }
     return false;
@@ -279,7 +275,11 @@ export default class PointEditorView extends SmartView {
   _destinationInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      dectinationState: evt.target.value,
+      dectinationState: {
+        name: evt.target.value,
+        description: '',
+        pictures: [],
+      }
     }, this._checkDectination(evt.target.value));
   }
 
@@ -349,13 +349,17 @@ export default class PointEditorView extends SmartView {
     // console.log('22', data)
     return Object.assign({},
       data, {
-      typePointState: null,
-      dectinationState: null,
-      dateFromState: null,
-      dateToState: null,
-      dateFromPicker: null,
-      dateToPicker: null,
-      priceState: null,
+      typePointState: '',
+      dectinationState: {
+        name: '',
+        description: '',
+        pictures: []
+      },
+      dateFromState: '',
+      dateToState: '',
+      dateFromPicker: '',
+      dateToPicker: '',
+      priceState: '',
     },
     );
   }
@@ -365,13 +369,14 @@ export default class PointEditorView extends SmartView {
     const data = Object.assign({}, state,
       Object.assign({},
         {
-          typePoint: state.typePointState !== null ? state.typePointState : state.typePoint,
-          offers: state.typePointState !== null ? OFFER.get(state.typePointState) : state.offers,
-          name: state.dectinationState !== null ? state.dectinationState : state.name,
-          destination: state.dectinationState !== null ? POINT_DESCRIPTION.get(state.dectinationState) : state.destination,
-          basePrice: state.priceState !== null ? state.priceState : state.basePrice,
+          typePoint: state.typePointState !== '' ? state.typePointState : state.typePoint,
+          offers: state.typePointState !== '' ? OFFER.get(state.typePointState) : state.offers,
+          name: state.dectinationState.name !== '' ? state.dectinationState.name : state.dectination.name,
+          destination: state.dectinationState.name !== '' ? POINT_DESCRIPTION.get(state.dectinationState) : state.destination,
+          basePrice: state.priceState !== '' ? state.priceState : state.basePrice,
         },
-        setDatesFields(state))
+        // setDatesFields(state)
+        )
     );
 
     delete data.typePointState;

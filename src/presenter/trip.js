@@ -17,7 +17,7 @@ export default class TripPresenter {
   constructor(tripEventsMain, pointsModel, filterModel, api) {
     this._isEmpty = true;
     this._listEmptyView = new ListEmptyView(this._isEmpty);
-    this._infoPoints = new InfoView();
+    this._infoPoints = null;
     this._filtersView = new FiltersView(FilterType.EVERYTHING);
     this._tripEventsMain = tripEventsMain;
     this._pointPresenter = {};
@@ -127,9 +127,9 @@ export default class TripPresenter {
       case UpdateType.INIT:
 
         this._isLoading = false;
-        remove(this._loadingComponent); 
+        remove(this._loadingComponent);
         // remove(this._listEmptyView);
-        
+
         this._renderPoints();
 
         break;
@@ -149,7 +149,7 @@ export default class TripPresenter {
     remove(this._sortView);
     remove(this._loadingComponent);
     remove(this._infoPoints);
-    
+
 
     if (resetSortType) {
       this._sortMode = SortMode.DAY;
@@ -199,7 +199,8 @@ export default class TripPresenter {
 
     //отрисовка InfoView (список точек и общая стоимость)
     const tripMain = document.querySelector('.trip-main');
-    render(tripMain, new InfoView(points), RenderPosition.AFTERBEGIN);
+    this._infoPoints = new InfoView(points);
+    render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
 
     // console.log('111', points)
     //если точек нет - прячем InfoView и показываем заставку
