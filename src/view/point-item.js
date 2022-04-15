@@ -1,7 +1,7 @@
 import { AbstractView } from "./abstract.js";
 import he from 'he';
 import { getOnlyDate, getMonthDay, getDateHourMinute,  getDateHour} from "./dayjs.js";
-
+import {getMinMaxDateDuration} from './dayjs.js'
 
 
 const createPointItemTemplate = (point) => {
@@ -17,9 +17,9 @@ const createPointItemTemplate = (point) => {
         dateTo,
         // dateToHourMinute,
         // dateToHour,
-        pointDuration,
         basePrice
     } = point;
+    // console.log(point)
 
     const dateFromOnlyDate = getOnlyDate(dateFrom);
     const dateFromMonthDay = getMonthDay(dateFrom);
@@ -27,7 +27,7 @@ const createPointItemTemplate = (point) => {
     const  dateFromHour = getDateHour(dateFrom);
    const  dateToHourMinute = getDateHourMinute(dateTo);
    const  dateToHour = getDateHour(dateTo);
-  //  const name = point.destination.name;
+   const pointDuration = getMinMaxDateDuration(dateFrom, dateTo);
 
     const basePriceString = String(basePrice);
     // console.log(basePriceString)

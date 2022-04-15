@@ -21,6 +21,7 @@ export default class FilterPresenter {
   }
 
   init() {
+    // console.log('222')
     const filters = this._getFilters();
     const prevFilterView = this._filtersView;
 

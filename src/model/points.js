@@ -13,14 +13,16 @@ export default class PointsModel extends Observer {
   }
 
   setPoints(updateType, points) {
-    this._points = points.slice();
+    this._points = points.slice(); //тестовая строка 1. this._points = points.slice(0, 3); и 2. []
 
     if (UpdateType.INIT === updateType) {
       this._points = this._parseData(this._points);
     }
+    // console.log('333', this._points)
 
-
-
+    //здесь вызываются два обзервера:
+    //1. установлен в FilterPresenter (вызывает init у фильтров)
+    //2. установленный в TripPresenter (вызывает _renderPoints)
     this._notify(updateType);
   }
 

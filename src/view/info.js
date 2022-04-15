@@ -3,13 +3,18 @@ import {AbstractView} from "./abstract.js";
 
 const createInfoTemplate = (points) => {
 
-    //маршрут (города)
+  
+    //маршрут (все города)
     const mainTitle = points.length === 0 ?
-        "" : points.map((currentPoint) => { return `${currentPoint.name}` }).join(` &mdash; `);
-
+        "" : points.length === 3 ? 
+        points.map((currentPoint) => { return `${currentPoint.destination.name}` }).join(` &mdash; `) : 
+        `${points[0].destination.name} &mdash; ... &mdash; ${points[points.length - 1].destination.name}`;
+        
+      
     //даты от и до
     const cumulativeDate = points.length === 0 ? '' : getCumulativeDate(points[0].dateFrom, points[points.length - 1].dateTo);
 
+    // console.log('22', points)
     //общая стоимость
     let fullCost = 0;
     fullCost = points.length === 0 ?

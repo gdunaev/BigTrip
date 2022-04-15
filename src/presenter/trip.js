@@ -15,7 +15,7 @@ import LoadingView from '../view/loading.js';
 
 export default class TripPresenter {
   constructor(tripEventsMain, pointsModel, filterModel, api) {
-    this._isEmpty = false;
+    this._isEmpty = true;
     this._listEmptyView = new ListEmptyView(this._isEmpty);
     this._infoPoints = new InfoView();
     this._filtersView = new FiltersView(FilterType.EVERYTHING);
@@ -33,7 +33,7 @@ export default class TripPresenter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+     this._filterModel.addObserver(this._handleModelEvent);
     this._sortView = null;
     this._handleSortModeChange = this._handleSortModeChange.bind(this);
     this._pointNewPresenter = new PointNewPresenter(this._handleViewAction);
@@ -44,10 +44,10 @@ export default class TripPresenter {
   }
 
   start() {
-    if (this._isEmpty) {
-      render(this._tripEventsMain, this._listEmptyView, RenderPosition.BEFOREEND);
-      return;
-    }
+    // if (this._isEmpty) {
+    //   render(this._tripEventsMain, this._listEmptyView, RenderPosition.BEFOREEND);
+    //   return;
+    // }
     // this._renderMainInfo();
     // this._renderNavigation();
     this._renderPoints();
@@ -127,8 +127,9 @@ export default class TripPresenter {
       case UpdateType.INIT:
 
         this._isLoading = false;
-        remove(this._loadingComponent);
-
+        remove(this._loadingComponent); 
+        // remove(this._listEmptyView);
+        
         this._renderPoints();
 
         break;
@@ -147,6 +148,8 @@ export default class TripPresenter {
 
     remove(this._sortView);
     remove(this._loadingComponent);
+    remove(this._infoPoints);
+    
 
     if (resetSortType) {
       this._sortMode = SortMode.DAY;
@@ -181,30 +184,42 @@ export default class TripPresenter {
     this._pointPresenter[point.id] = pointPresenter;
   }
 
+
+  //отрисовка Инфо, Загрузки, Сортировки и Списка точек
   _renderPoints() {
 
+    //при загрузке показываем заставку загрузки
     if (this._isLoading) {
       this._renderLoading();
       return;
     }
-
-
     const points = this._getPoints();
 
-    const pointCount = points.length;
+    // console.log('00', points)
 
-    if (pointCount === 0) {
+    //отрисовка InfoView (список точек и общая стоимость)
+    const tripMain = document.querySelector('.trip-main');
+    render(tripMain, new InfoView(points), RenderPosition.AFTERBEGIN);
+
+    // console.log('111', points)
+    //если точек нет - прячем InfoView и показываем заставку
+    if (points.length === 0) {
       this._renderNoPoints();
       return;
     }
 
+    //отрисовываем сортировку
     this._renderSort();
 
+    //отрисовываем точки
     points.forEach((point) => this._renderPoint(point));
   }
 
+  //показываем заставку при пустом списке
   _renderNoPoints() {
-    // render(this._boardComponent, this._noTaskComponent, RenderPosition.AFTERBEGIN);
+    const tripInfoMain = document.querySelector('.trip-main__trip-info');
+    tripInfoMain.style.display = 'none';
+    render(this._tripEventsMain, this._listEmptyView, RenderPosition.BEFOREEND);
   }
 
   _renderFilters() {

@@ -46,10 +46,32 @@ const getMinMaxDurationDate = (dateA = null, dateB = null) => {
     return minMaxDates;
 }
 
+//расчет продолжительности поездки строкой - 00D 00H 00M
+const getMinMaxDateDuration = (dateMin, dateMax) => {
+
+   const dateFrom = dayjs(dateMin);
+   const dateTo = dayjs(dateMax);
+  
+      //получим разницу в миллисекундах, и разделим на дни/часы/минуты
+      const durationMinuteAll = Math.trunc(dateTo.diff(dateFrom) / 60000);
+      const durationMin = durationMinuteAll % 60;
+      const durationHourAll = (durationMinuteAll - durationMin) / 60;
+      const durationHour = durationHourAll % 24;
+      const durationDay = (durationHourAll - durationHour) / 24;
+  
+      const isDay = durationDay === 0 ? false : true;
+  
+      let durationPoint = getStringDate(durationMin, 'M', false);
+      durationPoint = getStringDate(durationHour, 'H', isDay) + durationPoint;
+
+      return getStringDate(durationDay, 'D', isDay) + durationPoint;
+  }
+  
+
 const getPointDurationMinute = (dateMin, dateMax) => {
 
       //получим разницу в миллисекундах, и посчитаем минуты
-      return Math.trunc(dateMax.diff(dateMin) / 60000);
+      return Math.trunc(dayjs(dateMax).diff(dayjs(dateMin)) / 60000);
 
   }
 
@@ -93,7 +115,10 @@ const getDateEdit = (date) => {
     return dayjs(date).format('DD/MM/YY HH:mm');
 }
 
-const getCumulativeDate = (dateFrom, dateTo) => {
+const getCumulativeDate = (dateMin, dateMax) => {
+
+    const dateFrom = dayjs(dateMin);
+    const dateTo = dayjs(dateMax);
 
     return dateFrom.format('MMM') === dateTo.format('MMM') ?
         `${dateFrom.format('MMM')} ${dateFrom.format('DD')}&nbsp;&mdash;&nbsp;${dateTo.format('DD')}` :
@@ -159,5 +184,6 @@ export {
     getFuturePoints,
     setDatesFields,
     getPointDurationMinute,
-    getTypeDuration
+    getTypeDuration,
+    getMinMaxDateDuration
 }
