@@ -51,22 +51,22 @@ const getMinMaxDateDuration = (dateMin, dateMax) => {
 
    const dateFrom = dayjs(dateMin);
    const dateTo = dayjs(dateMax);
-  
+
       //получим разницу в миллисекундах, и разделим на дни/часы/минуты
       const durationMinuteAll = Math.trunc(dateTo.diff(dateFrom) / 60000);
       const durationMin = durationMinuteAll % 60;
       const durationHourAll = (durationMinuteAll - durationMin) / 60;
       const durationHour = durationHourAll % 24;
       const durationDay = (durationHourAll - durationHour) / 24;
-  
+
       const isDay = durationDay === 0 ? false : true;
-  
+
       let durationPoint = getStringDate(durationMin, 'M', false);
       durationPoint = getStringDate(durationHour, 'H', isDay) + durationPoint;
 
       return getStringDate(durationDay, 'D', isDay) + durationPoint;
   }
-  
+
 
 const getPointDurationMinute = (dateMin, dateMax) => {
 
@@ -136,40 +136,59 @@ const getFuturePoints = (points) => {
     return futurePoint;
 }
 
+const compareDataFrom = (elementA, elementB) => {
+  const rankA = dayjs(elementA.dateFrom);
+  const rankB = dayjs(elementB.dateFrom);
+  return rankA - rankB;
+};
 
-const setDatesFields = (state) => {
+const compareTime = (elementA, elementB) => {
 
-  if (state.dateFromPicker === null && state.dateToPicker === null) {
-    return {}
-  }
+  const rankA = dayjs(elementA.dateTo).diff(dayjs(elementA.dateFrom));
+  const rankB = dayjs(elementB.dateTo).diff(dayjs(elementB.dateFrom));
 
-    // dateFrom: state.dateFromPicker !== null ? state.dateFromPicker : state.dateFrom,
-    //     dateTo: state.dateToPicker !== null ? state.dateToPicker : state.dateTo,
 
-    const dateFrom = state.dateFromPicker !== null ? dayjs(state.dateFromPicker) : state.dateFrom;
-    const dateTo = state.dateToPicker !== null ? dayjs(state.dateToPicker) : state.dateTo;
-    const dueDates = getMinMaxDurationDate(dateFrom, dateTo);
-    // dateFrom = dueDates[0];
-    // dateTo = dueDates[1];
-    const pointDuration = dueDates[2];
 
-// console.log(dateFrom,  dateTo,  pointDuration)
+  // console.log(rankA, rankB, );
 
-    // return {}
-    return {
-        'dateFrom': dateFrom,
-        'dateFromOnlyDate': getOnlyDate(dateFrom),
-        'dateFromMonthDay': getMonthDay(dateFrom),
-        'dateFromHourMinute': getDateHourMinute(dateFrom),
-        'dateFromHour': getDateHour(dateFrom),
-        'dateFromEdit': getDateEdit(dateFrom),
-        dateTo,
-        'dateToHour': getDateHour(dateTo),
-        'dateToHourMinute': getDateHourMinute(dateTo),
-        'dateToEdit': getDateEdit(dateTo),
-        pointDuration,
-    };
-  }
+  // const rankA = +elementA.pointDuration.replace(/[H,D,M, ]/g, '');
+  // const rankB = +elementB.pointDuration.replace(/[H,D,M, ]/g, '');
+  return rankB - rankA;
+};
+
+// const setDatesFields = (state) => {
+
+//   if (state.dateFromPicker === null && state.dateToPicker === null) {
+//     return {}
+//   }
+
+//     // dateFrom: state.dateFromPicker !== null ? state.dateFromPicker : state.dateFrom,
+//     //     dateTo: state.dateToPicker !== null ? state.dateToPicker : state.dateTo,
+
+//     const dateFrom = state.dateFromPicker !== null ? dayjs(state.dateFromPicker) : state.dateFrom;
+//     const dateTo = state.dateToPicker !== null ? dayjs(state.dateToPicker) : state.dateTo;
+//     const dueDates = getMinMaxDurationDate(dateFrom, dateTo);
+//     // dateFrom = dueDates[0];
+//     // dateTo = dueDates[1];
+//     const pointDuration = dueDates[2];
+
+// // console.log(dateFrom,  dateTo,  pointDuration)
+
+//     // return {}
+//     return {
+//         'dateFrom': dateFrom,
+//         'dateFromOnlyDate': getOnlyDate(dateFrom),
+//         'dateFromMonthDay': getMonthDay(dateFrom),
+//         'dateFromHourMinute': getDateHourMinute(dateFrom),
+//         'dateFromHour': getDateHour(dateFrom),
+//         'dateFromEdit': getDateEdit(dateFrom),
+//         dateTo,
+//         'dateToHour': getDateHour(dateTo),
+//         'dateToHourMinute': getDateHourMinute(dateTo),
+//         'dateToEdit': getDateEdit(dateTo),
+//         pointDuration,
+//     };
+//   }
 
 export {
     getDateHour,
@@ -182,7 +201,9 @@ export {
     getCumulativeDate,
     getPastPoints,
     getFuturePoints,
-    setDatesFields,
+    compareDataFrom,
+    compareTime,
+    // setDatesFields,
     getPointDurationMinute,
     getTypeDuration,
     getMinMaxDateDuration

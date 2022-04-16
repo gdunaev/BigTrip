@@ -1,3 +1,6 @@
+import {compareDataFrom, compareTime} from '../view/dayjs.js'
+
+
 const getRandomInteger = (a = 0, b = 1) => {
     const lower = Math.ceil(Math.min(a, b));
     const upper = Math.floor(Math.max(a, b));
@@ -24,24 +27,13 @@ const isEscEvent = (evt) => {
 //     ];
 // }
 
-
 const comparePrice = (elementA, elementB) => {
     const rankA = +elementA.basePrice;
     const rankB = +elementB.basePrice;
     return rankB - rankA;
 };
 
-const compareDataFrom = (elementA, elementB) => {
-    const rankA = elementA.dateFrom;
-    const rankB = elementB.dateFrom;
-    return rankA - rankB;
-};
 
-const compareTime = (elementA, elementB) => {
-    const rankA = +elementA.pointDuration.replace(/[H,D,M, ]/g, '');
-    const rankB = +elementB.pointDuration.replace(/[H,D,M, ]/g, '');
-    return rankB - rankA;
-};
 
 const getSortPricePoints = (points) => {
     const sortPoints = points.slice().sort(comparePrice);
