@@ -53,6 +53,7 @@ export default class PointNewPresenter {
         this._pointViewEditor.setDeleteClickHandler(this._setDeleteHandler);
         this._pointViewEditor.setRollupClickHandler(this._setDeleteHandler);
         document.addEventListener('keydown', this._onEscPressDown);
+        document.querySelector('.trip-main__event-add-btn').disabled = true;
 
         render(this._tripEventsTripSort, this._pointViewEditor, RenderPosition.AFTEREND);
     }
@@ -71,6 +72,7 @@ export default class PointNewPresenter {
         this._pointViewEditor = null;
 
         document.removeEventListener('keydown', this._onEscPressDown);
+        document.querySelector('.trip-main__event-add-btn').disabled = false;
     }
 
     _onEscPressDown(evt) {

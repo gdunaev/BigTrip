@@ -137,7 +137,7 @@ export default class TripPresenter {
   }
 
   _renderLoading() {
-    // render(this._boardComponent, this._loadingComponent, RenderPosition.AFTERBEGIN);
+    //  render(this._boardComponent, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _clearAllPoints({ setCurrentMode = false, resetSortType = false } = {}) {

@@ -32,6 +32,7 @@ class AbstractView {
       document.querySelector('.trip-filters').classList.add('visually-hidden');
       document.querySelector('.trip-events').classList.add('trip-events--hidden');
       document.querySelector('.trip-main__event-add-btn').disabled = true;
+      // console.log('22')
     }
 
     hide() {
