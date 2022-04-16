@@ -27,7 +27,9 @@ const createPointEditTemplate = (state) => {
   //отрисовка состояния при смене типа и места назначения.
   let typePointIconTemplate = typePointState !== '' ? typePointState.toLowerCase() : typePoint.toLowerCase();
   const typePointTemplate = typePointState !== '' ? typePointState : typePoint;
-  const offers = typePointState !== '' ? OFFER.get(typePointState) : state.offers !== [] ? state.offers : [];
+  const offers = typePointState !== '' ? OFFER.get(typePointState.toLowerCase()) : state.offers !== [] ? state.offers : [];
+
+  // console.log('22', OFFER)
   const destination = dectinationState.name !== '' ? POINT_DESCRIPTION.get(dectinationState.name) : state.destination;
   const name = destination === undefined ? '' : destination.name;
   const descriptionComponent = destination === undefined ? '' : destination.description;
@@ -213,7 +215,7 @@ export default class PointEditorView extends SmartView {
 
     // console.log('444', this._point);
     this._setInnerHandlers();
-    // console.log('33', );
+    //  console.log('33', );
   }
 
   // Перегружаем метод родителя removeElement,
@@ -330,7 +332,9 @@ export default class PointEditorView extends SmartView {
   }
 
   _changeEventTypeHandler(evt) {
+
     if (evt.target.tagName === 'LABEL') {
+      // console.log('11', evt.target.textContent)
       this.updateData({
         typePointState: evt.target.textContent,
       });
