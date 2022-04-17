@@ -32,7 +32,10 @@ export default class PointsModel extends Observer {
        POINT_DESCRIPTION.set(point.destination.name, point.destination);
        if(!POINT_NAME.includes(point.destination.name)) {
         POINT_NAME.push(point.destination.name);
-       }
+       };
+       point.offers.forEach((offer) => {
+        offer.checked = false; //добавим по умолчанию что все офферы не выбраны
+       });
     });
 
     //  console.log(POINT_DESCRIPTION)
@@ -44,6 +47,7 @@ export default class PointsModel extends Observer {
   }
 
   updatePoint(updateType, update) {
+    // console.log('11', update)
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {

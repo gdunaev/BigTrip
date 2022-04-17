@@ -96,9 +96,9 @@ export default class TripPresenter {
       case UserAction.UPDATE:
         this._pointsModel.updatePoint(updateType, update);
 
-        this._api.updatePoint(update).then((response) => {
-          this._pointsModel.updatePoint(updateType, response);
-        });
+        // this._api.updatePoint(update).then((response) => {
+        //   this._pointsModel.updatePoint(updateType, response);
+        // });
 
         break;
       case UserAction.ADD:
