@@ -66,7 +66,7 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
- siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 //первоначальная отрисовка фильтров
 filterPresenter.init();

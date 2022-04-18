@@ -41,6 +41,7 @@ export default class TripPresenter {
     this._isLoading = true;
     this._loadingComponent = new LoadingView(this._isLoading);
     this._api = api;
+    this._newEventElement = document.querySelector('.trip-main__event-add-btn');
   }
 
   start() {
@@ -137,7 +138,9 @@ export default class TripPresenter {
   }
 
   _renderLoading() {
-    //  render(this._boardComponent, this._loadingComponent, RenderPosition.AFTERBEGIN);
+    const tripEvent = document.querySelector('.trip-events');
+    render(tripEvent, this._loadingComponent, RenderPosition.BEFOREEND);
+    this._newEventElement.disabled = true;
   }
 
   _clearAllPoints({ setCurrentMode = false, resetSortType = false } = {}) {
@@ -201,6 +204,7 @@ export default class TripPresenter {
     const tripMain = document.querySelector('.trip-main');
     this._infoPoints = new InfoView(points);
     render(tripMain, this._infoPoints, RenderPosition.AFTERBEGIN);
+    this._newEventElement.disabled = false;
 
     // console.log('111', points)
     //если точек нет - прячем InfoView и показываем заставку
