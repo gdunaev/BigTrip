@@ -92,9 +92,10 @@ api.getPoints().then((points) => {
   // debugger
   pointsModel.setPoints(UpdateType.INIT, points);
 }).catch(() => {
-  // pointsModel.setPoints(UpdateType.INIT, []); 
+  // pointsModel.setPoints(UpdateType.INIT, []);
 });
 
 
 
 //ВОПРОСЫ
+
