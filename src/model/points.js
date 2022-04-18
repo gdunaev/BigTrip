@@ -143,3 +143,5 @@ export default class PointsModel extends Observer {
 }
 
 export {OFFER, POINT_DESCRIPTION, POINT_NAME}
+
+
