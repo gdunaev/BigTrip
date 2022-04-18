@@ -6,6 +6,7 @@ export default class SmartView extends AbstractView {
     this._state = {};
   }
 
+  //перерисовывает компонент на странице, с новыми данными
   updateData(update, justDataUpdating) {
     if (!update) {
       return;

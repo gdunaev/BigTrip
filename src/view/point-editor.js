@@ -16,39 +16,46 @@ const TypeDate = {
 };
 
 const getOfferComponent = (offers) => {
-  
   if  (offers === undefined) {
-    // console.log(document.querySelector('.event__section'))
-    // document.querySelector('.event__section--offers').style.display = 'none';
     return '';
   } else {
-
-    return `<section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">
-    ${offers.map((currentPoint, index) => `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage" ${currentPoint.checked === true ? 'checked' : ''}>
-      <label class="event__offer-label" for="event-offer-luggage-${index}">
-        <span class="event__offer-title">${currentPoint.title}</span>
-        +€&nbsp;
-        <span class="event__offer-price">${currentPoint.price}</span>
-      </label>
-    </div>`).join(' ')}
-    </div>
-  </section>`;
+        return `<section class="event__section  event__section--offers">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+        ${offers.map((currentPoint, index) => `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage" ${currentPoint.checked === true ? 'checked' : ''}>
+          <label class="event__offer-label" for="event-offer-luggage-${index}">
+            <span class="event__offer-title">${currentPoint.title}</span>
+            +€&nbsp;
+            <span class="event__offer-price">${currentPoint.price}</span>
+          </label>
+        </div>`).join(' ')}
+        </div>
+      </section>`;
   }
-
 };
 
+
+const getDescriptionComponent = (destination) => {
+  if(destination !== undefined) {
+    const photos = destination.pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
+    const description = destination.description;
+    return `<section class="event__section  event__section--destination">
+              <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+              <p class="event__destination-description">${description}</p>
+              <div class="event__photos-container">
+                  <div class="event__photos-tape">
+                      ${photos}
+                  </div>
+              </div>
+            </section>`;
+  }
+  return '';
+};
+
+
 const createPointEditTemplate = (state) => {
-
-  //  console.log(state)
-
-
   const { typePoint, dateFromState, dateToState, typePointState, destinationState, priceState } = state;
-
-  // console.log(state)
-
 
   //отрисовка состояния при смене типа и места назначения.
   let typePointIconTemplate = typePointState !== '' ? typePointState : typePoint.toLowerCase();
@@ -58,45 +65,30 @@ const createPointEditTemplate = (state) => {
   // console.log('22', OFFER)
   const destination = destinationState.name !== '' ? POINT_DESCRIPTION.get(destinationState.name) : state.destination;
   const name = destination === undefined ? '' : destination.name;
-  const descriptionComponent = destination === undefined ? '' : destination.description;
-  const photos = destination === undefined ? '' : destination.pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
+
   // console.log('66', getDateEdit(state.dateFrom), )
   // debugger;
   const dateFromEdit = dateFromState !== '' ? dateFromState : state.dateFrom !== '' ? getDateEdit(state.dateFrom) : '';
-
-  // console.log('66',state.dateFrom)
-
   const dateToEdit = dateToState !== '' ? dateToState : state.dateTo !== '' ? getDateEdit(state.dateTo) : '';
   const price = priceState !== '' ? priceState : state.basePrice;
   const cancelDelete = 'Delete';
 
   //подставляем наименование точек
   let dataListTemplate = '';
-
-
   POINT_NAME.forEach((point_name) => {
     return dataListTemplate = dataListTemplate + ` <option value="${point_name}">${point_name}</option>`;
   });
 
+  //иконки для типов точек
   typePointIconTemplate = typePointIconTemplate !== '' ? `img/icons/${typePointIconTemplate}.png` : '';
 
+  //офферы для типа точки
   const offersComponent = getOfferComponent(offers);
-  
- 
 
-  // offersComponent = offersComponent === '' ? '' : 
-  //       `<section class="event__section  event__section--offers">
-  //         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-  //         <div class="event__available-offers">
-  //         ${offersComponent}
-  //         </div>
-  //       </section>`;
+//описание и фото для названия точки
+const descriptionComponent = getDescriptionComponent(destination);
 
-  const photosComponent = `<div class="event__photos-container">
-                   <div class="event__photos-tape">
-                       ${photos}
-                     </div>
-                   </div>`;
+
 
   // console.log('66',  dataListTemplate, dateFromEdit);
   //,  dataListTemplate,  dateFromEdit, dateToEdit,price, cancelDelete,
@@ -171,7 +163,7 @@ const createPointEditTemplate = (state) => {
           <label class="event__label  event__type-output" for="event-destination-1">
           ${typePointTemplate}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(name)}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(name)}" list="destination-list-1" autocomplete="off">
           <datalist id="destination-list-1">
             ${dataListTemplate}
           </datalist>
@@ -201,16 +193,11 @@ const createPointEditTemplate = (state) => {
       </header>
 
       <section class="event__details">
-        
+
       ${offersComponent}
 
-      
-        
-        <section class="event__section  event__section--destination">
-          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${descriptionComponent}</p>
-            ${photosComponent}
-        </section>
+      ${descriptionComponent}
+
       </section>
     </form>
   </li>
@@ -287,22 +274,19 @@ export default class PointEditorView extends SmartView {
 
     this.getElement().querySelector('#event-destination-1').addEventListener('input', this._destinationInputHandler);
     this.getElement().querySelector('#event-price-1').addEventListener('input', this._priceInputHandler);
-    // const offerInputs = this.getElement().querySelectorAll('.event__offer-selector');
-    // offerInputs.forEach(element => element.addEventListener('click', this._offerClickHandler));
-
-     this.getElement().querySelector('.event__details').addEventListener('click', this._offerClickHandler);
+    this.getElement().querySelector('.event__details').addEventListener('click', this._offerClickHandler);
   }
 
-  _checkDectination(dectinationName) {
-    if (POINT_DESCRIPTION.get(dectinationName) === undefined) {
-      return true;
-    }
-    return false;
-  }
+  // _checkDectination(dectinationName) {
+  //   console.log('22', POINT_DESCRIPTION.get(dectinationName))
+  //   if (POINT_DESCRIPTION.get(dectinationName) === undefined) {
+
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   _offerClickHandler(evt) {
-
-    // const parentElement = evt.target.parentElement;
 
     //запомним все индексы у выделенных
     const checkedIndexs = [];
@@ -313,22 +297,11 @@ export default class PointEditorView extends SmartView {
           checkedIndexs.push(key);
         }
       });
-      // checkedIndexs.push(offer);
-      // console.log(offers)
-        // console.log('22', checkedIndexs)
 
       this.updateData({
         offersState: checkedIndexs,
       }, true);
     }
-
-
-    // evt.target.checked = !evt.target.checked;
-
-    // console.log('22', evt.target)
-
-    // evt.preventDefault();
-
   }
 
   _priceInputHandler(evt) {
@@ -341,12 +314,12 @@ export default class PointEditorView extends SmartView {
   _destinationInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      dectinationState: {
+      destinationState: {
         name: evt.target.value,
         description: '',
         pictures: [],
       }
-    }, this._checkDectination(evt.target.value));
+    }, false); //this._checkDectination(evt.target.value)
   }
 
   _setDateFromPicker() {
