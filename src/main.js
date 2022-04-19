@@ -98,4 +98,3 @@ api.getPoints().then((points) => {
 
 
 //ВОПРОСЫ
-
