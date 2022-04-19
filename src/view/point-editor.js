@@ -3,17 +3,17 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 // import { POINT_DESCRIPTION, POINT_NAME } from './mock.js';
-import { setDatesFields, getDateEdit } from './dayjs.js';
+import { setDatesFields, getDateEdit, compareDates } from './dayjs.js';
 import he from 'he';
 import { OFFER, POINT_DESCRIPTION, POINT_NAME } from '../model/points.js';
 // import dayjs from 'dayjs';
 
 
 const FORMAT_DATE = 'd/m/y H:i';
-const TypeDate = {
-  START: 'start',
-  END: 'end',
-};
+// const TypeDate = {
+//   START: 'start',
+//   END: 'end',
+// };
 
 const getOfferComponent = (offers) => {
   if  (offers === undefined) {
@@ -329,10 +329,10 @@ export default class PointEditorView extends SmartView {
     }
 
     this._dateFromPicker = flatpickr(
-      this.getElement().querySelector(`#event-${TypeDate.START}-time-1`), {
+      this.getElement().querySelector(`#event-start-time-1`), {
       dateFormat: FORMAT_DATE,
       enableTime: true,
-      defaultDate: this.getElement().querySelector(`#event-${TypeDate.START}-time-1`).value,
+      defaultDate: this.getElement().querySelector(`#event-start-time-1`).value,
       onChange: this._dateFromChangeHandler,
     },
     );
@@ -345,25 +345,40 @@ export default class PointEditorView extends SmartView {
     }
 
     this._dateToPicker = flatpickr(
-      this.getElement().querySelector(`#event-${TypeDate.END}-time-1`), {
+      this.getElement().querySelector(`#event-end-time-1`), {
       dateFormat: FORMAT_DATE,
       enableTime: true,
-      defaultDate: this.getElement().querySelector(`#event-${TypeDate.END}-time-1`).value,
+      defaultDate: this.getElement().querySelector(`#event-end-time-1`).value,
       onChange: this._dateToChangeHandler,
     },
     );
   }
 
+  _checkDataMinMax(fromTo) {
+    const dataFrom = this.getElement().querySelector(`#event-start-time-1`);
+    const dataTo = this.getElement().querySelector(`#event-end-time-1`);
+    if(dataFrom.value && dataTo.value && compareDates(dataFrom.value, dataTo.value) < 0) {
+      fromTo === 'to' ? dataTo.value = '' : dataFrom.value = '';
+    }
+    return true;
+  }
+
   _dateFromChangeHandler() {
+    if(!this._checkDataMinMax('from')){
+      return;
+    }
     this.updateData({
-      dateFromState: this.getElement().querySelector(`#event-${TypeDate.START}-time-1`).value,
+      dateFromState: this.getElement().querySelector(`#event-start-time-1`).value,
       dateFromPicker: this._dateFromPicker.selectedDates,
     });
   }
 
   _dateToChangeHandler() {
+    if(!this._checkDataMinMax('to')){
+      return;
+    }
     this.updateData({
-      dateToState: this.getElement().querySelector(`#event-${TypeDate.END}-time-1`).value,
+      dateToState: this.getElement().querySelector(`#event-end-time-1`).value,
       dateToPicker: this._dateToPicker.selectedDates,
     });
   }

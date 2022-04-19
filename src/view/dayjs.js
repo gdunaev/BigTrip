@@ -142,6 +142,19 @@ const compareDataFrom = (elementA, elementB) => {
   return rankA - rankB;
 };
 
+const compareDates = (elementA, elementB) => {
+
+ let dateFrom = elementA.split("/").join(' ').split(' ');
+ dateFrom = dayjs(`${'20' + dateFrom[2]}-${dateFrom[1]}-${dateFrom[0]} ${dateFrom[3]}`);
+
+ let dateTo = elementB.split("/").join(' ').split(' ');
+ dateTo = dayjs(`${'20' + dateTo[2]}-${dateTo[1]}-${dateTo[0]} ${dateTo[3]}`);
+
+//  console.log('22', elementB)
+  return dateTo.diff(dateFrom);
+};
+
+
 const compareTime = (elementA, elementB) => {
 
   const rankA = dayjs(elementA.dateTo).diff(dayjs(elementA.dateFrom));
@@ -203,7 +216,7 @@ export {
     getFuturePoints,
     compareDataFrom,
     compareTime,
-    // setDatesFields,
+    compareDates,
     getPointDurationMinute,
     getTypeDuration,
     getMinMaxDateDuration
