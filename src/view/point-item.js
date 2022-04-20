@@ -36,12 +36,18 @@ const createPointItemTemplate = (point) => {
     let offersComponent = '';
     if (offers !== undefined) {
         for (const elem of offers) {
+          if(elem.checked) {
             offersComponent = `${offersComponent}<li class="event__offer">
                     <span class="event__offer-title">${elem['title']}</span>
                     &plus;&euro;&nbsp;
                     <span class="event__offer-price">${elem['price']}</span>
                   </li>`;
+          };
         }
+        offersComponent = `<h4 class="visually-hidden">Offers:</h4>
+                          <ul class="event__selected-offers">
+                          ${offersComponent}  
+                          </ul>`;
     }
 
     const typePointIcon = typePoint.toLowerCase();
@@ -67,10 +73,9 @@ const createPointItemTemplate = (point) => {
               <p class="event__price">
                  &euro;&nbsp;<span class="event__price-value">${he.encode(basePriceString)}</span>
               </p>
-              <h4 class="visually-hidden">Offers:</h4>
-              <ul class="event__selected-offers">
-                ${offersComponent}
-              </ul>
+
+              ${offersComponent}
+              
               <button class="event__favorite-btn ${activeFavorite}" type="button">
                 <span class="visually-hidden">Add to favorite</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

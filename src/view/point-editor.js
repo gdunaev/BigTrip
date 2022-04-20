@@ -16,7 +16,9 @@ const FORMAT_DATE = 'd/m/y H:i';
 // };
 
 const getOfferComponent = (offers) => {
-  if  (offers === undefined) {
+  //  console.log(offers === [])
+  if  (offers.length === 0) {
+    // console.log(offers)
     return '';
   } else {
         return `<section class="event__section  event__section--offers">
@@ -37,7 +39,8 @@ const getOfferComponent = (offers) => {
 
 
 const getDescriptionComponent = (destination) => {
-  if(destination !== undefined) {
+  //  console.log(destination)
+  if(destination.name !== '') {
     const photos = destination.pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
     const description = destination.description;
     return `<section class="event__section  event__section--destination">
@@ -221,7 +224,7 @@ export default class PointEditorView extends SmartView {
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
 
-    // console.log('666', this._point);
+    //  console.log('666', this._point);
     this._state = PointEditorView.parseDataToState(this._point);
     this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
     this._destinationInputHandler = this._destinationInputHandler.bind(this);
@@ -277,14 +280,13 @@ export default class PointEditorView extends SmartView {
     this.getElement().querySelector('.event__details').addEventListener('click', this._offerClickHandler);
   }
 
-  // _checkDectination(dectinationName) {
-  //   console.log('22', POINT_DESCRIPTION.get(dectinationName))
-  //   if (POINT_DESCRIPTION.get(dectinationName) === undefined) {
-
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  _checkDectination(dectinationName) {
+    // console.log('22', POINT_DESCRIPTION.get(dectinationName))
+    if (POINT_DESCRIPTION.get(dectinationName) === undefined) {
+      return true;
+    }
+    return false;
+  }
 
   _offerClickHandler(evt) {
 
@@ -319,7 +321,7 @@ export default class PointEditorView extends SmartView {
         description: '',
         pictures: [],
       }
-    }, false); //this._checkDectination(evt.target.value)
+    }, this._checkDectination(evt.target.value)); //this._checkDectination(evt.target.value)
   }
 
   _setDateFromPicker() {

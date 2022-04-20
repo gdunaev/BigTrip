@@ -59,7 +59,8 @@ export default class TripPresenter {
     // console.log('11222')
     this._sortMode = SortMode.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._pointNewPresenter.start();
+    const points = this._pointsModel.getPoints()
+    this._pointNewPresenter.start(points);
   }
 
   //получает точки (с сортировкой или фильтрацией) перед отрисовкой
@@ -103,6 +104,7 @@ export default class TripPresenter {
 
         break;
       case UserAction.ADD:
+        // console.log('2- ', update)
         this._pointsModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE:

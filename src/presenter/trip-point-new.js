@@ -21,7 +21,6 @@ export default class PointNewPresenter {
         return {
             'id': '',
             'typePoint': '',
-            'name': '',
             'basePrice': 0,
             'dateFrom': '',
             'dateFromOnlyDate': '',
@@ -34,20 +33,24 @@ export default class PointNewPresenter {
             'dateToHourMinute': '',
             'dateToEdit': '',
             'pointDuration': '',
-            'destination': undefined,
+            'destination': {
+                'name': '',
+                'description': '',
+                'pictures': [],
+              },
             'isFavorite': '',
-            'offers': undefined,
+            'offers': [],
         };
     }
 
 
-    start() {
+    start(points) {
       // console.log('33344')
         if (this._pointViewEditor !== null) {
             return;
         }
         this._tripEventsTripSort = document.querySelector('.trip-events__trip-sort');
-
+        this._points = points;
         this._pointViewEditor = new PointEditorView(this._state);
         this._pointViewEditor.setSubmitFormHandler(this._handleFormSubmit);
         this._pointViewEditor.setDeleteClickHandler(this._setDeleteHandler);
@@ -83,12 +86,11 @@ export default class PointNewPresenter {
     }
 
     _handleFormSubmit(point) {
-      // console.log('11', point)
+         console.log('11', point)
         this._changeData(
             UserAction.ADD,
             UpdateType.MINOR,
-            Object.assign({ id: nanoid() }, point));
-
+            Object.assign({}, point, { id: `${this._points.length}`}));
         this.destroy();
     }
 }

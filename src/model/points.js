@@ -68,7 +68,7 @@ export default class PointsModel extends Observer {
       update,
       ...this._points,
     ];
-
+    // console.log('22', this._points)
     this._notify(updateType, update);
   }
 
@@ -88,7 +88,7 @@ export default class PointsModel extends Observer {
   }
 
   static adaptToClient(point) {
-    const adaptedPoint = Object.assign(
+    let adaptedPoint = Object.assign(
       {},
       point,
       {
@@ -102,7 +102,6 @@ export default class PointsModel extends Observer {
         dateFrom: point.date_from,
         basePrice: point.base_price,
         dateTo: point.date_to,
-
         isFavorite: point.is_favorite,
         // typePoint: point.type,
         // typePoint: point.type,
@@ -116,6 +115,8 @@ export default class PointsModel extends Observer {
     delete adaptedPoint.base_price;
     delete adaptedPoint.date_to;
     delete adaptedPoint.is_favorite;
+
+    adaptedPoint.offers.forEach(element => element.checked = false);
 
     return adaptedPoint;
   }
