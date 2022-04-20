@@ -45,7 +45,7 @@ export default class PointNewPresenter {
 
 
     start(points) {
-      // console.log('33344')
+    //    console.log('33344', this._state)
         if (this._pointViewEditor !== null) {
             return;
         }
@@ -86,7 +86,7 @@ export default class PointNewPresenter {
     }
 
     _handleFormSubmit(point) {
-         console.log('11', point)
+        //  console.log('11', point)
         this._changeData(
             UserAction.ADD,
             UpdateType.MINOR,

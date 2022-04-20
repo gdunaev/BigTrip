@@ -103,6 +103,7 @@ export default class PointsModel extends Observer {
         basePrice: point.base_price,
         dateTo: point.date_to,
         isFavorite: point.is_favorite,
+        offers: [], //point.offers.slice(),
         // typePoint: point.type,
         // typePoint: point.type,
 
@@ -116,7 +117,11 @@ export default class PointsModel extends Observer {
     delete adaptedPoint.date_to;
     delete adaptedPoint.is_favorite;
 
-    adaptedPoint.offers.forEach(element => element.checked = false);
+    adaptedPoint.offers.forEach(element => {
+      element.checked = true;
+    });
+
+  // console.log(adaptedPoint)
 
     return adaptedPoint;
   }

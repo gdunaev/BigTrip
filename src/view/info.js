@@ -3,7 +3,7 @@ import {AbstractView} from "./abstract.js";
 
 const createInfoTemplate = (points) => {
 
-  // console.log(points)
+  //  console.log(points)
   
     //маршрут (все города)
     const mainTitle = points.length === 0 ?

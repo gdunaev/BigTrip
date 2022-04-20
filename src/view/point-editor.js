@@ -443,7 +443,7 @@ export default class PointEditorView extends SmartView {
     //если не меняется - берем те что были у этой точки.
     let offers = state.typePointState !== '' ? OFFER.get(state.typePointState) : state.offers;
 
-    //  console.log('11', offers, state.offersState)
+      // console.log('112', state)
 
     //а после проверим если ли выбранные офферы, если есть - отредактируем офферы
     offers = state.offersState !== [] ? PointEditorView.setCheckOffer(offers, state.offersState) : offers;
@@ -454,9 +454,10 @@ export default class PointEditorView extends SmartView {
         {
           typePoint: state.typePointState !== '' ? state.typePointState : state.typePoint,
           offers,
-          name: state.destinationState.name !== '' ? state.destinationState.name : state.destination.name,
-          destination: state.destinationState.name !== '' ? POINT_DESCRIPTION.get(state.destinationState) : state.destination,
+          destination: state.destinationState.name !== '' ? POINT_DESCRIPTION.get(state.destinationState.name) : state.destination,
           basePrice: state.priceState !== '' ? state.priceState : state.basePrice,
+          dateTo: state.dateToState !== '' ? state.dateToPicker : state.dateTo,
+          dateFrom: state.dateFromState !== '' ? state.dateFromPicker : state.dateFrom,
         },
       )
     );

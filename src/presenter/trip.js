@@ -200,7 +200,7 @@ export default class TripPresenter {
     }
     const points = this._getPoints();
 
-    // console.log('00', points)
+    //  console.log('00', points)
 
     //отрисовка InfoView (список точек и общая стоимость)
     const tripMain = document.querySelector('.trip-main');

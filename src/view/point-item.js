@@ -33,6 +33,8 @@ const createPointItemTemplate = (point) => {
     // console.log(basePriceString)
     const activeFavorite = isFavorite === true ? "event__favorite-btn--active" : "";
 
+    // console.log('111', offers)
+
     let offersComponent = '';
     if (offers !== undefined) {
         for (const elem of offers) {
