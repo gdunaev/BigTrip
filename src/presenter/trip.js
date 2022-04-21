@@ -23,7 +23,7 @@ export default class TripPresenter {
     this._pointPresenter = {};
     this._changeModePoint = this._changeModePoint.bind(this);
 
-    this._currentMode = '';
+    // this._currentMode = '';
     this._filterType = null;
     this._sortMode = SortMode.DAY;
     // this._siteMenuView = new SiteMenuView(points);
@@ -69,6 +69,8 @@ export default class TripPresenter {
 
     let points = this._pointsModel.getPoints().slice();
 
+    // console.log('11', this._filterType, this._currentMode)
+
     //фильтрация: Прошлые, Будущие, Все
     switch (this._filterType) {
       case FilterType.PAST:
@@ -83,7 +85,7 @@ export default class TripPresenter {
     }
 
     //здесь Сортировка (день, время, цена) 
-    if (this._currentMode === Mode.SORT) {
+    // if (this._currentMode === Mode.SORT) {
       switch (this._sortMode) {
         case SortMode.DAY:
           points = getSortDayPoints(points);
@@ -95,7 +97,7 @@ export default class TripPresenter {
           points = getSortPricePoints(points);
           break;
       }
-    }
+    // }
 
     return points;
   }
@@ -122,7 +124,7 @@ export default class TripPresenter {
 
   _handleModelEvent(updateType, point) {
 
-    // console.log()
+     console.log('44', updateType, point)
     switch (updateType) {
       case UpdateType.PATCH:
         this._pointPresenter[point.id].start(point);
@@ -168,18 +170,18 @@ export default class TripPresenter {
       this._sortMode = SortMode.DAY;
     }
 
-    //если обновление типа MAJOR (это значит что нажата смена фильтров),
-    //то устанавливаем текущий режим сортировки точек.
-    if(setCurrentMode) {
-      this._currentMode = Mode.FILTER;
-    }
+    // //если обновление типа MAJOR (это значит что нажата смена фильтров),
+    // //то устанавливаем текущий режим сортировки точек.
+    // if(setCurrentMode) {
+    //   this._currentMode = Mode.FILTER;
+    // }
   }
 
   _handleSortModeChange(sortMode) {
     if (this._sortMode === sortMode) {
       return;
     }
-    this._currentMode = Mode.SORT;
+    // this._currentMode = Mode.SORT;
     this._sortMode = sortMode;
 
     this._clearAllPoints();//
@@ -208,7 +210,7 @@ export default class TripPresenter {
     }
     const points = this._getPoints();
 
-    //  console.log('00', points)
+     console.log('00', points)
 
     //отрисовка InfoView (список точек и общая стоимость)
     const tripMain = document.querySelector('.trip-main');

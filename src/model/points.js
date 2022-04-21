@@ -68,7 +68,7 @@ export default class PointsModel extends Observer {
       update,
       ...this._points,
     ];
-    // console.log('22', this._points)
+    // console.log('22', this._notify)
     this._notify(updateType, update);
   }
 

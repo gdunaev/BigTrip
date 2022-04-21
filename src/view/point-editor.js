@@ -16,7 +16,7 @@ const FORMAT_DATE = 'd/m/y H:i';
 // };
 
 const getOfferComponent = (offers) => {
-     console.log(offers)
+    //  console.log(offers)
   if  (offers.length === 0) {
     // console.log(offers)
     return '';
@@ -64,7 +64,7 @@ const createPointEditTemplate = (state) => {
   //отрисовка состояния при смене типа и места назначения.
   let typePointIconTemplate = typePointState !== '' ? typePointState : typePoint.toLowerCase();
   const typePointTemplate = typePointState !== '' ? typePointState : typePoint;
-  const offers = typePointState !== '' ? OFFER.get(typePointState).slice() : OFFER.get(typePoint).slice();
+  const offers = typePointState !== '' ? OFFER.get(typePointState).slice() :  typePoint !== '' ? OFFER.get(typePoint).slice() : [];
 
   //  console.log('22', typePointState)
   const destination = destinationState.name !== '' ? POINT_DESCRIPTION.get(destinationState.name) : state.destination;
@@ -489,6 +489,8 @@ export default class PointEditorView extends SmartView {
     return createPointEditTemplate(this._state);
   }
 
+  //вызывает _handleViewAction с добавлением новой точки если передается из PointNewPresenter
+  //далее добавляет в общий список точек новую точку и вызывает обзервер Модели - _handleModelEvent с параметром
   _setSubmitHandler(evt) {
     // console.log('22', this._offers)
     evt.preventDefault();
