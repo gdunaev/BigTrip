@@ -58,7 +58,7 @@ const getDescriptionComponent = (destination) => {
 
 
 const createPointEditTemplate = (state) => {
-  // console.log(OFFER)
+  //  console.log(state)
   const { typePoint, dateFromState, dateToState, typePointState, destinationState, priceState } = state;
 
   //отрисовка состояния при смене типа и места назначения.
@@ -292,20 +292,24 @@ export default class PointEditorView extends SmartView {
 
     //запомним все индексы у выделенных
     const includedIndexs = [];
-    if (evt.target.tagName === 'INPUT') {
-      const offers = document.querySelectorAll('.event__offer-checkbox');
-      offers.forEach((offer, key) => {
-        // console.log(includedIndexs)
-        if (offer.checked) {
-          includedIndexs.push(key);
-        }
-      });
+    const name = this.getElement().querySelectorAll('input[name="event-type"]');
+    // let offers = OFFER.get(`${name}`);
+    console.log('1111',  name,)
+    // if (evt.target.tagName === 'INPUT') {
+    //   const offersElement = document.querySelectorAll('.event__offer-checkbox');
+    //   offersElement.forEach((offer, key) => {
+    //     // console.log(includedIndexs)
+    //     if (offer.checked) {
+    //       includedIndexs.push(key);
+    //     }
+    //   });
 
-      this.updateData({
-        offersState: includedIndexs,
-      }, true);
-    }
-    // console.log(includedIndexs)
+    //   //перерисовка компонента, отметка выбранных офферов будет при отправке формы в parseStateToData
+    //   this.updateData({
+    //     offersState: includedIndexs,
+    //   }, true);
+    // }
+    //  console.log(includedIndexs)
   }
 
   _priceInputHandler(evt) {
@@ -438,13 +442,13 @@ export default class PointEditorView extends SmartView {
 
   static parseStateToData(state) {
 
-    //  console.log('00', state)
+    // console.log('00', state.offersState)
 
     //когда меняется тип точки - подставляем офферы из объекта (находим по имени типа точки),
     //если не меняется - берем те что были у этой точки.
     let offers = state.typePointState !== '' ? OFFER.get(state.typePointState).slice() : OFFER.get(state.typePoint).slice();
     
-    // console.log('112',  OFFER)
+     console.log('112',  offers === OFFER.get(state.typePoint))
 
     //а после проверим если ли выбранные офферы, если есть - отредактируем офферы
     offers = state.offersState.length > 0 ? PointEditorView.setIncludeOffer(offers, state.offersState) : offers;
@@ -463,7 +467,7 @@ export default class PointEditorView extends SmartView {
       )
       
     );
-    console.log('000', data)
+    // console.log('000', data)
     //  console.log('22', offers);
 
     // state.typePointState !== '' ?

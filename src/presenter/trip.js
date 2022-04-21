@@ -124,7 +124,7 @@ export default class TripPresenter {
 
   _handleModelEvent(updateType, point) {
 
-     console.log('44', updateType, point)
+    //  console.log('44', updateType, point)
     switch (updateType) {
       case UpdateType.PATCH:
         this._pointPresenter[point.id].start(point);
@@ -210,7 +210,7 @@ export default class TripPresenter {
     }
     const points = this._getPoints();
 
-     console.log('00', points)
+    //  console.log('00', points)
 
     //отрисовка InfoView (список точек и общая стоимость)
     const tripMain = document.querySelector('.trip-main');

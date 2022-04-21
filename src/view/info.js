@@ -21,11 +21,15 @@ const createInfoTemplate = (points) => {
     fullCost = points.length === 0 ?
         0 : points.reduce((sum, current) => {
 
+          // console.log('11', sum, current.basePrice);
+
             return sum + current.basePrice +
                 (current.offers === undefined ?
                     0 :
                     current.offers.reduce((sumOffers, currentOffer) => { 
+                      
                       if(currentOffer.included) {
+                        // console.log('22', sumOffers, currentOffer.price)
                         return sumOffers + currentOffer.price;
                       };  
                       return sumOffers;                  
