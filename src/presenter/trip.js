@@ -69,6 +69,8 @@ export default class TripPresenter {
 
     const points = this._pointsModel.getPoints();
 
+    // console.log('112', this._filterType)
+
     //здесь текущий режим - Сортировка (день, время, цена) или Фильтрация (все, будущие, прошлые)
     if (this._currentMode === Mode.SORT) {
       switch (this._sortMode) {
@@ -115,6 +117,7 @@ export default class TripPresenter {
 
   _handleModelEvent(updateType, point) {
 
+    // console.log()
     switch (updateType) {
       case UpdateType.PATCH:
         this._pointPresenter[point.id].start(point);

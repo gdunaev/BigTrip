@@ -25,7 +25,7 @@ const createInfoTemplate = (points) => {
                 (current.offers === undefined ?
                     0 :
                     current.offers.reduce((sumOffers, currentOffer) => { 
-                      if(currentOffer.checked) {
+                      if(currentOffer.included) {
                         return sumOffers + currentOffer.price;
                       };  
                       return sumOffers;                  

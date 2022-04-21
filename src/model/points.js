@@ -33,12 +33,12 @@ export default class PointsModel extends Observer {
        if(!POINT_NAME.includes(point.destination.name)) {
         POINT_NAME.push(point.destination.name);
        };
-       point.offers.forEach((offer) => {
-        offer.checked = false; //добавим по умолчанию что все офферы не выбраны
-       });
+      //  point.offers.forEach((offer) => {
+      //   offer.included = false; //добавим по умолчанию что все офферы не выбраны
+      //  });
     });
 
-    //  console.log(POINT_DESCRIPTION)
+        // console.log(OFFER)
     return points;
   }
 
@@ -92,21 +92,12 @@ export default class PointsModel extends Observer {
       {},
       point,
       {
-        // dueDate: point.due_date !== null ? new Date(point.due_date) : point.due_date, // На клиенте дата хранится как экземпляр Date
-        // isArchive: point.is_archived,
-        // isFavorite: point.is_favorite,
-        // repeating: point.repeating_days,
-
-
         typePoint: point.type,
         dateFrom: point.date_from,
         basePrice: point.base_price,
         dateTo: point.date_to,
         isFavorite: point.is_favorite,
-        offers: [], //point.offers.slice(),
-        // typePoint: point.type,
-        // typePoint: point.type,
-
+        offers: point.offers.slice(),
       },
     );
 
@@ -118,10 +109,10 @@ export default class PointsModel extends Observer {
     delete adaptedPoint.is_favorite;
 
     adaptedPoint.offers.forEach(element => {
-      element.checked = true;
+      element.included = true;
     });
 
-  // console.log(adaptedPoint)
+    // console.log(adaptedPoint)
 
     return adaptedPoint;
   }

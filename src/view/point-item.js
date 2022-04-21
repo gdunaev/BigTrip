@@ -38,7 +38,8 @@ const createPointItemTemplate = (point) => {
     let offersComponent = '';
     if (offers !== undefined) {
         for (const elem of offers) {
-          if(elem.checked) {
+          // console.log(elem)
+          if(elem.included) {
             offersComponent = `${offersComponent}<li class="event__offer">
                     <span class="event__offer-title">${elem['title']}</span>
                     &plus;&euro;&nbsp;
@@ -102,7 +103,7 @@ export default class PointView extends AbstractView {
     // this._favoriteClick = point;
   }
   getTemplate() {
-    // console.log('000', createPointItemTemplate(this._point))
+    //  console.log('000', this._point)
     return createPointItemTemplate(this._point);
   }
   _onRollupClick(evt) {

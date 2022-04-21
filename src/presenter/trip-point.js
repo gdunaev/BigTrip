@@ -111,6 +111,7 @@ export default class TripPointPresenter {
   }
 
   _handleFormSubmit(point) {
+    // console.log(point)
     this._changeData(
       UserAction.UPDATE,
       UpdateType.MINOR,
