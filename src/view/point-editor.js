@@ -16,7 +16,7 @@ const FORMAT_DATE = 'd/m/y H:i';
 // };
 
 const getOfferComponent = (offers) => {
-    // console.log(offers)
+     console.log(offers)
   if  (offers.length === 0) {
     // console.log(offers)
     return '';
@@ -64,7 +64,7 @@ const createPointEditTemplate = (state) => {
   //отрисовка состояния при смене типа и места назначения.
   let typePointIconTemplate = typePointState !== '' ? typePointState : typePoint.toLowerCase();
   const typePointTemplate = typePointState !== '' ? typePointState : typePoint;
-  const offers = typePointState !== '' ? OFFER.get(typePointState) : OFFER.get(typePoint);
+  const offers = typePointState !== '' ? OFFER.get(typePointState).slice() : OFFER.get(typePoint).slice();
 
   //  console.log('22', typePointState)
   const destination = destinationState.name !== '' ? POINT_DESCRIPTION.get(destinationState.name) : state.destination;
@@ -232,7 +232,6 @@ export default class PointEditorView extends SmartView {
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._offerClickHandler = this._offerClickHandler.bind(this);
 
-    this._offers = OFFER;
     // console.log('444', this._point);
     this._setInnerHandlers();
       // console.log('33', this._offers);
@@ -443,12 +442,12 @@ export default class PointEditorView extends SmartView {
 
     //когда меняется тип точки - подставляем офферы из объекта (находим по имени типа точки),
     //если не меняется - берем те что были у этой точки.
-    let offers = state.typePointState !== '' ? OFFER.get(state.typePointState) : OFFER.get(state.typePoint);
-
+    let offers = state.typePointState !== '' ? OFFER.get(state.typePointState).slice() : OFFER.get(state.typePoint).slice();
+    
     // console.log('112',  OFFER)
 
     //а после проверим если ли выбранные офферы, если есть - отредактируем офферы
-    offers = state.offersState !== [] ? PointEditorView.setIncludeOffer(offers, state.offersState) : offers;
+    offers = state.offersState.length > 0 ? PointEditorView.setIncludeOffer(offers, state.offersState) : offers;
 
 
     const data = Object.assign({}, state,
@@ -462,8 +461,9 @@ export default class PointEditorView extends SmartView {
           dateFrom: state.dateFromState !== '' ? state.dateFromPicker : state.dateFrom,
         },
       )
+      
     );
-
+    console.log('000', data)
     //  console.log('22', offers);
 
     // state.typePointState !== '' ?
@@ -490,7 +490,7 @@ export default class PointEditorView extends SmartView {
   }
 
   _setSubmitHandler(evt) {
-    console.log('22', this._offers)
+    // console.log('22', this._offers)
     evt.preventDefault();
     this._callback.submitClick(PointEditorView.parseStateToData(this._state));//PointEditorView.parseStateToData(this._state)
   }

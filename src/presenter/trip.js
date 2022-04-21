@@ -67,32 +67,37 @@ export default class TripPresenter {
   _getPoints() {
     this._filterType = this._filterModel.getActiveFilter();
 
-    const points = this._pointsModel.getPoints();
+    let points = this._pointsModel.getPoints().slice();
 
-    // console.log('112', this._filterType)
+    //фильтрация: Прошлые, Будущие, Все
+    switch (this._filterType) {
+      case FilterType.PAST:
+        points = getPastPoints(points);
+        break;
+      case FilterType.FUTURE:
+        points = getFuturePoints(points);
+        break;
+      case FilterType.EVERYTHING:
+        points = points;
+        break;
+    }
 
-    //здесь текущий режим - Сортировка (день, время, цена) или Фильтрация (все, будущие, прошлые)
+    //здесь Сортировка (день, время, цена) 
     if (this._currentMode === Mode.SORT) {
       switch (this._sortMode) {
         case SortMode.DAY:
-          return getSortDayPoints(points);
+          points = getSortDayPoints(points);
+          break;
         case SortMode.TIME:
-          return getSortTimePoints(points);
+          points = getSortTimePoints(points);
+          break;
         case SortMode.PRICE:
-          return getSortPricePoints(points);
+          points = getSortPricePoints(points);
+          break;
       }
     }
 
-    switch (this._filterType) {
-      case FilterType.PAST:
-        return getPastPoints(points);
-      case FilterType.FUTURE:
-        return getFuturePoints(points);
-      case FilterType.EVERYTHING:
-        return points;
-    }
-
-    return this._pointsModel.getPoints();
+    return points;
   }
 
   _handleViewAction(actionType, updateType, update) {
