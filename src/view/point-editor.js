@@ -6,6 +6,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { setDatesFields, getDateEdit, compareDates } from './dayjs.js';
 import he from 'he';
 import { OFFER, POINT_DESCRIPTION, POINT_NAME } from '../model/points.js';
+import { copy } from '../utils/common.js';
 // import dayjs from 'dayjs';
 
 
@@ -58,13 +59,13 @@ const getDescriptionComponent = (destination) => {
 
 
 const createPointEditTemplate = (state) => {
-  //  console.log(state)
+    // console.log('222', state)
   const { typePoint, dateFromState, dateToState, typePointState, destinationState, priceState } = state;
 
   //отрисовка состояния при смене типа и места назначения.
   let typePointIconTemplate = typePointState !== '' ? typePointState : typePoint.toLowerCase();
   const typePointTemplate = typePointState !== '' ? typePointState : typePoint;
-  const offers = typePointState !== '' ? OFFER.get(typePointState).slice() :  typePoint !== '' ? OFFER.get(typePoint).slice() : [];
+  const offers = typePointState !== '' ? OFFER.get(typePointState) :  typePoint !== '' ? state.offers : [];
 
   //  console.log('22', typePointState)
   const destination = destinationState.name !== '' ? POINT_DESCRIPTION.get(destinationState.name) : state.destination;
@@ -289,27 +290,23 @@ export default class PointEditorView extends SmartView {
   }
 
   _offerClickHandler(evt) {
+    const typePoint = this.getElement().querySelector('.event__type-output').innerText.toLowerCase().replace(/\s+/g, '');
+    let offers = copy(OFFER.get(`${typePoint}`));
 
-    //запомним все индексы у выделенных
-    const includedIndexs = [];
-    const name = this.getElement().querySelectorAll('input[name="event-type"]');
-    // let offers = OFFER.get(`${name}`);
-    console.log('1111',  name,)
-    // if (evt.target.tagName === 'INPUT') {
-    //   const offersElement = document.querySelectorAll('.event__offer-checkbox');
-    //   offersElement.forEach((offer, key) => {
-    //     // console.log(includedIndexs)
-    //     if (offer.checked) {
-    //       includedIndexs.push(key);
-    //     }
-    //   });
+    if (evt.target.tagName === 'INPUT') {
+      // console.log(offers)
+      const offersElement = this.getElement().querySelectorAll('.event__offer-checkbox');
+      // console.log(offersElement)
+      offersElement.forEach((offer, key) => {
+         offers[key].included = offer.checked;
+      });
 
-    //   //перерисовка компонента, отметка выбранных офферов будет при отправке формы в parseStateToData
-    //   this.updateData({
-    //     offersState: includedIndexs,
-    //   }, true);
-    // }
-    //  console.log(includedIndexs)
+      //перерисовка компонента, отметка выбранных офферов будет при отправке формы в parseStateToData
+      this.updateData({
+        offersState: offers,
+      }, true);
+    }
+    //  console.log('111', OFFER)
   }
 
   _priceInputHandler(evt) {
@@ -394,7 +391,7 @@ export default class PointEditorView extends SmartView {
   _changeEventTypeHandler(evt) {
 
     if (evt.target.tagName === 'LABEL') {
-      // console.log('11', evt.target.textContent)
+      //  console.log('11', evt.target)
       this.updateData({
         typePointState: (evt.target.textContent).toLowerCase(),
       });
@@ -429,30 +426,28 @@ export default class PointEditorView extends SmartView {
     );
   }
 
-  static setIncludeOffer(offers, includedIndexs) {
-    const includedOffers = offers.slice();
-    includedOffers.forEach((offer, index) => {
-      offer.included = false;
-      if (includedIndexs.includes(index)) {
-        offer.included = true;
-      };
-    });
-    return includedOffers;
-  }
+  // static setIncludeOffer(offers, includedIndexs) {
+  //   const includedOffers = offers.slice();
+  //   includedOffers.forEach((offer, index) => {
+  //     offer.included = false;
+  //     if (includedIndexs.includes(index)) {
+  //       offer.included = true;
+  //     };
+  //   });
+  //   return includedOffers;
+  // }
 
   static parseStateToData(state) {
 
-    // console.log('00', state.offersState)
+    //  console.log('00', state)
 
     //когда меняется тип точки - подставляем офферы из объекта (находим по имени типа точки),
-    //если не меняется - берем те что были у этой точки.
+    //если не меняется - берем те что были у этой точки. Но может быть ситуация когда менялась и точка, и офферы -
+    //выключались например, ниже проверим это.
     let offers = state.typePointState !== '' ? OFFER.get(state.typePointState).slice() : OFFER.get(state.typePoint).slice();
-    
-     console.log('112',  offers === OFFER.get(state.typePoint))
+    offers = state.offersState.length > 0 ? state.offersState : offers;
 
-    //а после проверим если ли выбранные офферы, если есть - отредактируем офферы
-    offers = state.offersState.length > 0 ? PointEditorView.setIncludeOffer(offers, state.offersState) : offers;
-
+    // console.log('00', OFFER)
 
     const data = Object.assign({}, state,
       Object.assign({},
@@ -465,9 +460,9 @@ export default class PointEditorView extends SmartView {
           dateFrom: state.dateFromState !== '' ? state.dateFromPicker : state.dateFrom,
         },
       )
-      
+
     );
-    // console.log('000', data)
+    //  console.log('000', data)
     //  console.log('22', offers);
 
     // state.typePointState !== '' ?

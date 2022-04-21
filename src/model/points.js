@@ -26,9 +26,30 @@ export default class PointsModel extends Observer {
     this._notify(updateType);
   }
 
+  _setOffers(typePoint, offers) {
+    const currentOffers = OFFER.get(typePoint);
+    if(!currentOffers) {
+      OFFER.set(typePoint, offers);
+      return;
+    }
+    offers.forEach(offer => {
+      const title = offer.title;
+      let add = true
+      for (let current of currentOffers) {
+        if(current.title === title) {
+          add = false;
+          break;
+        }
+      }
+      add === true ? currentOffers.push(offer) : '';
+    })
+// console.log('1111', OFFER)
+  }
+
   _parseData(points) {
     points.forEach((point) => {
-       OFFER.set(point.typePoint, point.offers);
+       this._setOffers(point.typePoint, point.offers);
+
        POINT_DESCRIPTION.set(point.destination.name, point.destination);
        if(!POINT_NAME.includes(point.destination.name)) {
         POINT_NAME.push(point.destination.name);
@@ -97,7 +118,7 @@ export default class PointsModel extends Observer {
         basePrice: point.base_price,
         dateTo: point.date_to,
         isFavorite: point.is_favorite,
-        offers: point.offers.slice(),
+        offers: point.offers,
       },
     );
 
@@ -112,7 +133,7 @@ export default class PointsModel extends Observer {
       element.included = true;
     });
 
-    // console.log(adaptedPoint)
+    //  console.log(adaptedPoint)
 
     return adaptedPoint;
   }
