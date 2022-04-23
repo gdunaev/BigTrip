@@ -42,6 +42,9 @@ export default class TripPresenter {
     this._loadingComponent = new LoadingView(this._isLoading);
     this._api = api;
     this._newEventElement = document.querySelector('.trip-main__event-add-btn');
+
+    this._offers = [];
+    this._destinations = [];
   }
 
   start() {
@@ -51,6 +54,9 @@ export default class TripPresenter {
     // }
     // this._renderMainInfo();
     // this._renderNavigation();
+    // const points = this._pointsModel.getPoints();
+    // console.log('333444', points)
+
     this._renderPoints();
   }
 
@@ -59,8 +65,7 @@ export default class TripPresenter {
     // console.log('11222')
     this._sortMode = SortMode.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    const points = this._pointsModel.getPoints()
-    this._pointNewPresenter.start(points);
+    this._pointNewPresenter.start(this._points, this._offers, this._destinations);
   }
 
   //получает точки (с сортировкой или фильтрацией) перед отрисовкой
@@ -69,7 +74,7 @@ export default class TripPresenter {
 
     let points = this._pointsModel.getPoints().slice();
 
-    // console.log('11', this._filterType, this._currentMode)
+    //  console.log('11', points)
 
     //фильтрация: Прошлые, Будущие, Все
     switch (this._filterType) {
@@ -84,7 +89,7 @@ export default class TripPresenter {
         break;
     }
 
-    //здесь Сортировка (день, время, цена) 
+    //здесь Сортировка (день, время, цена)
     // if (this._currentMode === Mode.SORT) {
       switch (this._sortMode) {
         case SortMode.DAY:
@@ -194,7 +199,7 @@ export default class TripPresenter {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new TripPointPresenter(this._tripEventsMain, this._changeModePoint, this._handleViewAction);
+    const pointPresenter = new TripPointPresenter(this._tripEventsMain, this._changeModePoint, this._handleViewAction, this._offers, this._destinations);
     pointPresenter.start(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
@@ -209,6 +214,10 @@ export default class TripPresenter {
       return;
     }
     const points = this._getPoints();
+    this._offers = this._pointsModel.getOffersAll();
+    this._destinations = this._pointsModel.getDestinationsAll();
+
+    // console.log('11', this._offers)
 
     //  console.log('00', points)
 

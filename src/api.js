@@ -16,10 +16,32 @@ export default class Api {
     this._authorization = authorization;
   }
 
+  getAll() {
+    return Promise
+      .all([
+        this.getPoints(),
+        this.getDestinations(),
+        this.getOffers(),
+      ])
+    .then((value) => value);
+  }
+
   getPoints() {
     return this._load({url: 'points'})
       .then(Api.toJSON)
       .then((points) => points.map(PointModel.adaptToClient));;
+  }
+
+  getDestinations() {
+    return this._load({url: 'destinations'})
+      .then(Api.toJSON)
+      .then((destinations) => destinations);;
+  }
+
+  getOffers() {
+    return this._load({url: 'offers'})
+      .then(Api.toJSON)
+      .then((offers) => offers);;
   }
 
   updatePoint(point) {

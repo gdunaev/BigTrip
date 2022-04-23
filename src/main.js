@@ -1,4 +1,3 @@
-import { getPoints } from "./view/get-points.js";
 import TripPresenter from "./presenter/trip.js";
 import PointsModel from './model/points.js';
 import FilterModel from './model/filter-model.js';
@@ -87,14 +86,11 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
 
 
 //загрузка точек с сервера
-api.getPoints().then((points) => {
-  // console.log('333')
-  // debugger
-  pointsModel.setPoints(UpdateType.INIT, points);
+api.getAll().then((value) => {
+  pointsModel.setPoints(UpdateType.INIT, value);
 }).catch(() => {
-  // pointsModel.setPoints(UpdateType.INIT, []);
+  //  pointsModel.setPoints(UpdateType.INIT, [[], [], []]);
 });
-
 
 
 //ВОПРОСЫ:

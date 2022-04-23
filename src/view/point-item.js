@@ -35,17 +35,16 @@ const createPointItemTemplate = (point) => {
 
     //  console.log('111', offers)
 
+    //здесь показываем только офферы выбранные пользователем (например 2 из 5, или 1 из 3)
     let offersComponent = '';
-    if (offers !== undefined) {
+    if (offers !== []) {
         for (const elem of offers) {
           // console.log(elem)
-          if(elem.included) {
             offersComponent = `${offersComponent}<li class="event__offer">
                     <span class="event__offer-title">${elem['title']}</span>
                     &plus;&euro;&nbsp;
                     <span class="event__offer-price">${elem['price']}</span>
                   </li>`;
-          };
         }
         offersComponent = `<h4 class="visually-hidden">Offers:</h4>
                           <ul class="event__selected-offers">
@@ -95,9 +94,11 @@ const createPointItemTemplate = (point) => {
 };
 
 export default class PointView extends AbstractView {
-  constructor(point) {
+  constructor(point, offers, destinations) {
     super();
     this._point = point;
+    this._offers = offers;
+    this._destinations = destinations;
     this._onRollupClick = this._onRollupClick.bind(this);
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
     // this._favoriteClick = point;

@@ -7,7 +7,7 @@ import {UserAction, UpdateType, ModeEditing, RenderPosition} from '../const.js';
 
 
 export default class TripPointPresenter {
-  constructor(tripEventsMain, changeMode, changeData) {
+  constructor(tripEventsMain, changeMode, changeData, offers, destinations) {
     this._tripEventsMain = tripEventsMain;
     this._pointViewEditor = null;
     this._pointView = null;
@@ -16,19 +16,21 @@ export default class TripPointPresenter {
     this._changeMode = changeMode;
     this._changeData = changeData;
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
-
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
+
+    this._offers = offers;
+    this._destinations = destinations;
   }
 
   start(point) {
     this._point = point;
     // console.log('555', this._point);
-
+    // console.log('333', this._offers)
     const prevPointView = this._pointView;
     const prevPointViewEditor = this._pointViewEditor;
 
-    this._pointViewEditor = new PointEditorView(point);
-    this._pointView = new PointView(point);
+    this._pointViewEditor = new PointEditorView(point, this._offers, this._destinations);
+    this._pointView = new PointView(point, this._offers, this._destinations);
 
 
 

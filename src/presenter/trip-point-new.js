@@ -44,13 +44,15 @@ export default class PointNewPresenter {
     }
 
 
-    start(points) {
+    start(points, offers, destinations) {
     //    console.log('33344', this._state)
         if (this._pointViewEditor !== null) {
             return;
         }
         this._tripEventsTripSort = document.querySelector('.trip-events__trip-sort');
         this._points = points;
+        this._offers = offers;
+        this._destinations = destinations;
         this._pointViewEditor = new PointEditorView(this._state);
         this._pointViewEditor.setSubmitFormHandler(this._handleFormSubmit);
         this._pointViewEditor.setDeleteClickHandler(this._setDeleteHandler);

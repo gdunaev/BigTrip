@@ -1,24 +1,28 @@
 import Observer from '../utils/observer.js';
 import {UpdateType}from '../const.js';
 
-const OFFER = new Map([]);
-const POINT_DESCRIPTION = new Map([]);
-const POINT_NAME = [];
+// const OFFER = new Map([]);
+// const POINT_DESCRIPTION = new Map([]);
+// const POINT_NAME = [];
 
 
 export default class PointsModel extends Observer {
   constructor() {
     super();
     this._points = [];
+    this._offers = [];
+    this._destinations = [];
   }
 
-  setPoints(updateType, points) {
-    this._points = points.slice(); //тестовая строка 1. this._points = points.slice(0, 3); и 2. []
+  setPoints(updateType, value) {
+    this._points = value[0]; //тестовая строка 1.
+    this._destinations = value[1];
+    this._offers = value[2];
 
-    if (UpdateType.INIT === updateType) {
-      this._points = this._parseData(this._points);
-    }
-    // console.log('333', this._points)
+    // if (UpdateType.INIT === updateType) {
+    //   this._points = this._parseData(this._points);
+    // }
+      // console.log('000', this._offers)
 
     //здесь вызываются два обзервера:
     //1. установлен в FilterPresenter (вызывает init у фильтров)
@@ -26,42 +30,49 @@ export default class PointsModel extends Observer {
     this._notify(updateType);
   }
 
+  getOffersAll() {
+    // console.log('111', this._offers)
+    return this._offers;
+  }
+
+  getOffers(type) {
+    //  console.log('000', this._offers)
+    return  this._offers.find((offer) => {
+      // console.log('111', offer)
+      offer.type === type;
+    });
+  }
+
+  getDestinationsAll() {
+    return  this._destinations;
+  }
+
   _setOffers(typePoint, offers) {
-    const currentOffers = OFFER.get(typePoint);
-    if(!currentOffers) {
-      OFFER.set(typePoint, offers);
-      return;
-    }
-    offers.forEach(offer => {
-      const title = offer.title;
-      let add = true
-      for (let current of currentOffers) {
-        if(current.title === title) {
-          add = false;
-          break;
-        }
-      }
-      add === true ? currentOffers.push(offer) : '';
-    })
+    // const currentOffers = this._offers;
+    // if(!currentOffers) {
+    //   OFFER.set(typePoint, offers);
+    //   return;
+    // }
+    // offers.forEach(offer => {
+    //   const title = offer.title;
+    //   let adding = true;
+    //   for (let current of currentOffers) {
+    //     if(current.title === title) {
+    //       adding = false;
+    //       break;
+    //     }
+    //   }
+    //   adding === true ? currentOffers.push(offer) : '';
+    // })
 // console.log('1111', OFFER)
   }
 
-  _parseData(points) {
-    points.forEach((point) => {
-       this._setOffers(point.typePoint, point.offers);
-
-       POINT_DESCRIPTION.set(point.destination.name, point.destination);
-       if(!POINT_NAME.includes(point.destination.name)) {
-        POINT_NAME.push(point.destination.name);
-       };
-      //  point.offers.forEach((offer) => {
-      //   offer.included = false; //добавим по умолчанию что все офферы не выбраны
-      //  });
-    });
-
-        // console.log(OFFER)
-    return points;
-  }
+  // _parseData(offers) {
+  //   offers.forEach((offer) => {
+  //     offer.included = true;
+  //   });
+  //   return offers;
+  // }
 
   getPoints() {
     return this._points;
@@ -160,6 +171,6 @@ export default class PointsModel extends Observer {
   }
 }
 
-export {OFFER, POINT_DESCRIPTION, POINT_NAME}
+// export {OFFER, POINT_DESCRIPTION, POINT_NAME}
 
 
