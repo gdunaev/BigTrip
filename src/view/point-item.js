@@ -33,7 +33,7 @@ const createPointItemTemplate = (point) => {
     // console.log(basePriceString)
     const activeFavorite = isFavorite === true ? "event__favorite-btn--active" : "";
 
-    // console.log('111', offers)
+    //  console.log('111', offers)
 
     let offersComponent = '';
     if (offers !== undefined) {
@@ -49,7 +49,7 @@ const createPointItemTemplate = (point) => {
         }
         offersComponent = `<h4 class="visually-hidden">Offers:</h4>
                           <ul class="event__selected-offers">
-                          ${offersComponent}  
+                          ${offersComponent}
                           </ul>`;
     }
 
@@ -78,7 +78,7 @@ const createPointItemTemplate = (point) => {
               </p>
 
               ${offersComponent}
-              
+
               <button class="event__favorite-btn ${activeFavorite}" type="button">
                 <span class="visually-hidden">Add to favorite</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -103,7 +103,7 @@ export default class PointView extends AbstractView {
     // this._favoriteClick = point;
   }
   getTemplate() {
-    //  console.log('000', this._point)
+      // console.log('000', this._point)
     return createPointItemTemplate(this._point);
   }
   _onRollupClick(evt) {

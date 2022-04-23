@@ -289,24 +289,29 @@ export default class PointEditorView extends SmartView {
     return false;
   }
 
-  _offerClickHandler(evt) {
-    const typePoint = this.getElement().querySelector('.event__type-output').innerText.toLowerCase().replace(/\s+/g, '');
+  _checkOfferElements() {
+    // console.log('333', offers)
+    const typePoint = this._state.typePointState !== '' ? this._state.typePointState : this._state.typePoint;
     let offers = copy(OFFER.get(`${typePoint}`));
 
-    if (evt.target.tagName === 'INPUT') {
-      // console.log(offers)
-      const offersElement = this.getElement().querySelectorAll('.event__offer-checkbox');
-      // console.log(offersElement)
-      offersElement.forEach((offer, key) => {
-         offers[key].included = offer.checked;
-      });
+    const offersElement = this.getElement().querySelectorAll('.event__offer-checkbox');
+    // console.log(offersElement)
+    offersElement.forEach((offer, key) => {
+      offers[key].included = offer.checked;
+    });
 
-      //перерисовка компонента, отметка выбранных офферов будет при отправке формы в parseStateToData
-      this.updateData({
-        offersState: offers,
-      }, true);
+    //перерисовка компонента, отметка выбранных офферов будет при отправке формы в parseStateToData
+    this.updateData({
+      offersState: offers,
+    }, true);
+
+    // console.log('333', offers)
+  }
+
+  _offerClickHandler(evt) {
+    if (evt.target.tagName === 'INPUT') {
+      this._checkOfferElements();
     }
-    //  console.log('111', OFFER)
   }
 
   _priceInputHandler(evt) {
@@ -391,10 +396,11 @@ export default class PointEditorView extends SmartView {
   _changeEventTypeHandler(evt) {
 
     if (evt.target.tagName === 'LABEL') {
-      //  console.log('11', evt.target)
+
       this.updateData({
         typePointState: (evt.target.textContent).toLowerCase(),
       });
+      //  console.log('11', this._state)
     }
   }
 
@@ -407,7 +413,7 @@ export default class PointEditorView extends SmartView {
 
   static parseDataToState(data) {
 
-    // console.log('22', data)
+    //  console.log('22', data.offers)
     return Object.assign({},
       data, {
       typePointState: '',
@@ -445,6 +451,7 @@ export default class PointEditorView extends SmartView {
     //если не меняется - берем те что были у этой точки. Но может быть ситуация когда менялась и точка, и офферы -
     //выключались например, ниже проверим это.
     let offers = state.typePointState !== '' ? OFFER.get(state.typePointState).slice() : OFFER.get(state.typePoint).slice();
+    // console.log('11', state.offersState.length, state.offersState)
     offers = state.offersState.length > 0 ? state.offersState : offers;
 
     // console.log('00', OFFER)
@@ -492,6 +499,8 @@ export default class PointEditorView extends SmartView {
   //далее добавляет в общий список точек новую точку и вызывает обзервер Модели - _handleModelEvent с параметром
   _setSubmitHandler(evt) {
     // console.log('22', this._offers)
+    this._checkOfferElements();
+
     evt.preventDefault();
     this._callback.submitClick(PointEditorView.parseStateToData(this._state));//PointEditorView.parseStateToData(this._state)
   }
