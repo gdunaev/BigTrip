@@ -1,5 +1,5 @@
 import TripPresenter from "./presenter/trip.js";
-import PointsModel from './model/points.js';
+import PointsModel from './model/points-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import {MenuItem, RenderPosition, UpdateType} from './const.js';
@@ -94,7 +94,4 @@ api.getAll().then((value) => {
 
 
 //ВОПРОСЫ:
-//1. с сервера приходят разные офферы у такси например, запоминаю все офферы,
-//а показываю только те что пришли с сервера (где-то 2, где-то 3, где-то 5),
-//в случае смены типа точки показываю все офферы (5). Пришлось сделать так, иначе возникала ошибка,
-//УТОЧНИТЬ!
+

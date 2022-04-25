@@ -5,7 +5,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { getDateEdit, compareDates } from './dayjs.js';
 import he from 'he';
 import { copy } from '../utils/common.js';
-import PointsModel from '../model/points.js';
+import PointsModel from '../model/points-model.js';
 
 
 const FORMAT_DATE = 'd/m/y H:i';
@@ -33,8 +33,8 @@ const getOfferComponent = (currentOffers, offersAll, typePoint) => {
 
 
 const getDescriptionComponent = (destination) => {
-    // console.log(destination)
-  if(destination.name !== '') {
+  // console.log(destination)
+  if (destination.name !== '') {
     const photos = destination.pictures.map((currentPicture) => `<img class="event__photo" src="${currentPicture.src}" alt="Event photo">`).join(' ');
     const description = destination.description;
     return `<section class="event__section  event__section--destination">
@@ -52,7 +52,7 @@ const getDescriptionComponent = (destination) => {
 
 
 const createPointEditTemplate = (state, offersAll, destinationsAll) => {
-    //  console.log('222', destinationsAll)
+  //  console.log('222', destinationsAll)
   const { typePoint, dateFromState, dateToState, typePointState, destinationState, priceState } = state;
 
   //отрисовка состояния при смене типа и места назначения.
@@ -60,8 +60,9 @@ const createPointEditTemplate = (state, offersAll, destinationsAll) => {
   const typePointTemplate = typePointState !== '' ? typePointState : typePoint;
 
   //офферы для типа точки, если тип точки меняется - берем офферы из общего массива,
-  //если не меняются - берем из стэйта, если он пустой (новая точка) - берем пустой массив.
-  const offers = typePointState !== '' ? offersAll.find((offer) => offer.type === typePointState).offers :  typePoint !== '' ? state.offers : [];
+  //если не меняются - берем из state, если он пустой (новая точка) - берем пустой массив.
+  //это только для отрисовки, при отправке формы будет отдельно получать офферы.
+  const offers = typePointState !== '' ? offersAll.find((offer) => offer.type === typePointState).offers : typePoint !== '' ? state.offers : [];
   const offersComponent = getOfferComponent(offers, offersAll, typePointTemplate);
 
 
@@ -76,7 +77,7 @@ const createPointEditTemplate = (state, offersAll, destinationsAll) => {
   const price = priceState !== '' ? priceState : state.basePrice;
   const cancelDelete = 'Delete';
 
-  //подставляем наименование точек
+  //подставляем все наименования точек
   let dataListTemplate = '';
   destinationsAll.forEach((destination) => {
     return dataListTemplate = dataListTemplate + ` <option value="${destination.name}">${destination.name}</option>`;
@@ -85,10 +86,8 @@ const createPointEditTemplate = (state, offersAll, destinationsAll) => {
   //иконки для типов точек
   typePointIconTemplate = typePointIconTemplate !== '' ? `img/icons/${typePointIconTemplate}.png` : '';
 
-
-
-//описание и фото для названия точки
-const descriptionComponent = getDescriptionComponent(destination);
+  //описание и фото для названия точки
+  const descriptionComponent = getDescriptionComponent(destination);
 
 
 
@@ -230,11 +229,11 @@ export default class PointEditorView extends SmartView {
     this._changeEventTypeHandler = this._changeEventTypeHandler.bind(this);
     this._destinationInputHandler = this._destinationInputHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
-    this._offerClickHandler = this._offerClickHandler.bind(this);
+    // this._offerClickHandler = this._offerClickHandler.bind(this);
 
     // console.log('444', this._point);
     this._setInnerHandlers();
-      // console.log('33', this._offers);
+    // console.log('33', this._offers);
   }
 
   // Перегружаем метод родителя removeElement,
@@ -277,40 +276,36 @@ export default class PointEditorView extends SmartView {
 
     this.getElement().querySelector('#event-destination-1').addEventListener('input', this._destinationInputHandler);
     this.getElement().querySelector('#event-price-1').addEventListener('input', this._priceInputHandler);
-    this.getElement().querySelector('.event__details').addEventListener('click', this._offerClickHandler);
+    // this.getElement().querySelector('.event__details').addEventListener('click', this._offerClickHandler);
   }
 
   //перерисовку вызываем только когда полностью указано Наименование точки
   _checkDectination(dectinationName) {
-    if (this._destinations.some(dectination =>  dectination.name === dectinationName)) {
+    if (this._destinations.some(dectination => dectination.name === dectinationName)) {
       return false;
     }
     return true;
   }
 
-  _checkOfferElements() {
-    // console.log('333', offers)
-    const typePoint = this._state.typePointState !== '' ? this._state.typePointState : this._state.typePoint;
-    let offers = copy(PointsModel.getOffers(`${typePoint}`));
+  _includeOffers() {
+    //когда меняется тип точки мы офферы меняем ТОЛЬКО на отрисовке, клик на оффере нигде не отражается,
+    //а вот при отправке формы, мы ищем по типу точки (выбранному или прежнему) все офферы полученные с сервера для этого типа,
+    //и из них (по названию выбранного оффера) находим нужный и добавляем в массив выбранных.
+    const offers = this._state.typePointState !== '' ?
+      this._offers.find((offer) => offer.type === this._state.typePointState).offers :
+      this._offers.find((offer) => offer.type === this._state.typePoint).offers;
 
     const offersElement = this.getElement().querySelectorAll('.event__offer-checkbox');
-    // console.log(offersElement)
-    offersElement.forEach((offer, key) => {
-      offers[key].included = offer.checked;
+    let includedOffers = [];
+    offersElement.forEach((offerElement) => {
+      const title = offerElement.parentElement.querySelector('.event__offer-title').textContent;
+      if (offerElement.checked) {
+        includedOffers.push(offers.find(offer => offer.title === title));
+      }
     });
-
-    //перерисовка компонента, отметка выбранных офферов будет при отправке формы в parseStateToData
     this.updateData({
-      offersState: offers,
-    }, true);
-
-    // console.log('333', offers)
-  }
-
-  _offerClickHandler(evt) {
-    if (evt.target.tagName === 'INPUT') {
-      this._checkOfferElements();
-    }
+      offersState: includedOffers,
+    }, false);
   }
 
   _priceInputHandler(evt) {
@@ -322,7 +317,7 @@ export default class PointEditorView extends SmartView {
 
   _destinationInputHandler(evt) {
 
-    console.log('111', this._destinations, evt.target.value)
+    // console.log('111', this._destinations, evt.target.value)
     const destination = this._destinations.find(dectination => dectination.name === evt.target.value);
 
     evt.preventDefault();
@@ -366,14 +361,14 @@ export default class PointEditorView extends SmartView {
   _checkDataMinMax(fromTo) {
     const dataFrom = this.getElement().querySelector(`#event-start-time-1`);
     const dataTo = this.getElement().querySelector(`#event-end-time-1`);
-    if(dataFrom.value && dataTo.value && compareDates(dataFrom.value, dataTo.value) < 0) {
+    if (dataFrom.value && dataTo.value && compareDates(dataFrom.value, dataTo.value) < 0) {
       fromTo === 'to' ? dataTo.value = '' : dataFrom.value = '';
     }
     return true;
   }
 
   _dateFromChangeHandler() {
-    if(!this._checkDataMinMax('from')){
+    if (!this._checkDataMinMax('from')) {
       return;
     }
     this.updateData({
@@ -383,7 +378,7 @@ export default class PointEditorView extends SmartView {
   }
 
   _dateToChangeHandler() {
-    if(!this._checkDataMinMax('to')){
+    if (!this._checkDataMinMax('to')) {
       return;
     }
     this.updateData({
@@ -443,32 +438,20 @@ export default class PointEditorView extends SmartView {
   // }
 
   static parseStateToData(state) {
-
-    //  console.log('00', state)
-
-    //когда меняется тип точки - подставляем офферы из объекта (находим по имени типа точки),
-    //если не меняется - берем те что были у этой точки. Но может быть ситуация когда менялась и точка, и офферы -
-    //выключались например, ниже проверим это.
-    let offers = state.typePointState !== '' ? PointsModel.getOffers(state.typePointState).slice() : PointsModel.getOffers(state.typePoint).slice();
-    // console.log('11', state.offersState.length, state.offersState)
-    offers = state.offersState.length > 0 ? state.offersState : offers;
-
-    // console.log('00', OFFER)
-
     const data = Object.assign({}, state,
       Object.assign({},
         {
           typePoint: state.typePointState !== '' ? state.typePointState : state.typePoint,
-          offers,
-          destination: state.destinationState.name !== '' ? POINT_DESCRIPTION.get(state.destinationState.name) : state.destination,
+          offers: state.offersState !== [] ? state.offersState : state.offers,
+          destination: state.destinationState.name !== '' ? state.destinationState : state.destination,
           basePrice: state.priceState !== '' ? state.priceState : state.basePrice,
           dateTo: state.dateToState !== '' ? state.dateToPicker : state.dateTo,
           dateFrom: state.dateFromState !== '' ? state.dateFromPicker : state.dateFrom,
         },
       )
-
     );
 
+    // console.log('22', data)
 
     delete data.typePointState;
     delete data.destinationState;
@@ -488,14 +471,27 @@ export default class PointEditorView extends SmartView {
     return createPointEditTemplate(this._state, this._offers, this._destinations);
   }
 
+  _includeDestination() {
+    //делаем через if (а не ? :) чтобы не затирать объект destinationState
+    if(this._state.destinationState.name !== '') {
+      this._state.destinationState = this._destinations.find(dectination => dectination.name === this._state.destinationState.name);
+    } 
+    //а здесь ищем объект для прежней точки (если она не менялась)
+    this._state.destination = this._destinations.find(dectination => dectination.name === this._state.destination.name);
+
+    // console.log('111', this._state)
+  }
+
+
   //вызывает _handleViewAction с добавлением новой точки если передается из PointNewPresenter
   //далее добавляет в общий список точек новую точку и вызывает обзервер Модели - _handleModelEvent с параметром
   _setSubmitHandler(evt) {
-    // console.log('22', this._offers)
-    this._checkOfferElements();
+    this._includeOffers();
+
+    this._includeDestination();
 
     evt.preventDefault();
-    this._callback.submitClick(PointEditorView.parseStateToData(this._state));//PointEditorView.parseStateToData(this._state)
+    this._callback.submitClick(PointEditorView.parseStateToData(this._state));
   }
 
   setSubmitFormHandler(callback) {
